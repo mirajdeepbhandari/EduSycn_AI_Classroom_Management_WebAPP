@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plagiarism Detector</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .card-header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-bottom: none;
+            padding: 20px;
+        }
+        .back-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover {
+            background-color: #c82333;
+            color: white;
+        }
+        .upload-area {
+            border: 2px dashed #6610f2;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #fff;
+        }
+        .upload-area:hover {
+            background-color: #f0e6fe;
+        }
+        .upload-icon {
+            font-size: 64px;
+            color: #6610f2;
+        }
+        .btn-primary {
+            background-color: #6610f2;
+            border-color: #6610f2;
+            border-radius: 20px;
+            padding: 12px 24px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #5a0db8;
+            border-color: #5a0db8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .result-area {
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 20px;
+            padding: 20px;
+        }
+        .cont{
+            margin-top: 50px;
+
+        }
+        @media (max-width: 768px) {
+
+            .cont{
+                margin-top: 0;
+                padding: 0 !important;
+            }
+            .card {
+                margin: 0 10px;
+            }
+            .upload-area {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container  cont">
+        <div class="card">
+            <div class="card-header">
+                <a href="teacher_landingpage.html" style="text-decoration: none;">
+                <button class="back-btn">
+                    <i class="bi bi-arrow-left me-2"></i>BACK
+                </button>
+            </a>
+                <h1 class="text-center mt-3">Plagiarism Detector</h1>
+            </div>
+            <div class="card-body p-4">
+                <form id="plagiarismForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="upload-area">
+                                <i class="bi bi-cloud-arrow-up-fill upload-icon"></i>
+                                <h3 class="mt-4">Upload Document 1</h3>
+                                <p class="text-muted">Click or drag and drop your file here</p>
+                                <input type="file" class="form-control mt-3" id="file1" accept=".pdf,.doc,.docx,.txt">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="upload-area">
+                                <i class="bi bi-cloud-arrow-up-fill upload-icon"></i>
+                                <h3 class="mt-4">Upload Document 2</h3>
+                                <p class="text-muted">Click or drag and drop your file here</p>
+                                <input type="file" class="form-control mt-3" id="file2" accept=".pdf,.doc,.docx,.txt">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Detect Plagiarism</button>
+                </form>
+                <div class="mt-4 result-area" id="resultArea" style="display: none;">
+                    <h4 class="mb-3">Plagiarism Detection Results:</h4>
+                    <p id="similarityPercentage" class="fw-bold"></p>
+                    <textarea class="form-control mt-3" id="similarParts" rows="5" readonly></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('plagiarismForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const file1 = document.getElementById('file1').files[0];
+            const file2 = document.getElementById('file2').files[0];
+
+            if (file1 && file2) {
+                // Simulate plagiarism detection (replace with actual implementation)
+                const similarity = Math.floor(Math.random() * 100);
+                const similarText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+
+                document.getElementById('similarityPercentage').textContent = `Similarity: ${similarity}%`;
+                document.getElementById('similarParts').value = similarText;
+                document.getElementById('resultArea').style.display = 'block';
+            } else {
+                alert('Please upload both documents before submitting.');
+            }
+        });
+    </script>
+</body>
+</html>
