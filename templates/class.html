@@ -144,7 +144,10 @@
         .post-actions .btn-edit:hover, .post-actions .btn-delete:hover {
             color: var(--primary-color);
         }
-
+        
+        .liked{
+            background-color: #52de9c;
+        }
         .post-actions form {
             display: flex;
             gap: 10px;
@@ -251,9 +254,9 @@
                          </div>
                          <p class="card-text">{{ post[5] }}</p>
                          <div class="d-flex justify-content-between align-items-center mb-3 post-actions">
-                            <button class="like-button" data-post-id="{{ post[0] }}">
+                            <button class="like-button" data-post-id="{{ post[0] }}" data-user-id="{{current_user}}" onclick="likePost(this)">
                                 <i class="bi bi-hand-thumbs-up"></i>
-                                {{ likes | selectattr("0", "equalto", post[0]) | list | length }}
+                                <span class="like-count">{{ likes | selectattr("0", "equalto", post[0]) | list | length }}</span>
                             </button>
                              <button class="btn btn-link">
                                  <i class="bi bi-chat me-1"></i>
@@ -296,52 +299,78 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const likeButtons = document.querySelectorAll(".like-button");
-    
-            likeButtons.forEach(button => {
-                button.addEventListener("click", function() {
-                    const postId = this.getAttribute("data-post-id");
-                    const userId = "user_id"; // Set the user ID here
-                    const likeCountSpan = this.querySelector(".like-count");
-                    let currentLikes = parseInt(likeCountSpan.textContent);
-                    const liked = this.getAttribute("data-liked") === "true";
-    
-                    // Use Fetch API to toggle like/unlike
-                    fetch(`/update_like_count/${postId}/${userId}`, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        }
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error("Failed to update like count");
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Update the displayed like count and toggle like state
-                        likeCountSpan.textContent = `${data.new_like_count} Likes`;
-                        this.setAttribute("data-liked", data.liked);  // Update liked state
-    
-                        // Update like count visually based on toggle
-                        if (data.liked) {
-                            currentLikes += 1;
-                            this.classList.add("liked");  // Optional: Add styling for liked state
-                        } else {
-                            currentLikes -= 1;
-                            this.classList.remove("liked");
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error updating like count:", error);
-                    });
-                });
-            });
+       async function likePost(button) {
+    const postId = button.getAttribute("data-post-id");
+    const userId = button.getAttribute("data-user-id");
+    const likeCountElement = button.querySelector(".like-count");
+
+    try {
+        // Send POST request with post_id and user_id
+        const response = await fetch("/api/like", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ post_id: postId, user_id: userId })
         });
-    </script>
+
+        if (response.ok) {
+            const data = await response.json();
+
+            // Update the like count in the UI
+            likeCountElement.textContent = data.likes;
+
+            // Toggle the liked class based on the action
+            if (data.action === "liked") {
+                button.classList.add("liked");  // Add the liked state immediately
+            } else {
+                button.classList.remove("liked");  // Remove the liked state immediately
+            }
+        } else {
+            console.error("Failed to update likes");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+        </script>
+
+<script>
+
+// Function to load liked statuses on page load
+async function loadLikedStatuses(userId) {
+    try {
+        // Fetch the liked statuses for the current user
+        const response = await fetch(`/api/liked_statuses?user_id=${userId}`);
+        
+        if (response.ok) {
+            const likedPosts = await response.json();
+
+            // Loop through each like button on the page
+            document.querySelectorAll(".like-button").forEach(button => {
+                const postId = button.getAttribute("data-post-id");
+                
+                // Check if this post ID is in the list of liked posts
+                if (likedPosts.includes(parseInt(postId))) {
+                    button.classList.add("liked");  // Add liked class if post is liked
+                }
+            });
+        } else {
+            console.error("Failed to load liked statuses");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+// Call this function on page load, passing the current user ID
+document.addEventListener("DOMContentLoaded", () => {
+    const userId = document.querySelector(".like-button").getAttribute("data-user-id"); //user_id is available on each button
+    loadLikedStatuses(userId);
+});
+        </script>
 
 </body>
 </html>

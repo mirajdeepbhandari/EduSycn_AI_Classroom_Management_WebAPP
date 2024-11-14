@@ -261,17 +261,79 @@ async def classroom(request: Request, subject_id:str, subject:str, class_id:str)
             likes = cursor.fetchall()
             print(likes)
             
+            current_user=request.session.get("user_id")
+
             return templates.TemplateResponse("class.html", {"request": request, "posts":posts, "subject_name":subject,
-                                                             "post_time":formatted_date, "comments":comments,"likes":likes
-                                                            })
+                                                             "post_time":formatted_date, "comments":comments,"likes":likes,
+                                                            "current_user":current_user})
         finally:
             connection.close()
     except Exception as e:
         print(f"An error occurred: {e}")
         return RedirectResponse(url="/", status_code=303)
 
+@app.post("/api/like")
+async def like_post(request: Request):
+    try:
+        # Parse the JSON request body
+        data = await request.json()
+        post_id_ = data.get("post_id")
+        user_id_ = data.get("user_id")
 
+        # Check if post_id and user_id are provided
+        if post_id_ is None or user_id_ is None:
+            raise HTTPException(status_code=400, detail="post_id and user_id are required")
+        
+        # Establish connection
+        connection = establish_connection()
+        
+        try:
+            cursor = connection.cursor()
 
+            # Check if the user has already liked the post
+            cursor.execute("SELECT like_id FROM likes WHERE post_id = %s AND user_id = %s", (post_id_, user_id_))
+            result = cursor.fetchone()
+
+            # Initialize a variable to track the action type
+            action = "liked"
+
+            if result:
+                # If already liked, delete the like (unlike)
+                cursor.execute("DELETE FROM likes WHERE post_id = %s AND user_id = %s;", (post_id_, user_id_))
+                connection.commit()
+                action = "unliked"
+            else:
+                # Otherwise, insert a new like
+                cursor.execute("INSERT INTO likes (post_id, user_id) VALUES (%s, %s);", (post_id_, user_id_))
+                connection.commit()
+
+            # Get the updated like count
+            cursor.execute("SELECT COUNT(*) FROM likes WHERE post_id = %s", (post_id_,))
+            like_count = cursor.fetchone()[0]
+
+            # Return the updated like count and action type
+            return {"likes": like_count, "action": action}
+        
+        finally:
+            # Ensure the connection is always closed
+            connection.close()
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        raise HTTPException(status_code=500, detail="An error occurred while processing your request")
+
+@app.get("/api/liked_statuses")
+async def get_liked_statuses(user_id: int):
+    connection = establish_connection()
+    try:
+        cursor = connection.cursor()
+        # Get the post_ids that the user has liked
+        cursor.execute("SELECT post_id FROM likes WHERE user_id = %s", (user_id,))
+        liked_posts = [row[0] for row in cursor.fetchall()]
+        return liked_posts
+    finally:
+        connection.close()
+        
 @app.get("/teacher_dashboard", response_class=HTMLResponse)
 async def teacher_dashboard(request: Request):
     return templates.TemplateResponse("Teacher/teacher_landingpage.html", {"request": request})
