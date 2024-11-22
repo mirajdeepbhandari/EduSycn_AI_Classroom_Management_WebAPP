@@ -279,10 +279,13 @@
 
                     {% for sub in subject_data %}
                     <div class="col-md-4 mb-3">
-                        <a href="/class?subject_id={{ sub[1] }}&subject={{ sub[0] }}&class_id={{ class_id }}" style="text-decoration: none; color: #000000;">
-                            <div class="course-card">
-                                <h5> {{ sub[0] }}</h5>
-                                <p class="mb-2"> {{ class_name }}</p>
+                        <form action="{{url_for('classroom')}}" method="POST" style="text-decoration: none; color: #000000; background-color: white; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); border: none; border-radius: 12px; padding: 20px; transition: box-shadow 0.3s;">
+                            <input type="hidden" name="subject_id" value="{{sub[1]}}">
+                            <input type="hidden" name="subject" value="{{sub[0]}}">
+                            <input type="hidden" name="class_id" value="{{class_id}}">
+                            <button type="submit" class="course-card" style="all: unset; display: block; width: 100%; cursor: pointer;">
+                                <h5>{{ sub[0] }}</h5>
+                                <p class="mb-2">Physics</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span>76 Students</span>
                                     <div class="avatar-group">
@@ -291,13 +294,11 @@
                                         <img src="https://via.placeholder.com/30/dc3545/ffffff?text=S3" alt="Student 3">
                                     </div>
                                 </div>
-                            </div>
-                        </a>
+                            </button>
+                        </form>
                     </div>
                     {% endfor %}
-                    
-                
-            
+
                 </div>
             </div>
         </main>

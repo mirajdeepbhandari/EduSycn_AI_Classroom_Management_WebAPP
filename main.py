@@ -86,13 +86,15 @@ async def login_validation(
         try:
             cursor = connection.cursor()
             # Check if the email and password match
-            cursor.execute('SELECT user_id, role FROM user WHERE email=%s AND password=%s', (email, password))
+            cursor.execute('SELECT user_id,full_name, role FROM user WHERE email=%s AND password=%s', (email, password))
             user = cursor.fetchone()
 
             if user:
-                user_id, role = user
+                user_id,name, role = user
                 # Store user_id in the session
                 request.session['user_id'] = user_id
+                request.session['user_name'] = name
+                request.session['role'] = role
 
                 # Redirect based on role
                 if role == "student":
@@ -190,8 +192,8 @@ def random_color(value):
     return "#{:06x}".format(random.randint(0, 0xFFFFFF))
 
 templates.env.filters["random_color"] = random_color
-@app.get("/class", response_class=HTMLResponse)
-async def classroom(request: Request, subject_id:str, subject:str, class_id:str):
+@app.post("/class", response_class=HTMLResponse)
+async def classroom(request: Request, subject_id:str = Form(...), subject:str = Form(...), class_id:str  = Form(...)):
     try:
         connection = establish_connection()
         try:
@@ -259,13 +261,18 @@ async def classroom(request: Request, subject_id:str, subject:str, class_id:str)
 
             cursor.execute(like_query, (class_id,subject_id))
             likes = cursor.fetchall()
-            print(likes)
+       
             
             current_user=request.session.get("user_id")
+            current_role=request.session.get("role")
 
+    
+            
+            
             return templates.TemplateResponse("class.html", {"request": request, "posts":posts, "subject_name":subject,
                                                              "post_time":formatted_date, "comments":comments,"likes":likes,
-                                                            "current_user":current_user})
+                                                            "current_user":current_user, "class_id":class_id, "subject_id":subject_id,
+                                                            "current_role":current_role})
         finally:
             connection.close()
     except Exception as e:
@@ -333,10 +340,194 @@ async def get_liked_statuses(user_id: int):
         return liked_posts
     finally:
         connection.close()
+
+@app.post("/classroom_students", response_class=HTMLResponse)
+async def showClassMembers(request: Request, subject_id:str = Form(...), subject:str = Form(...), class_id:str = Form(...)):
+
+    try:
+        connection = establish_connection()
+        try:
+            cursor = connection.cursor()
+
+            query_students = '''
+               SELECT u.full_name
+                FROM user u
+                JOIN student s ON u.user_id = s.user_id
+                JOIN class_sub cs ON s.class_id = cs.class_id
+                WHERE u.role = 'student'
+                AND s.class_id = %s
+                AND cs.subject_id = %s;
+            '''
+           
+                                      
+            cursor.execute(query_students, (class_id,subject_id))
+            students = cursor.fetchall()
+            print(students)
+            return templates.TemplateResponse("list_of_students.html", {"request": request, 
+                                                                        "listofstu":students,
+                                                                        "subject_name":subject,
+                                                                        "class_id":class_id,
+                                                                        "subject_id":subject_id,
+                                                                         "subject":subject})
         
+        finally:
+            connection.close()
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return RedirectResponse(url="/", status_code=303)
+
 @app.get("/teacher_dashboard", response_class=HTMLResponse)
 async def teacher_dashboard(request: Request):
-    return templates.TemplateResponse("Teacher/teacher_landingpage.html", {"request": request})
+    current_teacher = request.session.get('user_name')
+    current_user_id = request.session.get('user_id')
+
+    try:
+        connection = establish_connection()
+        try:
+            cursor = connection.cursor()
+
+            query = '''
+               SELECT 
+                    t.user_id,
+                    t.teacher_id,
+                    tc.class_id,
+                    c.class_name,
+                    tc.subject_id,
+                    s.subject_name
+                FROM 
+                    teacher_class AS tc
+                INNER JOIN teacher AS t ON tc.teacher_id = t.teacher_id
+                INNER JOIN classroom AS c ON c.class_id = tc.class_id
+                INNER JOIN subject AS s ON s.subject_id = tc.subject_id
+                WHERE t.user_id = %s
+                ORDER BY tc.class_id ASC;
+
+            '''
+           
+            cursor.execute(query, (current_user_id,))
+            teaching_modules = cursor.fetchall()
+            return templates.TemplateResponse("Teacher/teacher_landingpage.html", {"request": request, 
+                                                                                   "teaching_modules": teaching_modules, 
+                                                                                   "current_teacher": current_teacher})
+        
+        finally:
+            connection.close()
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return RedirectResponse(url="/", status_code=303)
+
+
+
+@app.post("/give_assignment", response_class=HTMLResponse)
+async def giveAssignment(
+    request: Request,
+    subject_id: str = Form(...),
+    class_id: str = Form(...),
+    subject: str = Form(...),
+    title: str = Form(None),
+    teacher_id: str = Form(...),
+    description: str = Form(None),
+    due_date: str = Form(None),
+    
+):
+    if title and description and due_date:
+        connection = establish_connection()
+
+        if connection and connection.is_connected():
+            try:
+                cursor = connection.cursor()
+                cursor.execute("SELECT teacher_id FROM teacher WHERE user_id = %s", (teacher_id,))
+                teacher = cursor.fetchone()
+                
+                sql_query = """
+                        INSERT INTO assignment 
+                        (teacher_id, class_id, subject_id, assignment_title, assignment_description, due_date) 
+                        VALUES (%s, %s, %s, %s, %s, %s)
+                        """
+                data = (teacher[0], class_id, subject_id, title, description, due_date)
+
+                cursor.execute(sql_query, data)
+
+                connection.commit()
+
+                  # Handle assignment creation logic here
+                return templates.TemplateResponse(
+                "TEACHER/give_assignment.html",  
+                {"request": request,
+                "subject_id": subject_id,
+                    "class_id": class_id,
+                    "subject_name": subject,
+                "message": "Assignment created successfully"}
+        )
+
+            finally:
+                connection.close()
+        else:
+            return RedirectResponse(url="/", status_code=303)
+        
+       
+
+    else:
+        # Render the assignment form
+        return templates.TemplateResponse(
+            "TEACHER/give_assignment.html",
+            {
+                "request": request,
+                "subject_id": subject_id,
+                "class_id": class_id,
+                "subject_name": subject,
+                "teacher_id": teacher_id
+            },
+        )
+    
+
+@app.post("/sumbitAssignment", response_class=HTMLResponse)
+async def Assignment(request: Request, subject_id: str = Form(...), class_id: str = Form(...), subject:str = Form(...)):
+
+        connection = establish_connection()
+
+        if connection and connection.is_connected():
+            try:
+                cursor = connection.cursor()
+                cursor.execute("SELECT * FROM `assignment` WHERE class_id=%s and subject_id=%s;", (class_id,subject_id))
+                Assignment = cursor.fetchone()
+                if Assignment:
+                    teacher_id=Assignment[1]
+                    title=Assignment[4]
+                    description=Assignment[5]
+                    due_date=Assignment[6]
+
+                    cursor.execute("SELECT u.full_name FROM teacher AS t JOIN user AS u ON t.user_id = u.user_id WHERE t.teacher_id = %s;", (teacher_id,))
+                    teacher_name = cursor.fetchone()
+
+                    return templates.TemplateResponse("assignment.html", {"request": request,
+                                                            "subject_id": subject_id,
+                                                            "class_id": class_id,
+                                                            "subject_name": subject,
+                                                            "teacher_name": teacher_name[0],
+                                                            "title": title,
+                                                            "description": description,
+                                                            "due_date": due_date})
+                else:
+                     return templates.TemplateResponse("assignment.html", {"request": request,
+                                                            "subject_id": subject_id,
+                                                            "class_id": class_id,
+                                                            "subject_name": subject,
+                                                            "description": None,
+                                                            })
+
+            finally:
+                connection.close()
+        else:
+            return RedirectResponse(url="/", status_code=303)
+        
+
+    
+
+
+
 
 
 if __name__ == "__main__":

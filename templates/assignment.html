@@ -54,6 +54,33 @@
             border-left: 5px solid #6a11cb;
             border-radius: 10px;
         }
+        /* Basic Styling */
+.responsive-deadline {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Allows wrapping on smaller screens */
+    gap: 10px; /* Adds space between items */
+    padding: 10px;
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    .responsive-deadline {
+        flex-direction: column; /* Stacks items vertically on smaller screens */
+        align-items: flex-start; /* Aligns items to the left */
+    }
+}
+
+.deadline{
+    color: #6a11cb;
+    font-weight: bold;
+}
+
+.teacher{
+    color: #1711cb;
+    font-weight: bold;
+}
+
     </style>
 </head>
 <body>
@@ -61,18 +88,30 @@
         <div class="card">
             <div class="card-header text-white d-flex justify-content-between align-items-center py-3">
                 <h1 class="h3 mb-0">Assignment Portal</h1>
-                <a href="class.html" style="text-decoration: none;">
-                <button class="btn btn-outline-light btn-sm">
-                    <i class="fas fa-arrow-left me-2"></i>Back
-                </button>
-                </a>
+                <form action="{{ url_for('classroom') }}" method="POST" style="display: inline;">
+
+                    <input type="hidden" name="subject_id" value="{{ subject_id }}">
+                    <input type="hidden" name="subject" value="{{ subject_name }}">
+                    <input type="hidden" name="class_id" value="{{ class_id }}">
+
+                    <button type="submit" class="btn btn-outline-light btn-sm">
+                        <i class="fas fa-arrow-left me-2"></i>Back
+                    </button>
+                </form>                
             </div>
+            
             <div class="card-body p-4">
+                {% if description %}
                 <div class="mb-4 assignment-box p-3">
-                    <h2 class="h5 mb-3 text-primary">New Assignment:</h2>
+                    <h2 class="h5 mb-3 text-primary">New Assignment: {{title}}</h2>
                     <p class="mb-0">
-                        Create a responsive website for a fictional restaurant. The website should include a home page, menu page, and contact page. Use HTML, CSS, and JavaScript to create an interactive and visually appealing design. Ensure the website is mobile-friendly and adheres to modern web design principles.
+                       {{ description }}
                     </p>
+                </div>
+                
+                <div class="responsive-deadline">
+                    <h5 class="deadline">Deadline: {{ due_date }}</h5>
+                    <h5 class="teacher">Teacher: {{ teacher_name }}</h5>
                 </div>
                 
                 <div class="mb-4">
@@ -94,7 +133,15 @@
                         <i class="fas fa-paper-plane me-2"></i>Submit
                     </button>
                 </div>
+                
+                {% else %}
+                <div class="text-center" style="height: 70vh; display: flex; justify-content: center; align-items: center;">
+                    <h2 class="h5 mb-3 text-primary">✍🏻 Currently, There are no Tasks 👨🏻‍🏫 or Assignments Available for you !!!</h2>
+                </div>
+                
+                {% endif %}
             </div>
+            
         </div>
     </div>
 

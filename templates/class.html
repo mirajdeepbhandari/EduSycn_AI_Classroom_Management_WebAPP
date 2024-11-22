@@ -181,9 +181,9 @@
     <div class="container main-container">
         <div class="row">
             <div class="col-12 mb-4">
-                <a href="{{url_for('student_dashboard')}}" class="btn btn-light mt-3 bkbtn">
+                <a href="{% if current_role == 'teacher' %}{{ url_for('teacher_dashboard') }}{% else %}{{ url_for('student_dashboard') }}{% endif %}" class="btn btn-light mt-3 bkbtn">
                     <i class="bi bi-arrow-left"></i> Back
-                </a>
+                </a>                
             </div>
         </div>
 
@@ -197,10 +197,35 @@
         </div>
 
         <nav class="nav nav-pills nav-justified my-4 mininav">
-            <a class="nav-link" href="assignment.html" style="color:white"><i class="bi bi-book me-2"></i>Assignments</a>
-            <a class="nav-link" href="chat.html" style="color:white"><i class="bi bi-chat-dots me-2" ></i>Chat With Teacher</a>
-            <a class="nav-link" href="list_of_students.html" style="color:white"><i class="bi bi-people-fill me-2"></i>Students</a>
+            <div style="display: flex; justify-content: space-between; width: 100%;">
+                <form action="{% if current_role == 'teacher' %}{{ url_for('giveAssignment') }}{% else %}{{ url_for('Assignment') }}{% endif %}" method="POST" class="m-0 flex-grow-1 text-center">
+                    <input type="hidden" name="subject_id" value="{{ subject_id }}">
+                    <input type="hidden" name="subject" value="{{ subject_name }}">
+                    <input type="hidden" name="class_id" value="{{ class_id }}">
+                    <input type="hidden" name="teacher_id" value="{{ current_user}}">
+                    <button type="submit" class="nav-link btn btn-link" style="color:white; text-decoration: none; width: 100%;">
+                        <i class="bi bi-book me-2"></i>Assignments
+                    </button>
+                </form>
+                {% if current_role != 'teacher' %}
+                <form action="chat.html" method="POST" class="m-0 flex-grow-1 text-center">
+                    <button type="submit" class="nav-link btn btn-link" style="color:white; text-decoration: none; width: 100%;">
+                        <i class="bi bi-chat-dots me-2"></i>Chat With Teacher
+                    </button>
+                </form>
+                {% endif %}
+        
+                <form action="/classroom_students" method="POST" class="m-0 flex-grow-1 text-center">
+                    <input type="hidden" name="subject_id" value="{{ subject_id }}">
+                    <input type="hidden" name="subject" value="{{ subject_name }}">
+                    <input type="hidden" name="class_id" value="{{ class_id }}">
+                    <button type="submit" class="nav-link btn btn-link" style="color:white; text-decoration: none; width: 100%;">
+                        <i class="bi bi-people-fill me-2"></i>Students
+                    </button>
+                </form>
+            </div>
         </nav>
+        
 
         <div class="row">
             <div class="col-12 mb-4">
@@ -243,14 +268,18 @@
                                      <p class="card-text"><small class="text-muted">{{post_time}}</small></p>
                                  </div>
                              </div>
+                             {% if current_user == post[1] %}
                              <div class="post-actions">
+                                 
                                  <form>
-                                     <a href="editpage.html?id={{ post[0] }}">
-                                         <div class="btn-edit"><i class="bi bi-pencil"></i></div>
-                                     </a>
                                      <button class="btn-delete" type="button"><i class="bi bi-trash"></i></button>
                                  </form>
+                                 <form>
+                                    <button class="btn-edit" type="button"><i class="bi bi-pencil"></i></button>
+                                </form>
                              </div>
+                             {% endif %}
+
                          </div>
                          <p class="card-text">{{ post[5] }}</p>
                          <div class="d-flex justify-content-between align-items-center mb-3 post-actions">

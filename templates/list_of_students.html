@@ -98,12 +98,15 @@
 <body>
     <div class="container py-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="section-title mb-0">Artificial Intelligence Class</h1>
-            <a href="class.html" style="text-decoration: none;">
-            <button class="back-button">
-                <i class="fas fa-arrow-left me-2"></i>Back
-            </button>
-            </a>
+            <h1 class="section-title mb-0">{{subject_name}}</h1>
+            <form action="{{ url_for('classroom') }}" method="POST" style="display: inline;">
+                <input type="hidden" name="subject_id" value="{{ subject_id }}">
+                <input type="hidden" name="subject" value="{{ subject_name }}">
+                <input type="hidden" name="class_id" value="{{ class_id }}">
+                <button type="submit" class="back-button">
+                    <i class="fas fa-arrow-left me-2"></i>Back
+                </button>
+            </form>
         </div>
         <div class="row">
             <hr style="border: 1.5px double #000000; margin: 30px 0;">
@@ -128,49 +131,18 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <span>Students</span>
-                        <span class="student-count">20 students</span>
+                        <span class="student-count">{{listofstu | length}} students</span>
                     </div>
                     <ul class="list-group list-group-flush">
+                        {% for student in listofstu %}
                         <li class="list-group-item">
-                            <div class="avatar" style="background-color: #3a7bd5;">A</div>
-                            <span class="name">Adar</span>
+                            <div class="avatar" style="background-color: #3a7bd5;">{{student[0] | initials}}</div>
+                            <span class="name">{{student[0]}}</span>
                         </li>
-                        <li class="list-group-item">
-                            <div class="avatar" style="background-color: #00d2ff;">AM</div>
-                            <span class="name">Ajit Mandal</span>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="avatar" style="background-color: #4facfe;">AA</div>
-                            <span class="name">Apil Adhikari</span>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="avatar" style="background-color: #38ef7d;">UB</div>
-                            <span class="name">Upendra Bohara</span>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="avatar" style="background-color: #6a11cb;">SK</div>
-                            <span class="name">Sanjay Kushwaha</span>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="avatar" style="background-color: #fc00ff;">RS</div>
-                            <span class="name">Ram Sharma</span>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="avatar" style="background-color: #00dbde;">SP</div>
-                            <span class="name">Sita Poudel</span>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="avatar" style="background-color: #f9d423;">BK</div>
-                            <span class="name">Binod Karki</span>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="avatar" style="background-color: #ff0844;">GS</div>
-                            <span class="name">Gita Shrestha</span>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="avatar" style="background-color: #396afc;">RB</div>
-                            <span class="name">Rajesh Bhattarai</span>
-                        </li>
+                        {% endfor %}
+
+                        
+                        
                     </ul>
                 </div>
             </div>
