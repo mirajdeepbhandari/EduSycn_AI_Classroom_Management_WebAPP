@@ -69,7 +69,7 @@
             transition: all 0.3s ease;
         }
         .btn-back:hover {
-            background-color: #ff6666; /* Light red */
+            background-color: #ff6666;
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
@@ -101,32 +101,44 @@
         {% if message %}
         <div class="alert alert-success" role="alert">
             {{ message }}
-          </div>
+        </div>
         {% endif %}
-        <form action="/give_assignment" method="post">
+        <form action="/give_assignment" method="post" enctype="multipart/form-data">
             <!-- Hidden inputs for subject_id, class_id, and teacher_id -->
-            <input type="hidden" name="subject_id" value="{{ subject_id}}">
+            <input type="hidden" name="subject_id" value="{{ subject_id }}">
             <input type="hidden" name="class_id" value="{{ class_id }}">
             <input type="hidden" name="subject" value="{{ subject_name }}">
             <input type="hidden" name="teacher_id" value="{{ teacher_id }}">
-      
-        
-            <!-- The rest of the form fields -->
+
+            <!-- Assignment Title -->
             <div class="mb-3">
                 <label for="assignment_title" class="form-label">Assignment Title</label>
                 <input type="text" class="form-control" id="assignment_title" placeholder="Enter assignment title" name="title" required>
             </div>
+
+            <!-- Assignment Description -->
             <div class="mb-3">
                 <label for="assignment_description" class="form-label">Assignment Description</label>
                 <textarea class="form-control" id="assignment_description" rows="4" placeholder="Enter assignment description" name="description" required></textarea>
             </div>
+
+            <!-- Due Date -->
             <div class="mb-3">
                 <label for="due_date" class="form-label">Due Date</label>
                 <input type="date" class="form-control" id="due_date" name="due_date" required>
             </div>
+
+            <!-- File Upload -->
+            <div class="mb-3">
+                <label for="assignment_file" class="form-label">Upload Assignment File</label>
+                <div class="custom-file">
+                    <input type="file" class="form-control" id="assignment_file" name="assignment_file" required>
+                </div>
+            </div>
+
+            <!-- Buttons -->
             <div class="button-group">
                 <button type="submit" class="btn btn-primary flex-grow-1">Submit Assignment</button>
-              
             </div>
         </form>
         <br>
@@ -135,13 +147,12 @@
             <input type="hidden" name="subject_id" value="{{ subject_id }}">
             <input type="hidden" name="class_id" value="{{ class_id }}">
             <input type="hidden" name="subject" value="{{ subject_name }}">
-        
-            <!-- Submit button for going back -->
+
+            <!-- Back Button -->
             <button type="submit" class="btn btn-back flex-grow-1">Back</button>
         </form>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-  
 </body>
 </html>

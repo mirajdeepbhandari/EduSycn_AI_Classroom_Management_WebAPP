@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Form, Depends,HTTPException
+from fastapi import FastAPI, Request, Form, Depends,HTTPException, UploadFile
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -6,6 +6,12 @@ import mysql.connector
 from mysql.connector import Error
 from starlette.middleware.sessions import SessionMiddleware
 import random
+from random import randint
+from datetime import datetime, timedelta
+import aiosmtplib
+from email.message import EmailMessage
+import shutil
+import os
 
 app = FastAPI()
 
@@ -31,6 +37,57 @@ def establish_connection():
     except Error as e:
         print(f'Error: {e}')
         return None
+
+
+
+# In-memory OTP storage for demo purposes
+otp_store = {}
+
+# Email configuration
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587  
+EMAIL_USER = "edusync521@gmail.com"  
+EMAIL_PASSWORD = "zazi wgrw ofir bmbd" 
+
+def generate_otp():
+    """Generate a 6-digit OTP."""
+    return str(randint(100000, 999999))
+
+@app.get("/send-otp/")
+async def send_otp(email: str = Form(None)):
+    """Send OTP to the provided email address."""
+    otp = generate_otp()
+    email="mirajdeepbhandari7@gmail.com"
+    expiry_time = datetime.utcnow() + timedelta(minutes=5) 
+    otp_store[email] = {"otp": otp, "expires_at": expiry_time}
+
+    # Create the email message
+    try:
+        message = EmailMessage()
+        message.set_content(f"Your OTP is: {otp}. It is valid for 5 minutes.")
+        message["Subject"] = "Your OTP"
+        message["From"] = EMAIL_USER
+        message["To"] = email
+
+        # Connect to the SMTP server with STARTTLS on port 587
+        smtp_client = aiosmtplib.SMTP(hostname=EMAIL_HOST, port=EMAIL_PORT)
+        await smtp_client.connect()
+
+        # Login to the SMTP server
+        await smtp_client.login(EMAIL_USER, EMAIL_PASSWORD)
+
+        # Send the email
+        await smtp_client.send_message(message)
+
+        # Close the connection
+        await smtp_client.quit()
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to send OTP: {str(e)}")
+
+    return {"message": "OTP sent successfully"}
+
+
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -430,14 +487,43 @@ async def giveAssignment(
     teacher_id: str = Form(...),
     description: str = Form(None),
     due_date: str = Form(None),
+    assignment_file: UploadFile = Form(None)
+ 
     
 ):
     if title and description and due_date:
         connection = establish_connection()
 
         if connection and connection.is_connected():
+
+           save_location = None
+
+        if assignment_file:
+            uploads_base = "static/TeacherAssignment"
+            
+            # Create the full path for the file save location
+            save_location = os.path.join(uploads_base, class_id, subject_id, subject, assignment_file.filename)
+            
+            # Check if the directory exists and if it contains any files
+            directory = os.path.dirname(save_location)
+            if os.path.exists(directory):
+                # If the directory exists, remove all files in the directory
+                for file in os.listdir(directory):
+                    file_path = os.path.join(directory, file)
+                    if os.path.isfile(file_path):
+                        os.remove(file_path)
+
+            # Ensure the directory exists
+            os.makedirs(directory, exist_ok=True)
+
+            # Save the uploaded file
+            with open(save_location, "wb") as file_object:
+                shutil.copyfileobj(assignment_file.file, file_object)
+                
             try:
                 cursor = connection.cursor()
+            
+
                 cursor.execute("SELECT teacher_id FROM teacher WHERE user_id = %s", (teacher_id,))
                 teacher = cursor.fetchone()
                 
@@ -449,6 +535,10 @@ async def giveAssignment(
                 data = (teacher[0], class_id, subject_id, title, description, due_date)
 
                 cursor.execute(sql_query, data)
+
+                connection.commit()
+
+                cursor.execute("DELETE FROM assignment WHERE created_at < (SELECT MAX(created_at) FROM assignment);")
 
                 connection.commit()
 
@@ -491,7 +581,9 @@ async def Assignment(request: Request, subject_id: str = Form(...), class_id: st
         if connection and connection.is_connected():
             try:
                 cursor = connection.cursor()
-                cursor.execute("SELECT * FROM `assignment` WHERE class_id=%s and subject_id=%s;", (class_id,subject_id))
+
+                cursor.execute("SELECT * from assignment WHERE class_id = %s AND subject_id = %s ORDER BY created_at DESC LIMIT 1;", (class_id,subject_id))
+
                 Assignment = cursor.fetchone()
                 if Assignment:
                     teacher_id=Assignment[1]
@@ -501,6 +593,7 @@ async def Assignment(request: Request, subject_id: str = Form(...), class_id: st
 
                     cursor.execute("SELECT u.full_name FROM teacher AS t JOIN user AS u ON t.user_id = u.user_id WHERE t.teacher_id = %s;", (teacher_id,))
                     teacher_name = cursor.fetchone()
+
 
                     return templates.TemplateResponse("assignment.html", {"request": request,
                                                             "subject_id": subject_id,
