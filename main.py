@@ -57,7 +57,7 @@ def generate_otp():
 async def send_otp(email: str = Form(None)):
     """Send OTP to the provided email address."""
     otp = generate_otp()
-    email="mirajdeepbhandari7@gmail.com"
+    email="arbitbhandari17@gmail.com"
     expiry_time = datetime.utcnow() + timedelta(minutes=5) 
     otp_store[email] = {"otp": otp, "expires_at": expiry_time}
 
@@ -538,6 +538,10 @@ async def giveAssignment(
 
                 connection.commit()
 
+                cursor.execute("UPDATE assignment SET link = %s", (save_location,))
+
+                connection.commit()
+
                 cursor.execute("DELETE FROM assignment WHERE created_at < (SELECT MAX(created_at) FROM assignment);")
 
                 connection.commit()
@@ -590,6 +594,8 @@ async def Assignment(request: Request, subject_id: str = Form(...), class_id: st
                     title=Assignment[4]
                     description=Assignment[5]
                     due_date=Assignment[6]
+                    created_at=format_datetime(Assignment[7])
+                    link=Assignment[8]
 
                     cursor.execute("SELECT u.full_name FROM teacher AS t JOIN user AS u ON t.user_id = u.user_id WHERE t.teacher_id = %s;", (teacher_id,))
                     teacher_name = cursor.fetchone()
@@ -602,7 +608,9 @@ async def Assignment(request: Request, subject_id: str = Form(...), class_id: st
                                                             "teacher_name": teacher_name[0],
                                                             "title": title,
                                                             "description": description,
-                                                            "due_date": due_date})
+                                                            "due_date": due_date,
+                                                            "created_at": created_at,
+                                                            "link": link,})
                 else:
                      return templates.TemplateResponse("assignment.html", {"request": request,
                                                             "subject_id": subject_id,
