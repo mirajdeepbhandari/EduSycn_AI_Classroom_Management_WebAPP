@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 22, 2024 at 04:13 PM
+-- Generation Time: Nov 23, 2024 at 01:58 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -34,15 +34,17 @@ CREATE TABLE `assignment` (
   `subject_id` int(11) DEFAULT NULL,
   `assignment_title` varchar(255) DEFAULT NULL,
   `assignment_description` text DEFAULT NULL,
-  `due_date` date DEFAULT NULL
+  `due_date` date DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `link` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `assignment`
 --
 
-INSERT INTO `assignment` (`assignment_id`, `teacher_id`, `class_id`, `subject_id`, `assignment_title`, `assignment_description`, `due_date`) VALUES
-(2, 9898, 10, 1, 'FRONT END DEVELOPMENT', 'Make a Ecommerce Website', '2024-11-19');
+INSERT INTO `assignment` (`assignment_id`, `teacher_id`, `class_id`, `subject_id`, `assignment_title`, `assignment_description`, `due_date`, `created_at`, `link`) VALUES
+(9, 9898, 10, 1, 'Frontend Assignment: Build a Simple To-Do List Application', 'Create a responsive To-Do List application using HTML, CSS, and JavaScript. This app should allow users to add tasks, mark them as completed, delete tasks, and filter tasks (e.g., show all, active, or completed).', '2024-11-23', '2024-11-23 12:09:46', 'static/TeacherAssignment\\10\\1\\English\\0001111000 (1).pdf');
 
 -- --------------------------------------------------------
 
@@ -439,7 +441,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `assignment`
 --
 ALTER TABLE `assignment`
-  MODIFY `assignment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `assignment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `likes`
