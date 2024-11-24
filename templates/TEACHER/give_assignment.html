@@ -142,11 +142,12 @@
             </div>
         </form>
         <br>
-        <form action="{{ url_for('classroom') }}" method="post">
+        <form action="{{ url_for('viewAssignment') }}" method="post">
             <!-- Hidden inputs for subject_id, class_id, and subject -->
             <input type="hidden" name="subject_id" value="{{ subject_id }}">
             <input type="hidden" name="class_id" value="{{ class_id }}">
             <input type="hidden" name="subject" value="{{ subject_name }}">
+            <input type="hidden" name="teacher_id" value="{{ teacher_id }}">
 
             <!-- Back Button -->
             <button type="submit" class="btn btn-back flex-grow-1">Back</button>

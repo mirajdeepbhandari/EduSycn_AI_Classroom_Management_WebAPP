@@ -52,37 +52,57 @@
             background-color: #6b46c1;
             color: white;
         }
+  
     </style>
 </head>
 <body>
     <div class="container py-4">
-        <div class="mb-4">
-            <button class="btn back-button px-4 py-2">back</button>
-        </div>
+        <form action="{{ url_for('classroom') }}" method="POST">
+            <input type="hidden" name="subject_id" value="{{ subject_id }}">
+            <input type="hidden" name="subject" value="{{ subject_name }}">
+            <input type="hidden" name="class_id" value="{{ class_id }}">
+
+            <div class="mb-4">
+                <button type="submit" class="btn back-button px-4 py-2">Back</button>
+            </div>
+        </form>
         
         <div class="row dashboard-grid g-4">
-            <div class="col-md-6">
-                <div class="dashboard-card p-4 d-flex flex-column align-items-center justify-content-center">
-                    <h2 class="mb-4 text-center">View Students Reports</h2>
-                    <div class="icon-container mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
+            <div class="col-md-6 d-flex justify-content-center align-items-center">
+                <form action="{{ url_for('studentMarkReport') }}" method="POST">
+                    <div class="dashboard-card p-4 d-flex flex-column align-items-center justify-content-center">
+                        <h2 class="mb-4 text-center">View Students Reports</h2>
+                        <button type="submit" class="icon-container mb-4 border-0 bg-transparent">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </button>
                     </div>
-                </div>
+                    <input type="hidden" name="subject_id" value="{{ subject_id }}">
+                    <input type="hidden" name="subject" value="{{ subject_name }}">
+                    <input type="hidden" name="class_id" value="{{ class_id }}">
+                    <input type="hidden" name="teacher_id" value="{{ teacher_id }}">
+                </form>
             </div>
-
-            <div class="col-md-6">
-                <div class="dashboard-card p-4 d-flex flex-column align-items-center justify-content-center">
-                    <h2 class="mb-4 text-center">Give New Assignment</h2>
-                    <div class="icon-container mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
+        
+            <div class="col-md-6 d-flex justify-content-center align-items-center">
+                <form action="{{ url_for('giveAssignment') }}" method="post">
+                    <div class="dashboard-card p-4 d-flex flex-column align-items-center justify-content-center">
+                        <h2 class="mb-4 text-center">Give New Assignment</h2>
+                        <button type="submit" class="icon-container mb-4 border-0 bg-transparent">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                        </button>
                     </div>
-                </div>
+                    <input type="hidden" name="subject_id" value="{{ subject_id }}">
+                    <input type="hidden" name="subject" value="{{ subject_name }}">
+                    <input type="hidden" name="class_id" value="{{ class_id }}">
+                    <input type="hidden" name="teacher_id" value="{{ teacher_id }}">
+                </form>
             </div>
         </div>
+        
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -577,6 +577,27 @@ async def giveAssignment(
         )
     
 
+
+@app.post("/assignmentview", response_class=HTMLResponse)
+async def viewAssignment(request: Request, subject_id: str = Form(...), class_id: str = Form(...), subject:str = Form(...), teacher_id: str = Form(...)):
+    return templates.TemplateResponse("Teacher/inside_assignment.html", {"request": request,
+                                                            "subject_id": subject_id,
+                                                            "class_id": class_id,
+                                                            "subject_name": subject,
+                                                            "teacher_id": teacher_id})
+
+
+
+
+
+
+
+
+
+
+
+
+
 @app.post("/sumbitAssignment", response_class=HTMLResponse)
 async def Assignment(request: Request, subject_id: str = Form(...), class_id: str = Form(...), subject:str = Form(...)):
 
@@ -626,7 +647,13 @@ async def Assignment(request: Request, subject_id: str = Form(...), class_id: st
         
 
     
-
+@app.post("/studentReportView", response_class=HTMLResponse)
+async def studentMarkReport(request: Request, subject_id: str = Form(...), class_id: str = Form(...), subject:str = Form(...), teacher_id: str = Form(...)):
+    return templates.TemplateResponse("Teacher/view_report.html", {"request": request,
+                                                            "subject_id": subject_id,
+                                                            "class_id": class_id,
+                                                            "subject_name": subject,
+                                                            "teacher_id": teacher_id})
 
 
 

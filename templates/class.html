@@ -198,7 +198,7 @@
 
         <nav class="nav nav-pills nav-justified my-4 mininav">
             <div style="display: flex; justify-content: space-between; width: 100%;">
-                <form action="{% if current_role == 'teacher' %}{{ url_for('giveAssignment') }}{% else %}{{ url_for('Assignment') }}{% endif %}" method="POST" class="m-0 flex-grow-1 text-center">
+                <form action="{% if current_role == 'teacher' %}{{ url_for('viewAssignment') }}{% else %}{{ url_for('Assignment') }}{% endif %}" method="POST" class="m-0 flex-grow-1 text-center">
                     <input type="hidden" name="subject_id" value="{{ subject_id }}">
                     <input type="hidden" name="subject" value="{{ subject_name }}">
                     <input type="hidden" name="class_id" value="{{ class_id }}">
