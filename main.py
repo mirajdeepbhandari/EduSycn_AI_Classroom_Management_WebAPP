@@ -152,6 +152,8 @@ async def login_validation(
                 request.session['user_id'] = user_id
                 request.session['user_name'] = name
                 request.session['role'] = role
+                print("user_id:",request.session['user_id'])
+                print("role:",request.session['role'])
 
                 # Redirect based on role
                 if role == "student":
@@ -323,8 +325,6 @@ async def classroom(request: Request, subject_id:str = Form(...), subject:str = 
             current_user=request.session.get("user_id")
             current_role=request.session.get("role")
 
-    
-            
             
             return templates.TemplateResponse("class.html", {"request": request, "posts":posts, "subject_name":subject,
                                                              "post_time":formatted_date, "comments":comments,"likes":likes,
@@ -602,20 +602,24 @@ async def viewAssignment(request: Request, subject_id: str = Form(...), class_id
 
 
 
-
-
-
-
-
-
-
-
+@app.post("/studentReportView", response_class=HTMLResponse)
+async def studentMarkReport(request: Request, subject_id: str = Form(...), class_id: str = Form(...), subject:str = Form(...), teacher_id: str = Form(...)):
+    return templates.TemplateResponse("Teacher/view_report.html", {"request": request,
+                                                            "subject_id": subject_id,
+                                                            "class_id": class_id,
+                                                            "subject_name": subject,
+                                                            "teacher_id": teacher_id})
 
 
 @app.post("/sumbitAssignment", response_class=HTMLResponse)
-async def Assignment(request: Request, subject_id: str = Form(...), class_id: str = Form(...), subject:str = Form(...)):
+async def Assignment(request: Request, subject_id: str = Form(...), class_id: str = Form(...), subject:str = Form(...),
+                     studentassignment_file: UploadFile = Form(None),
+                     teacher_id: str = Form(None),
+                     remarks: str = Form(None),
+                     student_id: str = Form(None)):
 
         connection = establish_connection()
+        
 
         if connection and connection.is_connected():
             try:
@@ -625,15 +629,70 @@ async def Assignment(request: Request, subject_id: str = Form(...), class_id: st
 
                 Assignment = cursor.fetchone()
                 if Assignment:
-                    teacher_id=Assignment[1]
+                    assignment_id=Assignment[0]
+                    teacher_id_=Assignment[1]
                     title=Assignment[4]
                     description=Assignment[5]
                     due_date=Assignment[6]
                     created_at=format_datetime(Assignment[7])
                     link=Assignment[8]
 
-                    cursor.execute("SELECT u.full_name FROM teacher AS t JOIN user AS u ON t.user_id = u.user_id WHERE t.teacher_id = %s;", (teacher_id,))
+                    cursor.execute("SELECT u.full_name FROM teacher AS t JOIN user AS u ON t.user_id = u.user_id WHERE t.teacher_id = %s;", (teacher_id_,))
                     teacher_name = cursor.fetchone()
+
+                    if studentassignment_file and remarks:
+                      
+
+                        # Save the uploaded file
+
+                        uploads_base = "static/StudentSubmission"
+
+                        cursor.execute("SELECT S.student_id,u.full_name FROM student AS S JOIN user AS u ON S.user_id = u.user_id WHERE u.user_id = %s;", (student_id,))
+                        student_info = cursor.fetchone()
+                        student_id=str(student_info[0])
+                        student_name=str(student_info[1])
+            
+                        # Create the full path for the file save location
+                        save_location = os.path.join(uploads_base, class_id, subject_id, subject,student_id,student_name, studentassignment_file.filename)
+                        
+                        # Check if the directory exists and if it contains any files
+                        directory = os.path.dirname(save_location)
+                        if os.path.exists(directory):
+                            # If the directory exists, remove all files in the directory
+                            for file in os.listdir(directory):
+                                file_path = os.path.join(directory, file)
+                                if os.path.isfile(file_path):
+                                    os.remove(file_path)
+
+                        # Ensure the directory exists
+                        os.makedirs(directory, exist_ok=True)
+
+                        # Save the uploaded file
+                        with open(save_location, "wb") as file_object:
+                            shutil.copyfileobj(studentassignment_file.file, file_object)
+
+                        
+                        cursor.execute("INSERT INTO submission (assignment_id, student_id, file_path, remarks) VALUES (%s, %s, %s, %s);",
+                        (assignment_id, student_id, save_location, remarks))
+
+                        connection.commit()
+
+                        cursor.execute(
+                                """
+                                DELETE FROM submission
+                                WHERE student_id = %s
+                                and assignment_id = %s
+                                AND submission_date < (
+                                    SELECT MAX(submission_date)
+                                    FROM submission
+                                    WHERE student_id = %s
+                                    AND assignment_id = %s
+                                );
+                                """,
+                                (int(student_id), int(assignment_id), int(student_id), int(assignment_id))
+                            )
+
+                        connection.commit()
 
 
                     return templates.TemplateResponse("assignment.html", {"request": request,
@@ -645,7 +704,10 @@ async def Assignment(request: Request, subject_id: str = Form(...), class_id: st
                                                             "description": description,
                                                             "due_date": due_date,
                                                             "created_at": created_at,
-                                                            "link": link,})
+                                                            "link": link,
+                                                            "user_id": teacher_id,
+                                                            "teacher_id": teacher_id_,                                                                            
+                                                        })
                 else:
                      return templates.TemplateResponse("assignment.html", {"request": request,
                                                             "subject_id": subject_id,
@@ -653,6 +715,7 @@ async def Assignment(request: Request, subject_id: str = Form(...), class_id: st
                                                             "subject_name": subject,
                                                             "description": None,
                                                             })
+                
 
             finally:
                 connection.close()
@@ -661,13 +724,6 @@ async def Assignment(request: Request, subject_id: str = Form(...), class_id: st
         
 
     
-@app.post("/studentReportView", response_class=HTMLResponse)
-async def studentMarkReport(request: Request, subject_id: str = Form(...), class_id: str = Form(...), subject:str = Form(...), teacher_id: str = Form(...)):
-    return templates.TemplateResponse("Teacher/view_report.html", {"request": request,
-                                                            "subject_id": subject_id,
-                                                            "class_id": class_id,
-                                                            "subject_name": subject,
-                                                            "teacher_id": teacher_id})
 
 
 
