@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 23, 2024 at 01:58 PM
+-- Generation Time: Nov 24, 2024 at 08:53 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -44,7 +44,8 @@ CREATE TABLE `assignment` (
 --
 
 INSERT INTO `assignment` (`assignment_id`, `teacher_id`, `class_id`, `subject_id`, `assignment_title`, `assignment_description`, `due_date`, `created_at`, `link`) VALUES
-(9, 9898, 10, 1, 'Frontend Assignment: Build a Simple To-Do List Application', 'Create a responsive To-Do List application using HTML, CSS, and JavaScript. This app should allow users to add tasks, mark them as completed, delete tasks, and filter tasks (e.g., show all, active, or completed).', '2024-11-23', '2024-11-23 12:09:46', 'static/TeacherAssignment\\10\\1\\English\\0001111000 (1).pdf');
+(29, 9898, 10, 1, 'English hw', 'English hw', '2024-11-24', '2024-11-24 07:51:34', 'static/TeacherAssignment\\10\\1\\English\\eng hw.txt'),
+(30, 9898, 10, 7, 'Nepali HW', 'nepali hw', '2024-11-29', '2024-11-24 07:52:03', 'static/TeacherAssignment\\10\\7\\Nepali\\nep hw.txt');
 
 -- --------------------------------------------------------
 
@@ -441,7 +442,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `assignment`
 --
 ALTER TABLE `assignment`
-  MODIFY `assignment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `assignment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `likes`

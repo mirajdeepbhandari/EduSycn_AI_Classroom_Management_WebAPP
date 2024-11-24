@@ -526,7 +526,7 @@ async def giveAssignment(
 
                 cursor.execute("SELECT teacher_id FROM teacher WHERE user_id = %s", (teacher_id,))
                 teacher = cursor.fetchone()
-                
+                       
                 sql_query = """
                         INSERT INTO assignment 
                         (teacher_id, class_id, subject_id, assignment_title, assignment_description, due_date) 
@@ -538,11 +538,24 @@ async def giveAssignment(
 
                 connection.commit()
 
-                cursor.execute("UPDATE assignment SET link = %s", (save_location,))
+                cursor.execute("UPDATE assignment SET link = %s where class_id = %s AND subject_id = %s", (save_location,class_id,subject_id,))
 
                 connection.commit()
 
-                cursor.execute("DELETE FROM assignment WHERE created_at < (SELECT MAX(created_at) FROM assignment);")
+                cursor.execute(
+                                """
+                                DELETE FROM assignment 
+                                WHERE class_id = %s 
+                                AND subject_id = %s 
+                                AND created_at < (
+                                    SELECT MAX(created_at) 
+                                    FROM assignment 
+                                    WHERE class_id = %s 
+                                    AND subject_id = %s
+                                );
+                                """, 
+                                (class_id, subject_id, class_id, subject_id)
+                            )
 
                 connection.commit()
 
@@ -553,7 +566,8 @@ async def giveAssignment(
                 "subject_id": subject_id,
                     "class_id": class_id,
                     "subject_name": subject,
-                "message": "Assignment created successfully"}
+                "message": "Assignment created successfully",
+                "teacher_id": teacher_id}
         )
 
             finally:
