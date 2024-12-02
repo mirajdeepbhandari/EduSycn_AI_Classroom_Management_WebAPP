@@ -604,12 +604,82 @@ async def viewAssignment(request: Request, subject_id: str = Form(...), class_id
 
 @app.post("/studentReportView", response_class=HTMLResponse)
 async def studentMarkReport(request: Request, subject_id: str = Form(...), class_id: str = Form(...), subject:str = Form(...), teacher_id: str = Form(...)):
-    return templates.TemplateResponse("Teacher/view_report.html", {"request": request,
+
+        try:
+            connection = establish_connection()
+            try:
+                cursor = connection.cursor()
+
+                query = """
+                            SELECT 
+                                u.full_name AS student_name,
+                                s.submission_date AS submission_time,
+                                s.file_path AS submission_link,
+                                a.assignment_title AS assignment_title
+                            FROM 
+                                submission s
+                            JOIN 
+                                assignment a ON s.assignment_id = a.assignment_id
+                            JOIN 
+                                student st ON s.student_id = st.student_id
+                            JOIN 
+                                user u ON st.user_id = u.user_id
+                            WHERE 
+                                st.class_id = %s AND a.subject_id = %s;
+
+                        """
+                
+                cursor.execute(query, (class_id,subject_id))
+
+                submitted_Students = cursor.fetchall()
+
+                students_who_submitted = [row[0] for row in submitted_Students]
+                
+
+                all_students_enrolled = """
+
+                                     SELECT 
+                                        DISTINCT u.full_name AS student_name
+                                    FROM 
+                                        student st
+                                    JOIN 
+                                        user u ON st.user_id = u.user_id
+                                    JOIN 
+                                        assignment a ON a.class_id = st.class_id
+                                    WHERE 
+                                        st.class_id = 10 AND a.subject_id = 1;
+
+
+                                    """
+
+                cursor.execute(all_students_enrolled)
+
+                all_students = cursor.fetchall()
+                
+                all_students = [row[0] for row in all_students]
+
+                not_submitted_students = [student for student in all_students if student not in students_who_submitted]
+
+                
+                return templates.TemplateResponse("Teacher/view_report.html", {"request": request,
                                                             "subject_id": subject_id,
                                                             "class_id": class_id,
                                                             "subject_name": subject,
-                                                            "teacher_id": teacher_id})
+                                                            "teacher_id": teacher_id,
+                                                            "submitted_Students": submitted_Students,
+                                                            "not_submitted_students": not_submitted_students})
 
+            finally:
+                connection.close()
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return RedirectResponse(url="/", status_code=303)
+
+
+
+
+ 
 
 @app.post("/sumbitAssignment", response_class=HTMLResponse)
 async def Assignment(request: Request, subject_id: str = Form(...), class_id: str = Form(...), subject:str = Form(...),

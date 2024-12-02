@@ -141,7 +141,7 @@
                     
                     <h2 class="mb-0 text-center flex-grow-1">
                         <i class="bi bi-file-earmark-text me-2" aria-hidden="true"></i>
-                        Front-end Development Assignments
+                        {{submitted_Students[0][3]}}
                     </h2>
                 </div>
             </div>
@@ -150,7 +150,7 @@
                     <table class="table table-hover align-middle mb-0">
                         <thead>
                             <tr>
-                                <th scope="col" class="text-center">SN</th>
+                               
                                 <th scope="col">Student</th>
                                 <th scope="col" class="text-center">Submission Date</th>
                                 
@@ -158,67 +158,36 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {%for stud in submitted_Students%}
                             <tr>
-                                <td class="text-center">1</td>
+                              
                                 <td>
-                                    <img src="https://i.pravatar.cc/150?img=1" alt="John Doe" class="student-avatar">
-                                    <span>John Doe</span>
+                                    <span style="display: inline-block; background-color: {{ stud[1] | random_color }}; width: 40px; height: 40px; border-radius: 50%; text-align: center; line-height: 40px; font-weight: bold; color: white;">
+                                        {{ stud[0] | initials }}
+                                    </span>
+                                    <span>{{stud[0]}}</span>
                                 </td>
-                                <td class="text-center">2023-11-15</td>
+                                <td class="text-center">{{stud[1]}}</td>
                              
                                 <td class="text-center">
-                                    <button class="btn btn-primary btn-action">
-                                        <i class="bi bi-download me-1 me-sm-2" aria-hidden="true"></i><span class="d-none d-sm-inline">Download</span>
-                                    </button>
+                                    <a href="{{stud[2]}}" class="btn btn-primary btn-action" download>
+                                        <i class="bi bi-download me-1 me-sm-2" aria-hidden="true"></i>
+                                        <span class="d-none d-sm-inline">Download</span>
+                                    </a>
                                 </td>
                             </tr>
+                            {%endfor%}
+
+                            {%for stud in not_submitted_students%}
                             <tr>
-                                <td class="text-center">2</td>
+                               
                                 <td>
-                                    <img src="https://i.pravatar.cc/150?img=2" alt="Jane Smith" class="student-avatar">
-                                    <span>Jane Smith</span>
-                                </td>
-                                <td class="text-center">2023-11-14</td>
                                 
-                                <td class="text-center">
-                                    <button class="btn btn-primary btn-action">
-                                        <i class="bi bi-download me-1 me-sm-2" aria-hidden="true"></i><span class="d-none d-sm-inline">Download</span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">3</td>
-                                <td>
-                                    <img src="https://i.pravatar.cc/150?img=3" alt="Mike Johnson" class="student-avatar">
-                                    <span>Mike Johnson</span>
-                                </td>
-                                <td class="text-center">2023-11-16</td>
-                               
-                                <td class="text-center">
-                                    <button class="btn btn-primary btn-action">
-                                        <i class="bi bi-download me-1 me-sm-2" aria-hidden="true"></i><span class="d-none d-sm-inline">Download</span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">4</td>
-                                <td>
-                                    <img src="https://i.pravatar.cc/150?img=4" alt="Emily Brown" class="student-avatar">
-                                    <span>Emily Brown</span>
-                                </td>
-                                <td class="text-center">2023-11-15</td>
-                               
-                                <td class="text-center">
-                                    <button class="btn btn-primary btn-action">
-                                        <i class="bi bi-download me-1 me-sm-2" aria-hidden="true"></i><span class="d-none d-sm-inline">Download</span>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">5</td>
-                                <td>
-                                    <img src="https://i.pravatar.cc/150?img=5" alt="David Wilson" class="student-avatar">
-                                    <span>David Wilson</span>
+                                    <span style="display: inline-block; background-color: {{ stud[1] | random_color }}; width: 40px; height: 40px; border-radius: 50%; text-align: center; line-height: 40px; font-weight: bold; color: white;">
+                                        {{ stud | initials }}
+                                    </span>
+                                    
+                                    <span>{{stud}}</span>
                                 </td>
                                 <td class="text-center">-</td>
                              
@@ -228,6 +197,9 @@
                                     </button>
                                 </td>
                             </tr>
+                            {%endfor%}
+
+
                         </tbody>
                     </table>
                 </div>
