@@ -633,41 +633,55 @@ async def studentMarkReport(request: Request, subject_id: str = Form(...), class
 
                 submitted_Students = cursor.fetchall()
 
-                students_who_submitted = [row[0] for row in submitted_Students]
-                
+                if submitted_Students:
 
-                all_students_enrolled = """
+                        students_who_submitted = [row[0] for row in submitted_Students]
+                        
 
-                                     SELECT 
-                                        DISTINCT u.full_name AS student_name
-                                    FROM 
-                                        student st
-                                    JOIN 
-                                        user u ON st.user_id = u.user_id
-                                    JOIN 
-                                        assignment a ON a.class_id = st.class_id
-                                    WHERE 
-                                        st.class_id = 10 AND a.subject_id = 1;
+                        all_students_enrolled = """
+
+                                            SELECT 
+                                                DISTINCT u.full_name AS student_name
+                                            FROM 
+                                                student st
+                                            JOIN 
+                                                user u ON st.user_id = u.user_id
+                                            JOIN 
+                                                assignment a ON a.class_id = st.class_id
+                                            WHERE 
+                                                st.class_id = 10 AND a.subject_id = 1;
 
 
-                                    """
+                                            """
 
-                cursor.execute(all_students_enrolled)
+                        cursor.execute(all_students_enrolled)
 
-                all_students = cursor.fetchall()
-                
-                all_students = [row[0] for row in all_students]
+                        all_students = cursor.fetchall()
+                        
+                        all_students = [row[0] for row in all_students]
 
-                not_submitted_students = [student for student in all_students if student not in students_who_submitted]
+                        not_submitted_students = [student for student in all_students if student not in students_who_submitted]
 
-                
-                return templates.TemplateResponse("Teacher/view_report.html", {"request": request,
-                                                            "subject_id": subject_id,
-                                                            "class_id": class_id,
-                                                            "subject_name": subject,
-                                                            "teacher_id": teacher_id,
-                                                            "submitted_Students": submitted_Students,
-                                                            "not_submitted_students": not_submitted_students})
+                        
+                        return templates.TemplateResponse("Teacher/view_report.html", {"request": request,
+                                                                    "subject_id": subject_id,
+                                                                    "class_id": class_id,
+                                                                    "subject_name": subject,
+                                                                    "teacher_id": teacher_id,
+                                                                    "submitted_Students": submitted_Students,
+                                                                    "not_submitted_students": not_submitted_students})
+
+                else:
+                    submitted_Students=[]
+                    not_submitted_students=[]
+                    return templates.TemplateResponse("Teacher/view_report.html", {"request": request,
+                                                                    "subject_id": subject_id,
+                                                                    "class_id": class_id,
+                                                                    "subject_name": subject,
+                                                                    "teacher_id": teacher_id,
+                                                                    "submitted_Students": submitted_Students,
+                                                                    "not_submitted_students": not_submitted_students
+                                                                    })
 
             finally:
                 connection.close()

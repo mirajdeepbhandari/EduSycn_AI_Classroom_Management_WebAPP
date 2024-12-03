@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 03, 2024 at 11:09 AM
+-- Generation Time: Dec 02, 2024 at 08:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -44,8 +44,10 @@ CREATE TABLE `assignment` (
 --
 
 INSERT INTO `assignment` (`assignment_id`, `teacher_id`, `class_id`, `subject_id`, `assignment_title`, `assignment_description`, `due_date`, `created_at`, `link`) VALUES
+(29, 9898, 10, 1, 'English hw', 'English hw', '2024-11-24', '2024-11-24 07:51:34', 'static/TeacherAssignment\\10\\1\\English\\Screenshot 2024-12-01 192853.png'),
 (30, 9898, 10, 7, 'Nepali HW', 'nepali hw', '2024-11-29', '2024-11-24 07:52:03', 'static/TeacherAssignment\\10\\7\\Nepali\\nep hw.txt'),
-(34, 9898, 10, 1, 'Develop the Backend System', 'You are supposed to develop the backend system of ToDo app', '2024-12-26', '2024-12-03 10:06:09', 'static/TeacherAssignment\\10\\1\\English\\edusync.sql');
+(31, 9898, 10, 1, 'Front end', 'The McGregor Institute of Botanical Training, an Ireland-based institute located in Godawari, Lalitpur, Nepal, has been operating for nearly seven years. Specializing in agriculture, horticulture, and affiliated with Dublin City University, the institute offers undergraduate, postgraduate, and certification courses. With a recent surge in interest ', '2024-11-30', '2024-11-27 06:17:14', 'static/TeacherAssignment\\10\\1\\English\\Screenshot 2024-12-01 192853.png'),
+(32, 9898, 10, 1, 'lkjbn m,', ';lkjnjk', '2024-12-16', '2024-12-02 07:55:29', 'static/TeacherAssignment\\10\\1\\English\\Screenshot 2024-12-01 192853.png');
 
 -- --------------------------------------------------------
 
@@ -276,7 +278,9 @@ CREATE TABLE `submission` (
 --
 
 INSERT INTO `submission` (`submission_id`, `assignment_id`, `student_id`, `submission_date`, `file_path`, `remarks`) VALUES
+(18, 29, 111, '2024-11-24 11:52:30', 'static/StudentSubmission\\10\\1\\English\\111\\miraj deepbhandari\\Sample2_e2cf5610-8525-40e8-843a-44b815e4b93d_98416_ (2).docx', 'corrected'),
 (20, 30, 111, '2024-11-24 11:53:33', 'static/StudentSubmission\\10\\7\\Nepali\\111\\miraj deepbhandari\\requirements (1).txt', 'bigrexa'),
+(22, 29, 222, '2024-11-24 11:56:00', 'static/StudentSubmission\\10\\1\\English\\222\\arbit bhandari\\nepali-ict-mcqs.md', 'nooo'),
 (23, 30, 222, '2024-11-24 11:56:38', 'static/StudentSubmission\\10\\7\\Nepali\\222\\arbit bhandari\\nepali-ict-mcqs.md', 'hihihi');
 
 -- --------------------------------------------------------
@@ -416,8 +420,8 @@ ALTER TABLE `subject`
 --
 ALTER TABLE `submission`
   ADD PRIMARY KEY (`submission_id`),
-  ADD KEY `fk_submission_student` (`student_id`),
-  ADD KEY `fk_submission_assignment` (`assignment_id`);
+  ADD KEY `fk_submission_assignment` (`assignment_id`),
+  ADD KEY `fk_submission_student` (`student_id`);
 
 --
 -- Indexes for table `teacher`
@@ -450,7 +454,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `assignment`
 --
 ALTER TABLE `assignment`
-  MODIFY `assignment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `assignment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `likes`
@@ -462,7 +466,7 @@ ALTER TABLE `likes`
 -- AUTO_INCREMENT for table `submission`
 --
 ALTER TABLE `submission`
-  MODIFY `submission_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `submission_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -521,7 +525,7 @@ ALTER TABLE `student`
 -- Constraints for table `submission`
 --
 ALTER TABLE `submission`
-  ADD CONSTRAINT `fk_submission_assignment` FOREIGN KEY (`assignment_id`) REFERENCES `assignment` (`assignment_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_submission_assignment` FOREIGN KEY (`assignment_id`) REFERENCES `assignment` (`assignment_id`),
   ADD CONSTRAINT `fk_submission_student` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`);
 
 --
