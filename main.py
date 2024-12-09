@@ -477,11 +477,10 @@ async def classroom(request: Request, subject_id: str = Form(...), subject: str 
             cursor = connection.cursor()
 
             current_user = request.session.get("user_id")
-            current_role = request.session.get("role")
 
             if post_content:
                 # Save the uploaded file if it exists
-                if file_upload_post:
+                if file_upload_post and file_upload_post.filename:
                     uploads_base = "static/PostContents"
                     loc = str(class_id) + str(subject_id)
                     print(loc)
