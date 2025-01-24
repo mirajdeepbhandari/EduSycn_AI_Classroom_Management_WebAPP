@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 03, 2024 at 11:09 AM
+-- Generation Time: Jan 24, 2025 at 10:20 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -44,8 +44,8 @@ CREATE TABLE `assignment` (
 --
 
 INSERT INTO `assignment` (`assignment_id`, `teacher_id`, `class_id`, `subject_id`, `assignment_title`, `assignment_description`, `due_date`, `created_at`, `link`) VALUES
-(30, 9898, 10, 7, 'Nepali HW', 'nepali hw', '2024-11-29', '2024-11-24 07:52:03', 'static/TeacherAssignment\\10\\7\\Nepali\\nep hw.txt'),
-(34, 9898, 10, 1, 'Develop the Backend System', 'You are supposed to develop the backend system of ToDo app', '2024-12-26', '2024-12-03 10:06:09', 'static/TeacherAssignment\\10\\1\\English\\edusync.sql');
+(34, 9898, 10, 1, 'Develop the Backend System', 'You are supposed to develop the backend system of ToDo app', '2024-12-26', '2024-12-03 10:06:09', 'static/TeacherAssignment\\10\\1\\English\\edusync.sql'),
+(35, 9898, 10, 7, 'normalize', 'arbit do homework', '2024-12-19', '2024-12-10 02:09:43', 'static/TeacherAssignment\\10\\7\\Nepali\\miraj.jpg');
 
 -- --------------------------------------------------------
 
@@ -156,15 +156,6 @@ CREATE TABLE `comments` (
   `content` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `comments`
---
-
-INSERT INTO `comments` (`comment_id`, `post_id`, `user_id`, `content`) VALUES
-(0, 0, 4, 'sir has told to complete the exercise of page no 12'),
-(76, 999, 5, 'yes miraj'),
-(233, 0, 5, 'yes its good');
-
 -- --------------------------------------------------------
 
 --
@@ -182,10 +173,7 @@ CREATE TABLE `likes` (
 --
 
 INSERT INTO `likes` (`like_id`, `post_id`, `user_id`) VALUES
-(38, 999, 5),
-(42, 999, 4),
 (44, 0, 4),
-(49, 999, 9090),
 (53, 0, 5),
 (55, 0, 9090);
 
@@ -201,16 +189,9 @@ CREATE TABLE `post` (
   `subject_id` int(11) DEFAULT NULL,
   `class_id` int(11) DEFAULT NULL,
   `post_content` text DEFAULT NULL,
-  `post_date` timestamp NOT NULL DEFAULT current_timestamp()
+  `post_date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `filelink` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `post`
---
-
-INSERT INTO `post` (`post_id`, `user_id`, `subject_id`, `class_id`, `post_content`, `post_date`) VALUES
-(0, 4, 1, 10, 'Hello! Could you please share the details of the latest assignment? I’d like to get started and ensure I’m on track. Thanks in advance!', '2024-11-13 10:46:46'),
-(999, 4, 7, 10, 'whats up my friends?', '2024-11-13 14:57:16');
 
 -- --------------------------------------------------------
 
@@ -276,8 +257,9 @@ CREATE TABLE `submission` (
 --
 
 INSERT INTO `submission` (`submission_id`, `assignment_id`, `student_id`, `submission_date`, `file_path`, `remarks`) VALUES
-(20, 30, 111, '2024-11-24 11:53:33', 'static/StudentSubmission\\10\\7\\Nepali\\111\\miraj deepbhandari\\requirements (1).txt', 'bigrexa'),
-(23, 30, 222, '2024-11-24 11:56:38', 'static/StudentSubmission\\10\\7\\Nepali\\222\\arbit bhandari\\nepali-ict-mcqs.md', 'hihihi');
+(26, 34, 111, '2024-12-03 10:12:19', 'static/StudentSubmission\\10\\1\\English\\111\\miraj deepbhandari\\22067814 Miraj Deep Bhandari (5).pdf', 'done'),
+(27, 34, 222, '2024-12-03 10:12:57', 'static/StudentSubmission\\10\\1\\English\\222\\arbit bhandari\\fnnnnaknskans.jpg', 'done'),
+(28, 35, 111, '2024-12-10 02:10:56', 'static/StudentSubmission\\10\\7\\Nepali\\111\\miraj deepbhandari\\cv updatrd last.docx', '22067ygfyudih');
 
 -- --------------------------------------------------------
 
@@ -378,8 +360,8 @@ ALTER TABLE `class_sub`
 --
 ALTER TABLE `comments`
   ADD PRIMARY KEY (`comment_id`),
-  ADD KEY `fk_comments_post` (`post_id`),
-  ADD KEY `fk_comments_user` (`user_id`);
+  ADD KEY `fk_comments_user` (`user_id`),
+  ADD KEY `fk_post` (`post_id`);
 
 --
 -- Indexes for table `likes`
@@ -450,19 +432,25 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `assignment`
 --
 ALTER TABLE `assignment`
-  MODIFY `assignment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `assignment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `likes`
 --
 ALTER TABLE `likes`
-  MODIFY `like_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `like_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+
+--
+-- AUTO_INCREMENT for table `post`
+--
+ALTER TABLE `post`
+  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1046;
 
 --
 -- AUTO_INCREMENT for table `submission`
 --
 ALTER TABLE `submission`
-  MODIFY `submission_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `submission_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -493,8 +481,8 @@ ALTER TABLE `class_sub`
 -- Constraints for table `comments`
 --
 ALTER TABLE `comments`
-  ADD CONSTRAINT `fk_comments_post` FOREIGN KEY (`post_id`) REFERENCES `post` (`post_id`),
-  ADD CONSTRAINT `fk_comments_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+  ADD CONSTRAINT `fk_comments_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
+  ADD CONSTRAINT `fk_post` FOREIGN KEY (`post_id`) REFERENCES `post` (`post_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `likes`

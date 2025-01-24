@@ -401,6 +401,7 @@ async def classroom(request: Request, subject_id: str, subject: str, class_id: s
             WHERE post.subject_id = %s 
             AND post.class_id = %s;
             '''
+            
             comment_query = """
                 SELECT 
                     comments.comment_id, 
