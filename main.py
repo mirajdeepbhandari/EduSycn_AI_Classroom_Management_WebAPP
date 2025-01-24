@@ -152,8 +152,7 @@ async def login_validation(
                 request.session['user_id'] = user_id
                 request.session['user_name'] = name
                 request.session['role'] = role
-                print("user_id:",request.session['user_id'])
-                print("role:",request.session['role'])
+               
 
                 # Redirect based on role
                 if role == "student":
@@ -251,8 +250,140 @@ def random_color(value):
     return "#{:06x}".format(random.randint(0, 0xFFFFFF))
 
 templates.env.filters["random_color"] = random_color
-@app.post("/class", response_class=HTMLResponse)
-async def classroom(request: Request, subject_id:str = Form(...), subject:str = Form(...), class_id:str  = Form(...)):
+# @app.post("/class", response_class=HTMLResponse)
+# async def classroom(request: Request, subject_id:str = Form(...), subject:str = Form(...), class_id:str  = Form(...),
+#                      post_content: str = Form(None),  file_upload_post: UploadFile = Form(None)):
+#     try:
+#         connection = establish_connection()
+#         try:
+#             cursor = connection.cursor()
+        
+#             current_user=request.session.get("user_id")
+#             current_role=request.session.get("role")
+
+#             if post_content:
+#                  # Save the uploaded file
+
+#                 if file_upload_post:
+#                     uploads_base ="static/PostContents"
+
+#                     loc=str(class_id)+str(subject_id)
+#                     print(loc)
+#                     print(current_user, type(current_user))
+#                     # Create the full path for the file save location
+#                     save_location = os.path.join(uploads_base,str(current_user),loc, file_upload_post.filename)
+                    
+                    
+#                     # Check if the directory exists and if it contains any files
+#                     directory = os.path.dirname(save_location)
+                
+#                     # Ensure the directory exists
+#                     os.makedirs(directory, exist_ok=True)
+
+#                     # Save the uploaded file
+#                     with open(save_location, "wb") as file_object:
+#                         shutil.copyfileobj(file_upload_post.file, file_object)
+             
+#                 else:
+                    
+#                     save_location = "nofile"
+                
+              
+
+#                 query = '''
+#                 INSERT INTO post (user_id, subject_id, class_id, post_content,filelink) 
+#                 VALUES (%s, %s, %s, %s, %s);
+#                 '''
+
+#                 data_to_insert =  (current_user , subject_id, class_id, post_content, save_location,)
+            
+#                 cursor.execute(query, data_to_insert)
+
+#                 connection.commit()
+                
+
+
+#               # Clear the values to prevent duplicate insertions
+#             post_content = None
+#             file_upload_post = None
+
+#             query = '''
+#                 SELECT post.post_id, 
+#                 post.user_id, 
+#                 user.full_name, 
+#                 post.subject_id, 
+#                 post.class_id, 
+#                 post.post_content, 
+#                 post.post_date
+#             FROM post
+#             INNER JOIN user ON post.user_id = user.user_id
+#             WHERE post.subject_id = %s 
+#             AND post.class_id = %s;
+#             '''
+#             comment_query = """
+#                             SELECT 
+#                             comments.comment_id, 
+#                             comments.content, 
+#                             comments.user_id, 
+#                             comments.post_id, 
+#                             post.post_content, 
+#                             post.post_date,
+#                             user.full_name AS commentor_full_name
+                            
+#                         FROM 
+#                             comments
+#                         JOIN 
+#                             post ON comments.post_id = post.post_id
+#                         JOIN 
+#                             user ON comments.user_id = user.user_id
+#                         WHERE 
+#                             post.class_id = %s 
+#                             AND post.subject_id = %s;
+
+#                             """
+#             like_query = """
+                          
+#                     SELECT  
+#                     post.post_id,
+#                     likes.user_id,
+#                     likes.like_id
+#                 FROM 
+#                     post
+#                 INNER JOIN 
+#                     likes ON post.post_id = likes.post_id
+#                 WHERE 
+#                     post.class_id = %s
+#                     AND post.subject_id = %s;
+
+#                             """
+                                      
+#             cursor.execute(query, (subject_id,class_id))
+#             posts = cursor.fetchall()
+        
+#             if posts:
+#                 formatted_date=format_datetime(posts[0][6])
+#             else:
+#                 formatted_date=""
+
+#             cursor.execute(comment_query, (class_id,subject_id))
+#             comments = cursor.fetchall()
+
+#             cursor.execute(like_query, (class_id,subject_id))
+#             likes = cursor.fetchall()
+
+
+#             return templates.TemplateResponse("class.html", {"request": request, "posts":posts, "subject_name":subject,
+#                                                              "post_time":formatted_date, "comments":comments,"likes":likes,
+#                                                             "current_user":current_user, "class_id":class_id, "subject_id":subject_id,
+#                                                             "current_role":current_role})
+#         finally:
+#             connection.close()
+#     except Exception as e:
+#         print(f"An error occurred: {e}")
+#         return RedirectResponse(url="/", status_code=303)
+
+@app.get("/class", response_class=HTMLResponse)
+async def classroom(request: Request, subject_id: str, subject: str, class_id: str):
     try:
         connection = establish_connection()
         try:
@@ -271,29 +402,26 @@ async def classroom(request: Request, subject_id:str = Form(...), subject:str = 
             AND post.class_id = %s;
             '''
             comment_query = """
-                            SELECT 
-                            comments.comment_id, 
-                            comments.content, 
-                            comments.user_id, 
-                            comments.post_id, 
-                            post.post_content, 
-                            post.post_date,
-                            user.full_name AS commentor_full_name
-                            
-                        FROM 
-                            comments
-                        JOIN 
-                            post ON comments.post_id = post.post_id
-                        JOIN 
-                            user ON comments.user_id = user.user_id
-                        WHERE 
-                            post.class_id = %s 
-                            AND post.subject_id = %s;
-
-                            """
+                SELECT 
+                    comments.comment_id, 
+                    comments.content, 
+                    comments.user_id, 
+                    comments.post_id, 
+                    post.post_content, 
+                    post.post_date,
+                    user.full_name AS commentor_full_name
+                FROM 
+                    comments
+                JOIN 
+                    post ON comments.post_id = post.post_id
+                JOIN 
+                    user ON comments.user_id = user.user_id
+                WHERE 
+                    post.class_id = %s 
+                    AND post.subject_id = %s;
+            """
             like_query = """
-                          
-                    SELECT  
+                SELECT  
                     post.post_id,
                     likes.user_id,
                     likes.like_id
@@ -304,37 +432,98 @@ async def classroom(request: Request, subject_id:str = Form(...), subject:str = 
                 WHERE 
                     post.class_id = %s
                     AND post.subject_id = %s;
+            """
 
-                            """
-                                      
-            cursor.execute(query, (subject_id,class_id))
+            cursor.execute(query, (subject_id, class_id))
             posts = cursor.fetchall()
-        
-            if posts:
-                formatted_date=format_datetime(posts[0][6])
-            else:
-                formatted_date=""
 
-            cursor.execute(comment_query, (class_id,subject_id))
+            formatted_date = format_datetime(posts[0][6]) if posts else ""
+
+            cursor.execute(comment_query, (class_id, subject_id))
             comments = cursor.fetchall()
 
-            cursor.execute(like_query, (class_id,subject_id))
+            cursor.execute(like_query, (class_id, subject_id))
             likes = cursor.fetchall()
-       
-            
-            current_user=request.session.get("user_id")
-            current_role=request.session.get("role")
 
-            
-            return templates.TemplateResponse("class.html", {"request": request, "posts":posts, "subject_name":subject,
-                                                             "post_time":formatted_date, "comments":comments,"likes":likes,
-                                                            "current_user":current_user, "class_id":class_id, "subject_id":subject_id,
-                                                            "current_role":current_role})
+            current_user = request.session.get("user_id")
+            current_role = request.session.get("role")
+
+            return templates.TemplateResponse("class.html", {
+                "request": request,
+                "posts": posts,
+                "subject_name": subject,
+                "post_time": formatted_date,
+                "comments": comments,
+                "likes": likes,
+                "current_user": current_user,
+                "class_id": class_id,
+                "subject_id": subject_id,
+                "current_role": current_role
+            })
         finally:
             connection.close()
     except Exception as e:
         print(f"An error occurred: {e}")
         return RedirectResponse(url="/", status_code=303)
+
+
+
+@app.post("/class", response_class=HTMLResponse)
+async def classroom(request: Request, subject_id: str = Form(...), subject: str = Form(...), class_id: str = Form(...),
+                     post_content: str = Form(None), file_upload_post: UploadFile = Form(None)):
+    try:
+        connection = establish_connection()
+        try:
+            cursor = connection.cursor()
+
+            current_user = request.session.get("user_id")
+
+            if post_content:
+                # Save the uploaded file if it exists
+                if file_upload_post and file_upload_post.filename:
+                    uploads_base = "static/PostContents"
+                    loc = str(class_id) + str(subject_id)
+                    print(loc)
+                    print(current_user, type(current_user))
+
+                    # Create the full path for the file save location
+                    save_location = os.path.join(uploads_base, str(current_user), loc, file_upload_post.filename)
+
+                    # Ensure the directory exists
+                    directory = os.path.dirname(save_location)
+                    os.makedirs(directory, exist_ok=True)
+
+                    # Save the uploaded file
+                    with open(save_location, "wb") as file_object:
+                        shutil.copyfileobj(file_upload_post.file, file_object)
+                else:
+                    save_location = "nofile"
+
+                query = '''
+                INSERT INTO post (user_id, subject_id, class_id, post_content, filelink) 
+                VALUES (%s, %s, %s, %s, %s);
+                '''
+                data_to_insert = (current_user, subject_id, class_id, post_content, save_location)
+                cursor.execute(query, data_to_insert)
+                connection.commit()
+
+            # Redirect with proper query parameters
+            redirect_url = f"/class?subject_id={subject_id}&subject={subject}&class_id={class_id}"
+
+            return RedirectResponse(url=redirect_url, status_code=303)  # Using 303 for redirect after POST
+
+        finally:
+            connection.close()
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return RedirectResponse(url="/", status_code=303)
+
+
+
+
+
+
+
 
 @app.post("/api/like")
 async def like_post(request: Request):
@@ -419,7 +608,7 @@ async def showClassMembers(request: Request, subject_id:str = Form(...), subject
                                       
             cursor.execute(query_students, (class_id,subject_id))
             students = cursor.fetchall()
-            print(students)
+           
             return templates.TemplateResponse("list_of_students.html", {"request": request, 
                                                                         "listofstu":students,
                                                                         "subject_name":subject,
@@ -808,6 +997,73 @@ async def Assignment(request: Request, subject_id: str = Form(...), class_id: st
         
 
     
+# # Create Post 
+# @app.post("/createPost", response_class=HTMLResponse)
+# async def createPost(request: Request, subject_id:str = Form(...), subject:str = Form(...), class_id:str  = Form(...),
+#                      post_content: str = Form(...),  file_upload_post: UploadFile = Form(None)):
+
+#     current_user_id = request.session.get('user_id')
+
+#     try:
+#         connection = establish_connection()
+#         try:
+
+#             if file_upload_post:
+                      
+#                 # Save the uploaded file
+#                 uploads_base ="static/PostContents"
+
+#                 loc=class_id+subject_id
+#                 # Create the full path for the file save location
+#                 save_location = os.path.join(uploads_base,current_user_id,loc, file_upload_post.filename)
+                
+#                 # Check if the directory exists and if it contains any files
+#                 directory = os.path.dirname(save_location)
+            
+#                 # Ensure the directory exists
+#                 os.makedirs(directory, exist_ok=True)
+
+#                 # Save the uploaded file
+#                 with open(save_location, "wb") as file_object:
+#                     shutil.copyfileobj(file_upload_post.filename.file, file_object)
+
+#             else:
+#                 save_location = "nofile"
+
+#             cursor = connection.cursor()
+
+#             query = '''
+#               INSERT INTO your_table_name (user_id, subject_id, class_id, post_content,filelink) 
+#               VALUES (%s, %s, %s, %s, %s, %s);
+#             '''
+
+#             data_to_insert =  (current_user_id , subject_id, class_id, post_content, save_location)
+           
+#             cursor.execute(query, (data_to_insert,))
+
+#             connection.commit()
+
+            
+#             return templates.TemplateResponse("class.html", {"request": request,
+#                                                             "subject_id": subject_id,
+#                                                             "class_id": class_id,
+#                                                             "subject": subject,}
+#                                                             )
+        
+
+#         finally:
+#             connection.close()
+
+#     except Exception as e:
+#         print(f"An error occurred: {e}")
+#         return RedirectResponse(url="/", status_code=303)
+
+
+
+
+ 
+
+
 
 
 
