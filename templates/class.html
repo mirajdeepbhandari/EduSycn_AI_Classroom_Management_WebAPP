@@ -335,12 +335,19 @@
 
                          </div>
                          <p class="card-text">{{ post[5] }}</p>
-                         <a href="SDOT_Vehicle_Collision_Data_Analysis.ipynb" download class="file-download" style="margin-bottom: 10px; width: 100%; ">
+                         
+
+                         {% if post[7] != "nofile" %}
+                         <a href="{{ post[7]}}" download class="file-download" style="margin-bottom: 10px; width: 100%; ">
                             <img src="static/images/file_logo.png" alt="File Icon"> 
-                            <i><b>File Name</b> </i>
+                            <i><b>{{post[7] | getpostname}}</b> </i>
                             <img src="static/images/download_logoo.png" alt="File Icon">
 
                           </a>
+                          {% endif %}
+
+
+
                          <div class="d-flex justify-content-between align-items-center mb-3 post-actions">
                             <button class="like-button" data-post-id="{{ post[0] }}" data-user-id="{{current_user}}" onclick="likePost(this)">
                                 <i class="bi bi-hand-thumbs-up"></i>

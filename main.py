@@ -382,6 +382,17 @@ templates.env.filters["random_color"] = random_color
 #         print(f"An error occurred: {e}")
 #         return RedirectResponse(url="/", status_code=303)
 
+
+
+
+
+
+def get_filename(file_path):
+    return file_path.split("\\")[-1]
+
+# Register the filter with the Jinja environment
+templates.env.filters['getpostname'] = get_filename
+
 @app.get("/class", response_class=HTMLResponse)
 async def classroom(request: Request, subject_id: str, subject: str, class_id: str):
     try:
@@ -395,13 +406,13 @@ async def classroom(request: Request, subject_id: str, subject: str, class_id: s
                 post.subject_id, 
                 post.class_id, 
                 post.post_content, 
-                post.post_date
+                post.post_date,
+                post.filelink
             FROM post
             INNER JOIN user ON post.user_id = user.user_id
             WHERE post.subject_id = %s 
             AND post.class_id = %s;
             '''
-            
             comment_query = """
                 SELECT 
                     comments.comment_id, 
@@ -523,9 +534,6 @@ async def classroom(request: Request, subject_id: str = Form(...), subject: str 
 
 
 
-
-
-
 @app.post("/api/like")
 async def like_post(request: Request):
     try:
@@ -575,6 +583,8 @@ async def like_post(request: Request):
     except Exception as e:
         print(f"An error occurred: {e}")
         raise HTTPException(status_code=500, detail="An error occurred while processing your request")
+    
+
 
 @app.get("/api/liked_statuses")
 async def get_liked_statuses(user_id: int):
