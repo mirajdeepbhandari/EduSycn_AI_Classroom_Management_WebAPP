@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     
     <style>
+
         :root {
             --primary-color: #8e44ad;
             --secondary-color: #9b59b6;
@@ -195,7 +196,43 @@
       width: 40px;
       height: 40px;
     }
+     
+    .file-download-wrapper {
+    display: block;
+    text-decoration: none;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+  }
 
+  .file-download-wrapper:hover {
+    background-color: #e9ecef;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .file-download-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .file-icon,
+  .download-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+  }
+
+  .file-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    flex-grow: 1;
+  }
 
 
         @media (max-width: 768px) {
@@ -230,6 +267,12 @@
                 </a>                
             </div>
         </div>
+
+        {% if request.cookies.get('message') %}
+        <div class="alert alert-success" role="alert">
+            {{ request.cookies.get('message') }}
+        </div>
+        {% endif %}
 
         <div class="class-header text-center">
             <h1 class="display-4 fw-bold">{{subject_name}}</h1>
@@ -309,84 +352,91 @@
                 <h5 class="mb-4">Posts Feed</h5>
                  
                  <hr style="border: 1.5px double #000000; margin: 30px 0;">
+                 
+
                  {% if posts %}
-                 {% for post in posts %}
-                 <div class="card mb-4">
-                     <div class="card-body">
-                         <div class="d-flex align-items-center justify-content-between mb-3">
-                             <div class="d-flex align-items-center">
-                                 <div class="avatar me-3">{{ post[2]| initials }}</div> <!-- Initials -->
-                                 <div>
-                                     <h6 class="card-subtitle mb-1">{{ post[2] }}</h6>
-                                     <p class="card-text"><small class="text-muted">{{post_time}}</small></p>
-                                 </div>
-                             </div>
-                             {% if current_user == post[1] %}
-                             <div class="post-actions">
-                                 
-                                 <form>
-                                     <button class="btn-delete" type="button"><i class="bi bi-trash"></i></button>
-                                 </form>
-                                 <form>
-                                    <button class="btn-edit" type="button"><i class="bi bi-pencil"></i></button>
-                                </form>
-                             </div>
-                             {% endif %}
+    {% for post in posts %}
+        <div class="card mb-4" id="post-{{ post[0] }}">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="avatar me-3">{{ post[2] | initials }}</div> <!-- Initials -->
+                        <div>
+                            <h6 class="card-subtitle mb-1">{{ post[2] }}</h6>
+                            <p class="card-text"><small class="text-muted">{{ post_time }}</small></p>
+                        </div>
+                    </div>
+                    {% if current_user == post[1] %}
+                        <div class="post-actions">
+                            <button class="btn-delete" type="button"><i class="bi bi-trash"></i></button>
+                            <button class="btn-edit" type="button" onclick="editPost({{ post[0] }})"><i class="bi bi-pencil"></i></button>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="post-content">
+                    <p class="card-text" id="post-content-{{ post[0] }}" style="margin-bottom: 20px;">{{ post[5] }}</p>
+                </div>
+                <div class="edit-content d-none" id="edit-content-{{ post[0] }}" style="margin-bottom: 20px;">
 
-                         </div>
-                         <p class="card-text">{{ post[5] }}</p>
-                         
+                    <form action="{{ url_for('feedPostUpdate')}}" method="POST">
+                        <textarea class="form-control mb-2" name="content" required>{{ post[5] }}</textarea>
+                        <input type="hidden" name="post_id" value="{{ post[0] }}">
+                        <input type="hidden" name="user_id" value="{{ current_user }}">
+                        <input type="hidden" name="subject_id" value="{{ subject_id }}">
+                        <input type="hidden" name="subject" value="{{ subject_name }}">
+                        <input type="hidden" name="class_id" value="{{ class_id }}">
+                        <button class="btn btn-success btn-sm" type="submit">Save</button>
+                        <button class="btn btn-secondary btn-sm" type="button" onclick="cancelEdit({{ post[0] }})">Cancel</button>
+                    </form>
+                </div>
+                {% if post[7] != "nofile" %}
+                    <a href="{{ post[7] }}" download class="file-download-wrapper">
+                        <div class="file-download-content">
+                            <img src="static/images/file_logo.png" alt="File Icon" class="file-icon">
+                            <span class="file-name"><b>{{ post[7] | getpostname }}</b></span>
+                            <img src="static/images/download_logoo.png" alt="Download Icon" class="download-icon">
+                        </div>
+                    </a>
+                {% endif %}
+                <!-- Likes and Comments Section -->
+                <div class="d-flex justify-content-between align-items-center mb-3 post-actions">
+                    <button class="like-button" data-post-id="{{ post[0] }}" data-user-id="{{ current_user }}" onclick="likePost(this)">
+                        <i class="bi bi-hand-thumbs-up"></i>
+                        <span class="like-count">{{ likes | selectattr("0", "equalto", post[0]) | list | length }}</span>
+                    </button>
+                    <button class="btn btn-link">
+                        <i class="bi bi-chat me-1"></i>
+                        <span>{{ comments | selectattr("3", "equalto", post[0]) | list | length }} Comments</span>
+                    </button>
+                </div>
+                <hr>
+                <!-- Comments Section -->
+                <div class="comments-section">
+                    {% for comment in comments %}
+                        {% if comment[3] == post[0] %}
+                            <div class="d-flex mb-2">
+                                <div class="avatar me-2" style="background-color: {{ comment[1] | random_color }}">{{ comment[6] | initials }}</div>
+                                <div>
+                                    <h6 class="mb-2">{{ comment[6] }}</h6>
+                                    <p class="mb-2">{{ comment[1] }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="input-group mt-3 comment-input">
+                    <input type="text" class="form-control" placeholder="Add a comment...">
+                    <button class="btn btn-primary" type="button"><i class="bi bi-send"></i></button>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="text-center mt-4">
+        <p style="font-size: 19px;">No posts available. <h4 style="color:#e55151">Create a post !!!</h4> </p>
+    </div>
+{% endif %}
 
-                         {% if post[7] != "nofile" %}
-                         <a href="{{ post[7]}}" download class="file-download" style="margin-bottom: 10px; width: 100%; ">
-                            <img src="static/images/file_logo.png" alt="File Icon"> 
-                            <i><b>{{post[7] | getpostname}}</b> </i>
-                            <img src="static/images/download_logoo.png" alt="File Icon">
-
-                          </a>
-                          {% endif %}
-
-
-
-                         <div class="d-flex justify-content-between align-items-center mb-3 post-actions">
-                            <button class="like-button" data-post-id="{{ post[0] }}" data-user-id="{{current_user}}" onclick="likePost(this)">
-                                <i class="bi bi-hand-thumbs-up"></i>
-                                <span class="like-count">{{ likes | selectattr("0", "equalto", post[0]) | list | length }}</span>
-                            </button>
-                             <button class="btn btn-link">
-                                 <i class="bi bi-chat me-1"></i>
-                                 
-                                 <span>{{ comments | selectattr("3", "equalto", post[0]) | list | length }} Comments</span>
-                                
-                             </button>
-                         </div>
-                         <hr>
-                         <div class="comments-section">
-                             {% for comment in comments %}
-                                 {% if comment[3] == post[0] %}
-                                 <div class="d-flex mb-2">
-                                    <div class="avatar me-2" style="background-color: {{ comment[1] | random_color }}">{{ comment[6] | initials }}</div>
-                                     <div>
-                                         <h6 class="mb-2">{{ comment[6] }}</h6>
-                                         <p class="mb-2">{{ comment[1] }}</p>
-                                     </div>
-                                 </div>
-                                 {% endif %}
-                             {% endfor %}
-                         </div>
-                         <div class="input-group mt-3 comment-input">
-                             <input type="text" class="form-control" placeholder="Add a comment...">
-                             <button class="btn btn-primary" type="button"><i class="bi bi-send"></i></button>
-                         </div>
-                     </div>
-                 </div>
-                 {% endfor %}
-             {% else %}
-                 <div class="text-center mt-4">
-                     <p style="font-size: 19px;">No posts available. <h4 style="color:#e55151">Create a post !!!</h4> </p>
-                 </div>
-             {% endif %}
-             
             
 
             </div>
@@ -396,6 +446,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
+
        async function likePost(button) {
     const postId = button.getAttribute("data-post-id");
     const userId = button.getAttribute("data-user-id");
@@ -469,5 +520,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         </script>
 
+<script>
+
+function editPost(postId) {
+    // Show edit textarea and save button
+    document.getElementById(`post-content-${postId}`).classList.add("d-none");
+    document.getElementById(`edit-content-${postId}`).classList.remove("d-none");
+}
+
+function cancelEdit(postId) {
+    // Hide edit textarea and restore original content
+    document.getElementById(`post-content-${postId}`).classList.remove("d-none");
+    document.getElementById(`edit-content-${postId}`).classList.add("d-none");
+}
+
+</script>
 </body>
 </html>
