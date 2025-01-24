@@ -435,6 +435,78 @@ async def feedPostUpdate(post_id: str = Form(...),
         connection.close()
 
 
+@app.post("/deletePost")
+async def deletePost(
+    post_id: str = Form(...),
+    subject_id: str = Form(...),
+    subject: str = Form(...),
+    class_id: str = Form(...)
+):
+    """
+    Delete a post if the user is authorized.
+    """
+    connection = establish_connection()
+    try:
+        cursor = connection.cursor()
+
+
+        cursor.execute(
+    "SELECT filelink FROM post WHERE post_id = %s",
+    (post_id,)
+)
+
+        filelink = cursor.fetchone()
+
+        if filelink:
+            filelink = filelink[0]  
+            if filelink != "nofile":
+                # Get the directory path of the file
+                directory = os.path.dirname(filelink)
+
+                # Check if the file exists and is in a valid directory
+                if os.path.exists(filelink) and os.path.isdir(directory):
+                    # List all files in the directory
+                    files_in_directory = os.listdir(directory)
+                    
+                    # Check if the directory contains only this file
+                    if len(files_in_directory) == 1 and files_in_directory[0] == os.path.basename(filelink):
+                        # Remove the file
+                        os.remove(filelink)
+                        
+                        # Remove the directory up to 'static/PostContents'
+                        while directory != "static/PostContents" and os.path.exists(directory):
+                            if not os.listdir(directory):  # Check if the directory is empty
+                                os.rmdir(directory)  # Remove the empty directory
+                            directory = os.path.dirname(directory)  # Move to the parent directory
+                    else:
+                        # Remove only the file if there are other files in the directory
+                        os.remove(filelink)
+                
+                # Delete the post from the database
+                cursor.execute(
+                    "DELETE FROM post WHERE post_id = %s",
+                    (post_id,)
+                )
+
+        # Commit the changes to the database
+        connection.commit()
+
+    
+        # Redirect with a success message
+        response = RedirectResponse(
+            url=f"/class?subject_id={subject_id}&subject={subject}&class_id={class_id}",
+            status_code=303
+        )
+        response.set_cookie("message", "Post deleted successfully", max_age=5)
+        return response
+
+    except Exception as e:
+         print(f"An error occurred: {e}")
+         return RedirectResponse(url="/", status_code=303)
+    
+    finally:
+        connection.close()
+
 
 
 @app.post("/api/like")
