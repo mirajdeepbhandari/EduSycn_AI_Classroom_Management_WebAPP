@@ -482,11 +482,12 @@ async def deletePost(
                         # Remove only the file if there are other files in the directory
                         os.remove(filelink)
                 
-                # Delete the post from the database
-                cursor.execute(
-                    "DELETE FROM post WHERE post_id = %s",
-                    (post_id,)
-                )
+            # Delete the post from the database
+            cursor.execute(
+                "DELETE FROM post WHERE post_id = %s",
+                (post_id,)
+            )
+                
 
         # Commit the changes to the database
         connection.commit()
