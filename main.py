@@ -560,6 +560,43 @@ async def like_post(request: Request):
         raise HTTPException(status_code=500, detail="An error occurred while processing your request")
     
 
+@app.post("/addComment")
+async def addComment(
+                     request: Request, 
+                     post_id: str = Form(...),
+                     comment: str = Form(...), 
+                     subject_id: str = Form(...),
+                     subject: str = Form(...),
+                     class_id: str = Form(...)):
+                     
+    
+    connection = establish_connection()
+    try:
+        cursor = connection.cursor()
+
+        current_user = request.session.get("user_id")
+        # Insert the comment into the database
+        cursor.execute(
+            "INSERT INTO comments (post_id, user_id, content) VALUES (%s, %s, %s)",
+            (post_id, current_user, comment) 
+        )
+
+        connection.commit()
+        
+        response = RedirectResponse(
+            url=f"/class?subject_id={subject_id}&subject={subject}&class_id={class_id}", 
+            status_code=303
+        )
+        return response
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return RedirectResponse(url="/", status_code=303)
+
+    finally:
+        connection.close()
+
+
 
 @app.get("/api/liked_statuses")
 async def get_liked_statuses(user_id: int):

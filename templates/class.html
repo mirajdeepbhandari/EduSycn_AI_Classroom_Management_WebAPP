@@ -234,6 +234,15 @@
     flex-grow: 1;
   }
 
+  .comment-input .form-control {
+    min-width: 0; /* Ensures proper sizing in flexbox */
+}
+
+.comment-input .btn {
+    height: auto; /* Makes button height match the input field */
+}
+
+
 
         @media (max-width: 768px) {
             .class-header {
@@ -437,9 +446,23 @@
                     {% endfor %}
                 </div>
                 <div class="input-group mt-3 comment-input">
-                    <input type="text" class="form-control" placeholder="Add a comment...">
-                    <button class="btn btn-primary" type="button"><i class="bi bi-send"></i></button>
+                    <form action="{{ url_for('addComment') }}" method="POST" class="d-flex w-100">
+                        <input type="hidden" name="post_id" value="{{ post[0] }}">
+                        <input type="hidden" name="subject_id" value="{{ subject_id }}">
+                        <input type="hidden" name="subject" value="{{ subject_name }}">
+                        <input type="hidden" name="class_id" value="{{ class_id }}">
+                        <input 
+                            type="text" 
+                            class="form-control flex-grow-1" 
+                            placeholder="Add a comment..." 
+                            name="comment">
+                        <button class="btn btn-primary ms-2" type="submit">
+                            <i class="bi bi-send"></i>
+                        </button>
+                    </form>
                 </div>
+                
+                
             </div>
         </div>
     {% endfor %}

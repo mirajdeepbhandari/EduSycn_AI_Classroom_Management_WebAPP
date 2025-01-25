@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 24, 2025 at 10:02 AM
+-- Generation Time: Jan 25, 2025 at 07:15 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -156,6 +156,17 @@ CREATE TABLE `comments` (
   `content` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `comments`
+--
+
+INSERT INTO `comments` (`comment_id`, `post_id`, `user_id`, `content`) VALUES
+(1, 1064, 4, 'hello'),
+(2, 1064, 5, 'hi miraj'),
+(3, 1064, 5, 'can you tell me whats the problem miraj'),
+(4, 1049, 5, 'haha'),
+(5, 1064, 4, 'hello arbit ');
+
 -- --------------------------------------------------------
 
 --
@@ -175,7 +186,8 @@ CREATE TABLE `likes` (
 INSERT INTO `likes` (`like_id`, `post_id`, `user_id`) VALUES
 (44, 0, 4),
 (53, 0, 5),
-(55, 0, 9090);
+(55, 0, 9090),
+(107, 1049, 5);
 
 -- --------------------------------------------------------
 
@@ -192,6 +204,14 @@ CREATE TABLE `post` (
   `post_date` timestamp NOT NULL DEFAULT current_timestamp(),
   `filelink` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `post`
+--
+
+INSERT INTO `post` (`post_id`, `user_id`, `subject_id`, `class_id`, `post_content`, `post_date`, `filelink`) VALUES
+(1049, 5, 1, 10, 'iu', '2025-01-24 14:13:25', 'nofile'),
+(1064, 4, 1, 10, 'k', '2025-01-25 06:05:59', 'nofile');
 
 -- --------------------------------------------------------
 
@@ -435,16 +455,22 @@ ALTER TABLE `assignment`
   MODIFY `assignment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
+-- AUTO_INCREMENT for table `comments`
+--
+ALTER TABLE `comments`
+  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `likes`
 --
 ALTER TABLE `likes`
-  MODIFY `like_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+  MODIFY `like_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 
 --
 -- AUTO_INCREMENT for table `post`
 --
 ALTER TABLE `post`
-  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1046;
+  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1066;
 
 --
 -- AUTO_INCREMENT for table `submission`
