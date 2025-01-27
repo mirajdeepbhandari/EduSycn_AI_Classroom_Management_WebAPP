@@ -1,0 +1,3 @@
+uvicorn main:app --reload
+
+Mirajj@@@123abc

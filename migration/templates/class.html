@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classroom UI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+
+        :root {
+            --primary-color: #8e44ad;
+            --secondary-color: #9b59b6;
+            --accent-color: #3498db;
+            --background-color: #f3e5f5;
+            --text-color: #34495e;
+        }
+
+        body {
+            background-color: #edeaea;
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .main-container {
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            max-width: 1200px;
+            padding: 1rem;
+        }
+
+        .class-header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius:25px;
+        }
+
+        .nav-pills .nav-link {
+            color: var(--text-color);
+            border-radius: 30px;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .card {
+         
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-post{
+            border: 1px solid #438aa0;
+        }
+
+        .bkbtn{
+            background-color: #e55151;
+            color: #ffffff;
+        }
+
+        .bkbtn:hover{
+            background-color: #bf3131;
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .post-actions .btn {
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .like-button {
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 20px;
+            padding: 5px 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .like-button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .comment-input {
+            border-radius: 30px;
+        }
+
+        .comment-input .form-control {
+            border-radius: 30px 0 0 30px;
+        }
+
+        .comment-input .btn {
+            border-radius: 0 30px 30px 0;
+        }
+
+        .mininav{
+            background-color: #1d1f56;
+        }
+
+        .mininav a:hover{
+            background-color: #5641abfb;
+        }
+
+        .post-actions .btn-edit, .post-actions .btn-delete {
+            color: #6c757d;
+            border: none;
+            background: none;
+            cursor: pointer;
+            padding: 0;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+        .custom-file-input {
+        height: calc(1.5em + 0.75rem + 2px); /* Matches Bootstrap's form-control height */
+        padding: 0.375rem 0.75rem; /* Matches textarea padding */
+    }
+
+    .form-control {
+        box-sizing: border-box; /* Ensures consistent sizing */
+    }
+
+    .btn {
+        margin-left: 1rem; /* Adds space between input and button */
+    }
+
+        .post-actions .btn-edit:hover, .post-actions .btn-delete:hover {
+            color: var(--primary-color);
+        }
+        
+        .liked{
+            background-color: #52de9c;
+        }
+        .post-actions form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+
+        .file-download {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      width: fit-content;
+      text-decoration: none;
+      color: #333;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      justify-content: space-between;
+      height: 70px;
+    }
+
+    .file-download:hover {
+      background-color: #f0f0f0;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .file-download img {
+      width: 40px;
+      height: 40px;
+    }
+     
+    .file-download-wrapper {
+    display: block;
+    text-decoration: none;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+  }
+
+  .file-download-wrapper:hover {
+    background-color: #e9ecef;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .file-download-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .file-icon,
+  .download-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+  }
+
+  .file-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    flex-grow: 1;
+  }
+
+  .comment-input .form-control {
+    min-width: 0; /* Ensures proper sizing in flexbox */
+}
+
+.comment-input .btn {
+    height: auto; /* Makes button height match the input field */
+}
+
+
+
+        @media (max-width: 768px) {
+            .class-header {
+                padding: 2rem 1rem;
+            }
+
+            .nav-pills .nav-link {
+                margin: 0.25rem;
+            }
+
+            .main-container {
+                margin-top: 0; 
+                margin-bottom: 0; 
+                padding: 0.5rem;
+            }
+
+            .post-actions form {
+                flex-direction: column;
+                gap: 5px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container main-container">
+        <div class="row">
+            <div class="col-12 mb-4">
+                <a href="{% if current_role == 'teacher' %}{{ url_for('teacher_dashboard') }}{% else %}{{ url_for('student_dashboard') }}{% endif %}" class="btn btn-light mt-3 bkbtn">
+                    <i class="bi bi-arrow-left"></i> Back
+                </a>                
+            </div>
+        </div>
+
+        {% if request.cookies.get('message') %}
+        <div class="alert alert-success" role="alert">
+            {{ request.cookies.get('message') }}
+        </div>
+        {% endif %}
+
+        <div class="class-header text-center">
+            <h1 class="display-4 fw-bold">{{subject_name}}</h1>
+            <p class="lead">
+                <i class="bi bi-person-fill me-2"></i>Teacher: {{teacher}}
+            </p>
+        </div>
+
+        <nav class="nav nav-pills nav-justified my-4 mininav">
+            <div style="display: flex; justify-content: space-between; width: 100%;">
+                <form action="{% if current_role == 'teacher' %}{{ url_for('viewAssignment') }}{% else %}{{ url_for('Assignmentt') }}{% endif %}" method="POST" class="m-0 flex-grow-1 text-center">
+                    <input type="hidden" name="subject_id" value="{{ subject_id }}">
+                    <input type="hidden" name="subject" value="{{ subject_name }}">
+                    <input type="hidden" name="class_id" value="{{ class_id }}">
+                    <input type="hidden" name="teacher_id" value="{{ current_user}}">
+                    <button type="submit" class="nav-link btn btn-link" style="color:white; text-decoration: none; width: 100%;">
+                        <i class="bi bi-book me-2"></i>Assignments
+                    </button>
+                </form>
+                {% if current_role != 'teacher' %}
+                <form action="chat.html" method="POST" class="m-0 flex-grow-1 text-center">
+                    <button type="submit" class="nav-link btn btn-link" style="color:white; text-decoration: none; width: 100%;">
+                        <i class="bi bi-chat-dots me-2"></i>Chat With Teacher
+                    </button>
+                </form>
+                {% endif %}
+        
+                <form action="/classroom_students" method="POST" class="m-0 flex-grow-1 text-center">
+                    <input type="hidden" name="subject_id" value="{{ subject_id }}">
+                    <input type="hidden" name="subject" value="{{ subject_name }}">
+                    <input type="hidden" name="class_id" value="{{ class_id }}">
+                    <button type="submit" class="nav-link btn btn-link" style="color:white; text-decoration: none; width: 100%;">
+                        <i class="bi bi-people-fill me-2"></i>Students
+                    </button>
+                </form>
+            </div>
+        </nav>
+        
+       
+    <form action="{{ url_for('classroom') }}" method="get">
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="input-group">
+                     <input type="hidden" name="subject_id" value="{{ subject_id }}">
+                     <input type="hidden" name="subject" value="{{ subject_name }}">
+                     <input type="hidden" name="class_id" value="{{ class_id }}">
+                    <input type="text" class="form-control" placeholder="Search Posts..." name="search_post">
+                    <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+        <div class="row">
+            <div class="col-12 mb-4">
+                <form action="{{ url_for('classroom')}}" method="POST" enctype="multipart/form-data">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Create Post</h5>
+                            <textarea class="form-control mb-3" rows="3" placeholder="Write your post here..." name="post_content"></textarea>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <!-- Styled file input -->
+                                <input type="file" class="form-control custom-file-input" name="file_upload_post">
+                                <input type="hidden" name="subject_id" value="{{ subject_id }}">
+                                <input type="hidden" name="subject" value="{{ subject_name }}">
+                                <input type="hidden" name="class_id" value="{{ class_id }}">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-plus-circle me-2"></i>Create Post
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <h5 class="mb-4">Posts Feed</h5>
+                 
+                 <hr style="border: 1.5px double #000000; margin: 30px 0;">
+                 
+
+                 {% if posts %}
+    {% for post in posts %}
+        <div class="card mb-4 card-post" id="post-{{ post[0] }}">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="avatar me-3">{{ post[2] | initials }}</div> <!-- Initials -->
+                        <div>
+                            <h6 class="card-subtitle mb-1">{{ post[2] }}</h6>
+                            <p class="card-text"><small class="text-muted">{{ post_time }}</small></p>
+                        </div>
+                    </div>
+                    {% if current_user == post[1] %}
+                        <div class="post-actions">
+                            <form action="{{ url_for('deletePost') }}" method="post">
+                                <!-- Hidden inputs to send required data -->
+                                <input type="hidden" name="post_id" value="{{ post[0] }}">
+                                <input type="hidden" name="subject_id" value="{{ subject_id }}">
+                                <input type="hidden" name="subject" value="{{ subject }}">
+                                <input type="hidden" name="class_id" value="{{ class_id }}">
+                            
+                                <!-- Delete button -->
+                                <button class="btn-delete" type="submit">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                            
+                            <button class="btn-edit" type="button" onclick="editPost({{ post[0] }})"><i class="bi bi-pencil"></i></button>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="post-content">
+                    <p class="card-text" id="post-content-{{ post[0] }}" style="margin-bottom: 20px;">{{ post[5] }}</p>
+                </div>
+                <div class="edit-content d-none" id="edit-content-{{ post[0] }}" style="margin-bottom: 20px;">
+
+                    <form action="{{ url_for('feedPostUpdate')}}" method="POST">
+                        <textarea class="form-control mb-2" name="content" required>{{ post[5] }}</textarea>
+                        <input type="hidden" name="post_id" value="{{ post[0] }}">
+                        <input type="hidden" name="user_id" value="{{ current_user }}">
+                        <input type="hidden" name="subject_id" value="{{ subject_id }}">
+                        <input type="hidden" name="subject" value="{{ subject_name }}">
+                        <input type="hidden" name="class_id" value="{{ class_id }}">
+                        <button class="btn btn-success btn-sm" type="submit">Save</button>
+                        <button class="btn btn-secondary btn-sm" type="button" onclick="cancelEdit({{ post[0] }})">Cancel</button>
+                    </form>
+                </div>
+                {% if post[7] != "nofile" %}
+                    <a href="{{ post[7] }}" download class="file-download-wrapper">
+                        <div class="file-download-content">
+                            <img src="static/images/file_logo.png" alt="File Icon" class="file-icon">
+                            <span class="file-name"><b>{{ post[7] | getpostname }}</b></span>
+                            <img src="static/images/download_logoo.png" alt="Download Icon" class="download-icon">
+                        </div>
+                    </a>
+                {% endif %}
+                <!-- Likes and Comments Section -->
+                <div class="d-flex justify-content-between align-items-center mb-3 post-actions">
+                    <button class="like-button" data-post-id="{{ post[0] }}" data-user-id="{{ current_user }}" onclick="likePost(this)">
+                        <i class="bi bi-hand-thumbs-up"></i>
+                        <span class="like-count">{{ likes | selectattr("0", "equalto", post[0]) | list | length }}</span>
+                    </button>
+                    <button class="btn btn-link">
+                        <i class="bi bi-chat me-1"></i>
+                        <span>{{ comments | selectattr("3", "equalto", post[0]) | list | length }} Comments</span>
+                    </button>
+                </div>
+                <hr>
+                <!-- Comments Section -->
+                <div class="comments-section">
+                    {% for comment in comments %}
+                        {% if comment[3] == post[0] %}
+                            <div class="d-flex mb-2">
+                                <div class="avatar me-2" style="background-color: {{ comment[1] | random_color }}">{{ comment[6] | initials }}</div>
+                                <div>
+                                    <h6 class="mb-2">{{ comment[6] }}</h6>
+                                    <p class="mb-2">{{ comment[1] }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="input-group mt-3 comment-input">
+                    <form action="{{ url_for('addComment') }}" method="POST" class="d-flex w-100">
+                        <input type="hidden" name="post_id" value="{{ post[0] }}">
+                        <input type="hidden" name="subject_id" value="{{ subject_id }}">
+                        <input type="hidden" name="subject" value="{{ subject_name }}">
+                        <input type="hidden" name="class_id" value="{{ class_id }}">
+                        <input 
+                            type="text" 
+                            class="form-control flex-grow-1" 
+                            placeholder="Add a comment..." 
+                            name="comment">
+                        <button class="btn btn-primary ms-2" type="submit">
+                            <i class="bi bi-send"></i>
+                        </button>
+                    </form>
+                </div>
+                
+                
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="text-center mt-4">
+        <p style="font-size: 19px;">No posts available !!! </p>
+    </div>
+{% endif %}
+
+            
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+
+       async function likePost(button) {
+    const postId = button.getAttribute("data-post-id");
+    const userId = button.getAttribute("data-user-id");
+    const likeCountElement = button.querySelector(".like-count");
+
+    try {
+        // Send POST request with post_id and user_id
+        const response = await fetch("/api/like", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ post_id: postId, user_id: userId })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+
+            // Update the like count in the UI
+            likeCountElement.textContent = data.likes;
+
+            // Toggle the liked class based on the action
+            if (data.action === "liked") {
+                button.classList.add("liked");  // Add the liked state immediately
+            } else {
+                button.classList.remove("liked");  // Remove the liked state immediately
+            }
+        } else {
+            console.error("Failed to update likes");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+        </script>
+
+<script>
+
+// Function to load liked statuses on page load
+async function loadLikedStatuses(userId) {
+    try {
+        // Fetch the liked statuses for the current user
+        const response = await fetch(`/api/liked_statuses?user_id=${userId}`);
+        
+        if (response.ok) {
+            const likedPosts = await response.json();
+
+            // Loop through each like button on the page
+            document.querySelectorAll(".like-button").forEach(button => {
+                const postId = button.getAttribute("data-post-id");
+                
+                // Check if this post ID is in the list of liked posts
+                if (likedPosts.includes(parseInt(postId))) {
+                    button.classList.add("liked");  // Add liked class if post is liked
+                }
+            });
+        } else {
+            console.error("Failed to load liked statuses");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+// Call this function on page load, passing the current user ID
+document.addEventListener("DOMContentLoaded", () => {
+    const userId = document.querySelector(".like-button").getAttribute("data-user-id"); //user_id is available on each button
+    loadLikedStatuses(userId);
+
+});
+
+        </script>
+
+<script>
+
+function editPost(postId) {
+    // Show edit textarea and save button
+    document.getElementById(`post-content-${postId}`).classList.add("d-none");
+    document.getElementById(`edit-content-${postId}`).classList.remove("d-none");
+}
+
+function cancelEdit(postId) {
+    // Hide edit textarea and restore original content
+    document.getElementById(`post-content-${postId}`).classList.remove("d-none");
+    document.getElementById(`edit-content-${postId}`).classList.add("d-none");
+}
+
+</script>
+</body>
+</html>
