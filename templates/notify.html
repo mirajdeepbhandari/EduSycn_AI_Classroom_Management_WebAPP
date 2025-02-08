@@ -20,7 +20,7 @@
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 450px; /* Increased width */
+            max-width: 1050px; /* Increased width */
             max-height: 500px; /* Set maximum height for the container */
             padding: 30px; /* Increased padding */
             transition: background-color 0.3s;
@@ -100,9 +100,11 @@
             margin: 0 0 4px 0;
             font-weight: 500;
         }
+       
         .notification-time {
-            font-size: 13px;
-            color: #999;
+        font-size: 15px;
+        font-weight: 600;
+        color: #766f6f;
         }
         .mark-all {
             text-align: center;
@@ -143,49 +145,28 @@
 </head>
 <body>
     <div class="notification-panel" id="notification-panel">
-        <a href="student_page.html" style="text-decoration: none; color: black;">
+        
+        <form action="{{ url_for('student_dashboard') }}" method="get">
         <div class="panel-header">
             <span class="panel-title">Notifications</span>
-            <button class="close-btn" onclick="closePanel()">✕</button>
+            <button class="close-btn">✕</button>
         </div>
-    </a>
+        </form>
+        {% if notifications %}
+        {% for notification in notifications %}
         <div class="notification-item">
             <div class="notification-dot"></div>
             <div class="notification-content">
-                <p class="notification-title">New inspection assigned: QW0001 - Pepsi Asia</p>
-                <p class="notification-time">Now</p>
+                <p class="notification-title">{{ notification[0]}}</p>
+                <p class="notification-time">{{ notification.date.strftime('%Y-%m-%d %I:%M %p') }}</p>
             </div>
         </div>
-        <div class="notification-item">
-            <div class="notification-dot"></div>
-            <div class="notification-content">
-                <p class="notification-title">New inspection assigned: AR5567 - Pepsi Europe</p>
-                <p class="notification-time">1h ago</p>
-            </div>
-        </div>
-        <div class="notification-item">
-            <div class="notification-dot"></div>
-            <div class="notification-content">
-                <p class="notification-title">Inspection import has been successfully created</p>
-                <p class="notification-time">4h ago</p>
-            </div>
-        </div>
-        <div class="notification-item">
-            <div class="notification-dot"></div>
-            <div class="notification-content">
-                <p class="notification-title">Terms of use was updated</p>
-                <p class="notification-time">05 May 2019</p>
-            </div>
-        </div>
+        {% endfor %}
+        {%else%}
+        <p>No notifications found.</p>
+        {% endif %}
 
-        <div class="notification-item">
-            <div class="notification-dot"></div>
-            <div class="notification-content">
-                <p class="notification-title">Terms of use was updated</p>
-                <p class="notification-time">05 May 2019</p>
-            </div>
-        </div>
-
+       
        
     </div>
 

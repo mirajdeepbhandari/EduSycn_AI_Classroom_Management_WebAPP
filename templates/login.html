@@ -17,6 +17,17 @@
 
     <div class="bodyalter">
       <section class="wrapper">
+        {% if error %}
+        
+        <p class="err" >
+            {{ error }}
+        </p>
+        {% endif %}
+      {% if success %}
+      <p style="background-color: greenyellow; "class="err" >
+        {{ success }}
+    </p>
+      {% endif %}
         <div class="form signup">
           <header>Signup</header>
           <form action="/register_validation" method="post">

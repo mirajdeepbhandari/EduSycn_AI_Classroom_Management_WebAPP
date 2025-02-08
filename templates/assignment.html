@@ -87,6 +87,7 @@
     <div class="container py-5">
         <div class="card">
             <div class="card-header text-white d-flex justify-content-between align-items-center py-3">
+                
                 <h1 class="h3 mb-0">Assignment Portal</h1>
                 <form action="{{ url_for('classroom') }}" method="POST" style="display: inline;">
 
@@ -99,7 +100,13 @@
                     </button>
                 </form>                
             </div>
-            
+            {% if sumbitmsg %}
+
+            <div class="alert alert-success" style="margin-top: 20px;" role="alert">
+                {{sumbitmsg}}
+              </div>
+
+            {% endif %}
             <div class="card-body p-4">
                 {% if description %}
                 <div class="mb-4 assignment-box p-3">
@@ -125,7 +132,7 @@
                         <i class="fas fa-download me-2"></i>Download
                     </a>
                 </div>
-                <form action="{{url_for('Assignment')}}" method="post" enctype="multipart/form-data">
+                <form action="{{url_for('Assignmentt')}}" method="post" enctype="multipart/form-data">
                 <div class="mb-4">
                     <div class="upload-area" id="upload-area">
                         <i class="fas fa-cloud-upload-alt upload-icon mb-3"></i>

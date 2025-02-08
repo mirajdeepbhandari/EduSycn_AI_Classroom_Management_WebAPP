@@ -16,9 +16,16 @@
   background: -webkit-linear-gradient(to top, #1CB5E0, #000046); /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to top, #1CB5E0, #000046); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
+.err{
+  background-color: #ffa4a4;
+    padding: 5px;
+    font-size: 17px;
+    border-radius: 5px;
+    text-align: center;
+}
 .wrapper {
   position: relative;
-  height: 590px;
+  height: 623px;
   max-width: 390px; /* Reduce the maximum width */
   width: 100%;
   border-radius: 12px;

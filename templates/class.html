@@ -54,10 +54,14 @@
         }
 
         .card {
-            border: none;
+         
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             margin-bottom: 1.5rem;
+        }
+
+        .card-post{
+            border: 1px solid #438aa0;
         }
 
         .bkbtn{
@@ -286,15 +290,13 @@
         <div class="class-header text-center">
             <h1 class="display-4 fw-bold">{{subject_name}}</h1>
             <p class="lead">
-                <i class="bi bi-person-fill me-2"></i>Teacher: Aditi Rana Magar
-                <span class="mx-3">|</span>
-                <i class="bi bi-people-fill me-2"></i>Students: 23
+                <i class="bi bi-person-fill me-2"></i>Teacher: {{teacher}}
             </p>
         </div>
 
         <nav class="nav nav-pills nav-justified my-4 mininav">
             <div style="display: flex; justify-content: space-between; width: 100%;">
-                <form action="{% if current_role == 'teacher' %}{{ url_for('viewAssignment') }}{% else %}{{ url_for('Assignment') }}{% endif %}" method="POST" class="m-0 flex-grow-1 text-center">
+                <form action="{% if current_role == 'teacher' %}{{ url_for('viewAssignment') }}{% else %}{{ url_for('Assignmentt') }}{% endif %}" method="POST" class="m-0 flex-grow-1 text-center">
                     <input type="hidden" name="subject_id" value="{{ subject_id }}">
                     <input type="hidden" name="subject" value="{{ subject_name }}">
                     <input type="hidden" name="class_id" value="{{ class_id }}">
@@ -303,14 +305,7 @@
                         <i class="bi bi-book me-2"></i>Assignments
                     </button>
                 </form>
-                {% if current_role != 'teacher' %}
-                <form action="chat.html" method="POST" class="m-0 flex-grow-1 text-center">
-                    <button type="submit" class="nav-link btn btn-link" style="color:white; text-decoration: none; width: 100%;">
-                        <i class="bi bi-chat-dots me-2"></i>Chat With Teacher
-                    </button>
-                </form>
-                {% endif %}
-        
+                
                 <form action="/classroom_students" method="POST" class="m-0 flex-grow-1 text-center">
                     <input type="hidden" name="subject_id" value="{{ subject_id }}">
                     <input type="hidden" name="subject" value="{{ subject_name }}">
@@ -319,18 +314,49 @@
                         <i class="bi bi-people-fill me-2"></i>Students
                     </button>
                 </form>
+                
+                {% if current_role == 'teacher' %}
+                <form action="{{ url_for('GenerateMcqPage') }}" method="get" class="m-0 flex-grow-1 text-center">
+                    <input type="hidden" name="subject_id" value="{{ subject_id }}">
+                    <input type="hidden" name="subject" value="{{ subject_name }}">
+                    <input type="hidden" name="class_id" value="{{ class_id }}">
+                    <button type="submit" class="nav-link btn btn-link" style="color:white; text-decoration: none; width: 100%;">
+                        <i class="bi bi-lightning-charge-fill me-2"></i>Generate MCQ
+                    </button>
+                </form>
+                {% endif %}
+                
+
+                {% if current_role == 'student'%}
+                <form action="{{url_for('McqPageStudent')}}" method="get" class="m-0 flex-grow-1 text-center">
+                    <input type="hidden" name="subject_id" value="{{ subject_id }}">
+                    <input type="hidden" name="subject" value="{{ subject_name }}">
+                    <input type="hidden" name="class_id" value="{{ class_id }}">
+                    <button type="submit" class="nav-link btn btn-link" style="color:white; text-decoration: none; width: 100%;">
+                        <i class="bi bi-file-earmark-text-fill me-2"></i>Take MCQ Test
+                    </button>
+                </form>
+                {% endif %}
+                
+
+
             </div>
         </nav>
         
-
+       
+    <form action="{{ url_for('classroom') }}" method="get">
         <div class="row">
             <div class="col-12 mb-4">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search Posts...">
-                    <button class="btn btn-primary" type="button"><i class="bi bi-search"></i></button>
+                     <input type="hidden" name="subject_id" value="{{ subject_id }}">
+                     <input type="hidden" name="subject" value="{{ subject_name }}">
+                     <input type="hidden" name="class_id" value="{{ class_id }}">
+                    <input type="text" class="form-control" placeholder="Search Posts..." name="search_post">
+                    <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
                 </div>
             </div>
         </div>
+    </form>
 
         <div class="row">
             <div class="col-12 mb-4">
@@ -365,7 +391,7 @@
 
                  {% if posts %}
     {% for post in posts %}
-        <div class="card mb-4" id="post-{{ post[0] }}">
+        <div class="card mb-4 card-post" id="post-{{ post[0] }}">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <div class="d-flex align-items-center">
@@ -381,7 +407,7 @@
                                 <!-- Hidden inputs to send required data -->
                                 <input type="hidden" name="post_id" value="{{ post[0] }}">
                                 <input type="hidden" name="subject_id" value="{{ subject_id }}">
-                                <input type="hidden" name="subject" value="{{ subject }}">
+                                <input type="hidden" name="subject" value="{{ subject_name }}">
                                 <input type="hidden" name="class_id" value="{{ class_id }}">
                             
                                 <!-- Delete button -->
@@ -468,7 +494,7 @@
     {% endfor %}
 {% else %}
     <div class="text-center mt-4">
-        <p style="font-size: 19px;">No posts available. <h4 style="color:#e55151">Create a post !!!</h4> </p>
+        <p style="font-size: 19px;">No posts available !!! </p>
     </div>
 {% endif %}
 

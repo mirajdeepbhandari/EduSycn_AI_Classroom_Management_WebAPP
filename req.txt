@@ -1,8 +1,15 @@
 fastapi
 jinja2 
 uvicorn
-mysql-connector-python 
 python-multipart
 itsdangerous
 python-multipart
 aiosmtplib
+pymysql
+passlib
+bcrypt
+langchain_community
+pypdf
+langchain_google_genai
+PyMuPDF
+python-pptx
