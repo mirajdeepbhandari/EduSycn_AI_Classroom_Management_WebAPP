@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 08, 2025 at 01:20 PM
+-- Generation Time: Feb 12, 2025 at 06:16 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -194,7 +194,9 @@ CREATE TABLE `likes` (
 --
 
 INSERT INTO `likes` (`like_id`, `post_id`, `user_id`) VALUES
-(3, 1, 5);
+(3, 1, 5),
+(4, 1, 4),
+(5, 1, 9090);
 
 -- --------------------------------------------------------
 
@@ -236,7 +238,8 @@ CREATE TABLE `message` (
 INSERT INTO `message` (`msg_id`, `content`, `timestamp`, `chat_id`, `sender_id`, `receiver_id`, `status`) VALUES
 (1, 'k xa khabar oi', '2025-02-08', 1, 4, 5, 'read'),
 (2, 'hm sab thik xa yr', '2025-02-08', 1, 5, 4, 'read'),
-(3, 'oi', '2025-02-08', 2, 9090, 4, 'read');
+(3, 'oi', '2025-02-08', 2, 9090, 4, 'read'),
+(4, 'hm', '2025-02-08', 2, 4, 9090, 'read');
 
 -- --------------------------------------------------------
 
@@ -281,7 +284,8 @@ CREATE TABLE `post` (
 --
 
 INSERT INTO `post` (`post_id`, `user_id`, `subject_id`, `class_id`, `post_content`, `post_date`, `filelink`) VALUES
-(1, 4, 1, 10, 'hello hi', '2025-02-08 11:25:36', 'nofile');
+(1, 4, 1, 10, 'hello hij', '2025-02-08 12:36:36', 'nofile'),
+(5, 9092, 5, 10, 'hello', '2025-02-12 17:15:58', 'nofile');
 
 -- --------------------------------------------------------
 
@@ -302,7 +306,7 @@ CREATE TABLE `student` (
 
 INSERT INTO `student` (`student_id`, `user_id`, `class_id`, `is_notifyread`) VALUES
 (111, 4, 10, 'yes'),
-(222, 5, 10, 'no');
+(222, 5, 10, 'yes');
 
 -- --------------------------------------------------------
 
@@ -359,7 +363,8 @@ CREATE TABLE `teacher` (
 --
 
 INSERT INTO `teacher` (`teacher_id`, `user_id`) VALUES
-(9898, 9090);
+(9898, 9090),
+(9900, 9092);
 
 -- --------------------------------------------------------
 
@@ -384,7 +389,7 @@ INSERT INTO `teacher_class` (`tc_id`, `teacher_id`, `class_id`, `subject_id`) VA
 (3, 9898, 9, 1),
 (4, 9898, 9, 7),
 (5, 9898, 10, 1),
-(6, 9898, 10, 7);
+(14, 9900, 10, 5);
 
 -- --------------------------------------------------------
 
@@ -398,17 +403,20 @@ CREATE TABLE `user` (
   `number` varchar(20) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `role` enum('teacher','student') NOT NULL
+  `role` enum('teacher','student','admin') DEFAULT NULL,
+  `status` varchar(30) NOT NULL DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `full_name`, `number`, `password`, `email`, `role`) VALUES
-(4, 'miraj deepbhandari', '1111', '$2b$12$t67TT3SBj4gcWSUQ3ptRY.KS6Ei.KLxbNhiifyUBvFx4dcxTlNuqa', 'miraj@gmail.com', 'student'),
-(5, 'arbit bhandari', '22222', '$2b$12$t67TT3SBj4gcWSUQ3ptRY.KS6Ei.KLxbNhiifyUBvFx4dcxTlNuqa', 'arbit@gmail.com', 'student'),
-(9090, 'Rashmi Bhandari', '3333', '$2b$12$t67TT3SBj4gcWSUQ3ptRY.KS6Ei.KLxbNhiifyUBvFx4dcxTlNuqa', 'rashmi@gmail.com', 'teacher');
+INSERT INTO `user` (`user_id`, `full_name`, `number`, `password`, `email`, `role`, `status`) VALUES
+(4, 'miraj deepbhandari', '1111', '$2b$12$t67TT3SBj4gcWSUQ3ptRY.KS6Ei.KLxbNhiifyUBvFx4dcxTlNuqa', 'miraj@gmail.com', 'student', 'approved'),
+(5, 'arbit bhandari', '22222', '$2b$12$t67TT3SBj4gcWSUQ3ptRY.KS6Ei.KLxbNhiifyUBvFx4dcxTlNuqa', 'arbit@gmail.com', 'student', 'approved'),
+(9090, 'Rashmi Bhandari', '3333', '$2b$12$t67TT3SBj4gcWSUQ3ptRY.KS6Ei.KLxbNhiifyUBvFx4dcxTlNuqa', 'rashmi@gmail.com', 'teacher', 'approved'),
+(9091, 'edusync', '98989898', '$2b$12$t67TT3SBj4gcWSUQ3ptRY.KS6Ei.KLxbNhiifyUBvFx4dcxTlNuqa', 'edusync@gmail.com', 'admin', 'approved'),
+(9092, 'sabnam bhandari', '9876543212', '$2b$12$5Pe6i2cEDaH/VFmOo/55UuXp/89Bh1yLmR7CRATbRl6Eu8E4QE6Xi', 'sabnam@gmail.com', 'teacher', 'approved');
 
 --
 -- Indexes for dumped tables
@@ -592,7 +600,7 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT for table `likes`
 --
 ALTER TABLE `likes`
-  MODIFY `like_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `like_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `mcq_marks`
@@ -604,7 +612,7 @@ ALTER TABLE `mcq_marks`
 -- AUTO_INCREMENT for table `message`
 --
 ALTER TABLE `message`
-  MODIFY `msg_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `msg_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `notification`
@@ -616,13 +624,13 @@ ALTER TABLE `notification`
 -- AUTO_INCREMENT for table `post`
 --
 ALTER TABLE `post`
-  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=223;
+  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=226;
 
 --
 -- AUTO_INCREMENT for table `subject`
@@ -640,19 +648,19 @@ ALTER TABLE `submission`
 -- AUTO_INCREMENT for table `teacher`
 --
 ALTER TABLE `teacher`
-  MODIFY `teacher_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9899;
+  MODIFY `teacher_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9901;
 
 --
 -- AUTO_INCREMENT for table `teacher_class`
 --
 ALTER TABLE `teacher_class`
-  MODIFY `tc_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `tc_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9091;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9093;
 
 --
 -- Constraints for dumped tables

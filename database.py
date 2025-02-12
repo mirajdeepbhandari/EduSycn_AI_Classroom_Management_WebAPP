@@ -131,7 +131,8 @@ class User(Base):
     number = Column(String(20), nullable=True)
     password = Column(String(255), nullable=False)
     email = Column(String(255), nullable=False)
-    role = Column(Enum('teacher', 'student'), nullable=False)
+    role = Column(Enum('teacher', 'student','admin'), nullable=True)
+    status = Column(String(20), nullable=False, default='pending')
 
 
 
