@@ -153,6 +153,7 @@
             <div class="card-header">
                 <h1 class="text-center">AI Notes Generation</h1>
             </div>
+        <form method="POST" action="{{ url_for('summaryNote') }}" enctype="multipart/form-data">
             <div class="card-body">
                 <div class="mb-4 text-center">
                     <div class="button-group">
@@ -160,9 +161,9 @@
                             <button class="btn btn-primary btn-lg">
                                 <i class="fas fa-file-upload me-2"></i>Choose a file
                             </button>
-                            <input type="file" id="fileInput" class="form-control">
+                            <input type="file" id="fileInput" class="form-control" name="pdf_file" required>
                         </div>
-                        <button class="btn btn-danger btn-lg" id="summarizeBtn" disabled>
+                        <button class="btn btn-danger btn-lg" id="summarizeBtn" type="submit" disabled>
                             <i class="fas fa-chart-bar me-2"></i>Summarize
                         </button>
                     </div>
@@ -171,115 +172,110 @@
                 </div>
                 <div class="mb-4">
                     <label for="fileContents" class="form-label fw-bold">File Contents:</label>
-                    <div id="fileContents" class="bg-light"></div>
+                    <div id="fileContents" class="bg-light">{% if summary_ %}{{summary_}}{% endif %}
+                    </div>
                 </div>
+                
                 <div class="mb-4" id="summarySection" style="display: none;">
                     <label for="summaryContent" class="form-label fw-bold">Summary:</label>
-                    <div id="summaryContent" class="bg-light"></div>
+                    <div id="summaryContent" class="bg-light">
+                    </div>
                 </div>
                 <div class="text-center">
-                    <button class="btn btn-primary btn-lg me-2" id="downloadBtn" disabled>
+                    <button class="btn btn-primary btn-lg me-2" id="downloadBtn" type="button" onclick="downloadFile()">
                         <i class="fas fa-download me-2"></i>Download
                     </button>
-                    <button class="btn btn-secondary btn-lg" id="clearBtn" disabled>
+                    <button class="btn btn-secondary btn-lg" id="clearBtn" type="button" disabled>
                         <i class="fas fa-trash-alt me-2"></i>Clear
                     </button>
                 </div>
             </div>
-        </div>
+            </div>
+        </form>
     </div>
 
-    <script>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
         const fileInput = document.getElementById('fileInput');
-        const fileContents = document.getElementById('fileContents');
-        const summaryContent = document.getElementById('summaryContent');
-        const summarySection = document.getElementById('summarySection');
+        const summarizeBtn = document.getElementById('summarizeBtn');
         const downloadBtn = document.getElementById('downloadBtn');
         const clearBtn = document.getElementById('clearBtn');
-        const backBtn = document.getElementById('backBtn');
-        const summarizeBtn = document.getElementById('summarizeBtn');
-        const fileName = document.getElementById('fileName');
-        const fileInfo = document.getElementById('fileInfo');
+        const fileContents = document.getElementById('fileContents');
+        const summarySection = document.getElementById('summarySection');
+        const summaryContent = document.getElementById('summaryContent');
+        const fileNameDisplay = document.getElementById('fileName');
+        const fileInfoDisplay = document.getElementById('fileInfo');
+        const uploadArea = document.querySelector('.file-input-wrapper');
 
-        let currentFileContent = '';
+        // Drag and drop feature
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#00a8ff';
+            uploadArea.style.backgroundColor = '#f8f9fa';
+        });
+
+        uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#ccc';
+            uploadArea.style.backgroundColor = 'transparent';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#ccc';
+            uploadArea.style.backgroundColor = 'transparent';
+
+            const files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].type === 'application/pdf') {
+                handleFileUpload(files[0]);
+            }
+        });
 
         fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) {
-                return;
+            if (e.target.files.length > 0 && e.target.files[0].type === 'application/pdf') {
+                handleFileUpload(e.target.files[0]);
             }
-
-            fileName.textContent = file.name;
-            fileInfo.textContent = `Type: ${file.type || 'Unknown'}, Size: ${formatFileSize(file.size)}`;
-
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                currentFileContent = e.target.result;
-                fileContents.textContent = currentFileContent;
-                downloadBtn.disabled = false;
-                clearBtn.disabled = false;
-                summarizeBtn.disabled = false;
-                summarySection.style.display = 'none';
-                
-                // Syntax highlighting (basic example)
-                if (file.name.endsWith('.js') || file.name.endsWith('.ts')) {
-                    fileContents.innerHTML = fileContents.textContent
-                        .replace(/(const|let|var|function|return|if|else|for|while)/g, '<span style="color: #0000FF;">$1</span>')
-                        .replace(/(["'`].*?["'`])/g, '<span style="color: #008000;">$1</span>')
-                        .replace(/(\d+)/g, '<span style="color: #FF0000;">$1</span>');
-                }
-            };
-            reader.readAsText(file);
         });
 
-        downloadBtn.addEventListener('click', () => {
-            const blob = new Blob([currentFileContent], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'file_contents.txt';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        });
+        function handleFileUpload(file) {
+            fileNameDisplay.textContent = `Uploaded file: ${file.name}`;
+            summarizeBtn.removeAttribute('disabled');
+            clearBtn.removeAttribute('disabled');
+        }
 
         clearBtn.addEventListener('click', () => {
             fileInput.value = '';
             fileContents.textContent = '';
-            summaryContent.textContent = '';
-            fileName.textContent = '';
-            fileInfo.textContent = '';
-            downloadBtn.disabled = true;
-            clearBtn.disabled = true;
-            summarizeBtn.disabled = true;
+            fileNameDisplay.textContent = '';
+            fileInfoDisplay.textContent = '';
             summarySection.style.display = 'none';
-            currentFileContent = '';
+            summarizeBtn.setAttribute('disabled', 'true');
+            downloadBtn.removeAttribute('disabled');
+            clearBtn.setAttribute('disabled', 'true');
         });
 
-    
-        summarizeBtn.addEventListener('click', () => {
-            const summary = summarizeContent(currentFileContent);
-            summaryContent.innerHTML = summary;
-            summarySection.style.display = 'block';
-        });
+       
 
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
 
-        function escapeHtml(unsafe) {
-            return unsafe
-                 .replace(/&/g, "&amp;")
-                 .replace(/</g, "&lt;")
-                 .replace(/>/g, "&gt;")
-                 .replace(/"/g, "&quot;")
-                 .replace(/'/g, "&#039;");
+       
+    });
+
+    const downloadFile = () => {
+        const fileElement = document.getElementById("fileContents");
+        const fileText = fileElement.textContent;
+        if (!fileText || fileText.trim() === ""){
+            alert("No content to download.");
+            return;
         }
-    </script>
-</body>
+        const blob = new Blob([fileText], { type: "text/plain;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "Notes.txt";
+        link.click();
+        URL.revokeObjectURL(url);
+    };
+</script>
+
 </html>
