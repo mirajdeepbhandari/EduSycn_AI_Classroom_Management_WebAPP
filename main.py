@@ -1368,6 +1368,30 @@ async def GenerateMcqPage(
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @app.post("/generatemcq", response_class=HTMLResponse)
 async def GenerateMcqPage(
     pdf_file: UploadFile = File(...),
@@ -1623,9 +1647,6 @@ async def submitMcq(request: Request,
 @app.get("/exam_submission_status", response_class=HTMLResponse)
 async def examSubmissionStatus(request: Request):
     return templates.TemplateResponse("examalreadysubmission.html", {"request": request})
-
-
-
 
 
 

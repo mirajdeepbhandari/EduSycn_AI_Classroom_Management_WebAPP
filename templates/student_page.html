@@ -198,11 +198,6 @@
                             <i class="bi bi-house-door"></i> Home 
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="rag.html">
-                            <i class="bi bi-journal-text"></i> Query With Notes
-                        </a>
-                    </li>
                     <form action="{{ url_for('notificationsPage') }}" method="get">
                         <li class="nav-item">
                             <button type="submit" class="nav-link btn btn-link text-start w-100" style="display: flex; align-items: center;">
@@ -214,12 +209,10 @@
                                 {% endif %}
                             </button>
                         </li>
+
+                        
                     </form>
-                    <li class="nav-item">
-                        <a class="nav-link" href="edubot.html">
-                            <i class="bi bi-robot"></i> Chat with EduSync Bot
-                        </a>
-                    </li>
+
 
                     <form action="{{ url_for('inbox') }}" method="get"> <!-- Adjust action and method as needed -->
                         <li class="nav-item">
@@ -230,6 +223,19 @@
                             
                         </li>
                     </form>
+
+                    
+                    <form action="{{ url_for('summaryNote') }}" method="get">
+                        <li class="nav-item">
+                            <button type="submit" class="nav-link btn btn-link text-start w-100" style="display: flex; align-items: center;">
+                                <i class="bi bi-journal-text"></i> Generate Notes 
+                            </button>
+                        </li>
+
+                        
+                    </form>
+                    
+                    
 
                     <li class="nav-item" style="display: flex; align-items: center;">
                         <form action="{{url_for('logout')}}" method="POST">
@@ -267,40 +273,7 @@
             </div>
 
             <div class="container-fluid py-4">
-                <!-- Action cards -->
-                <div class="row mb-4">
-                    <div class="col-md-4 mb-3">
-                        <div class="card action-card present-card">
-                            <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                                <i class="bi bi-check-circle-fill mb-2" style="font-size: 30px;"></i>
-                                <h5 class="card-title">Total Attendance</h5>
-                                <p class="card-text">120 Days</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="card action-card abs-card">
-                            <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                                <i class="bi bi-x-circle-fill mb-2" style="font-size: 30px;"></i>
-                                <h5 class="card-title">Total Absence</h5>
-                                <p class="card-text">10 Days</p>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="col-md-4 mb-3">
-                        <form action="{{ url_for('summaryNote') }}" method="get">
-                            <button type="submit" style="text-decoration: none; border: none; background: none; padding: 0; width: 100%;">
-                                <div class="card action-card generate-notes-card">
-                                    <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                                        <i class="bi bi-journal-text mb-2" style="font-size: 30px;"></i>
-                                        <h5 class="card-title">Generate Notes</h5>
-                                    </div>
-                                </div>
-                            </button>
-                        </form>
-                    </div>
-                </div>
+              
                 
 
                 <hr style="border: 1.5px double #000000;">

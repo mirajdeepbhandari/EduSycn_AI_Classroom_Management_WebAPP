@@ -13,3 +13,4 @@ pypdf
 langchain_google_genai
 PyMuPDF
 python-pptx
+langchain_chroma
