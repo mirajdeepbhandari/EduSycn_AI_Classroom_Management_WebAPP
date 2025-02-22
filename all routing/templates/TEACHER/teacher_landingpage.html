@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
+            --accent-gradient: linear-gradient(135deg, #F6D365 0%, #FDA085 100%);
+            --text-color: #333;
+            --bg-color: #f4f7f9;
+            --card-bg: #ffffff;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            padding: 48px 0 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            background: var(--primary-gradient);
+        }
+        .sidebar-sticky {
+            position: relative;
+            top: 0;
+            height: calc(100vh - 48px);
+            padding-top: .5rem;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s;
+            border-radius: 0 25px 25px 0;
+            margin: 5px 0;
+        }
+        .sidebar .nav-link:hover {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+        .sidebar .nav-link.active {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .flx{
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        @media (max-width: 767.98px) {
+            .sidebar {
+                width: 55%;
+                height: 100%;
+                transform: translateX(-100%);
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            .flx{
+                margin-top: 10px;
+            }
+        }
+        .content {
+            transition: margin-left .3s;
+        }
+        @media (min-width: 768px) {
+            .content {
+                margin-left: 250px;
+            }
+        }
+        .action-card {
+            height: 100%;
+            transition: all 0.3s;
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .action-card .card-body {
+            background: var(--secondary-gradient);
+            color: white;
+        }
+        .btn-custom {
+            background: var(--accent-gradient);
+            border: none;
+            color: var(--text-color);
+            font-weight: 600;
+            transition: all 0.3s;
+            border-radius: 25px;
+        }
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .search-bar {
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .search-bar input {
+            border: none;
+            background-color: var(--card-bg);
+        }
+        .search-bar button {
+            background-color: var(--card-bg);
+            border: none;
+        }
+        .module-card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .module-card .card-body {
+            background: var(--accent-gradient);
+        }
+        .welcome-banner {
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .stats-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .stats-icon {
+            font-size: 2.5rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .course-card {
+    border: 2px solid #007bff;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.course-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.course-card h5 {
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+.course-card p {
+    color: #6c757d;
+}
+
+.avatar-group img {
+    border-radius: 50%;
+    width: 25px; /* Adjust as needed */
+}
+
+.message-info {
+            margin-left: 10px;
+    border-radius: 71%;
+    background-color: crimson;
+    padding: 6px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar">
+                <div class="position-sticky sidebar-sticky">
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-white">
+                        <h4 style="color: #f4f7f9; text-align: center;">EduSycn</h4>
+                        <button id="closeSidebar" class="d-md-none btn btn-link text-white">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                <i class="fas fa-home me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                   
+                        <li class="nav-item">
+                            <a class="nav-link" href="plagdetect.html">
+                                <i class="fas fa-shield-alt me-2"></i>
+                                Plagiarism Check
+                            </a>
+                        </li>
+                       
+                        <li class="nav-item">
+                            <a class="nav-link" href="notify.html">
+                                <i class="fas fa-file-powerpoint me-2"></i>
+                                Generate PPT Slides
+                            </a>
+                        </li>
+                        <form action="{{ url_for('inbox') }}" method="get"> <!-- Adjust action and method as needed -->
+                            <li class="nav-item">
+                                <button type="submit" class="nav-link btn btn-link text-start w-100" style="display: flex; align-items: center;">
+                                    <i class="fab fa-facebook-messenger me-2"></i>
+                                    Chat <p class="message-info" style="background-color: #2925e2;" >💬 {{inbox_message}}</p>
+                                </button>
+                            </li>
+                        </form>
+                        <li class="nav-item" style="display: flex; align-items: center;">
+                            <form action="{{url_for('logout')}}" method="POST">
+                                <button  type="submit" class="nav-link" style="background-color: rgb(103, 50, 235); border: 1px; margin-top: 15px; margin-left: 20px;"> Logout </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 content">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+                    <div class="welcome-banner w-100">
+                        <h1 class="h2 mb-0">Welcome back,{{current_teacher}}!</h1>
+                        <p class="mb-0">Here's what's happening in your classes today.</p>
+                        <section class="flx">
+                        <div class="btn-toolbar mb-2 mb-md-0" >
+                            <button id="sidebarToggle" class="btn btn-sm btn-custom d-md-none me-2">
+                                <i class="fas fa-bars"></i>
+                            </button>
+                        </div>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <form action="{{ url_for('teacher_dashboard') }}" method="GET">
+                                <div class="input-group search-bar">
+                                    <input type="text" class="form-control" placeholder="Search..." name="search">
+                                    <button class="btn" type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        </section>
+                    </div>
+                </div>
+                
+                <hr style="height: 4px; background-color: #000000; border: none;">
+
+                <h2 class="mb-3">My Classes</h2>
+
+                <div class="row">
+
+              
+                    {% if teaching_modules %}
+                    {% for modules in teaching_modules %}
+                    <div class="col-md-4 mb-3">
+                        <form action="/class" method="POST" style="text-decoration: none; color: #000000;">
+                            <input type="hidden" name="subject_id" value="{{ modules[4] }}">
+                            <input type="hidden" name="subject" value="{{ modules[5] }}">
+                            <input type="hidden" name="class_id" value="{{ modules[2] }}">
+                    
+                            <div class="course-card" style="border: 2px solid #8c48b1; border-radius: 10px; padding: 20px; background-color: #ffffff; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); transition: transform 0.3s, box-shadow 0.3s;">
+                                <h5 style="margin-bottom: 10px; color: #007bff;">{{modules[3]}}</h5>
+                                <div class="d-flex justify-content-between align-items-center">
+                                
+                                    <span style="font-weight: bold; color: #333; margin-right: 15px;">{{modules[5]}}</span>
+                                    <div class="avatar-group" style="display: flex; gap: 5px;">
+                                        <img src="https://avatars.githubusercontent.com/u/40092465?v=4" alt="Student 1" style="border-radius: 50%; width: 25px;">
+                                        <img src="https://avatars.githubusercontent.com/u/40092465?v=4" alt="Student 2" style="border-radius: 50%; width: 25px;">
+                                        <img src="https://avatars.githubusercontent.com/u/40092465?v=4" alt="Student 3" style="border-radius: 50%; width: 25px;">
+                                    </div>
+                                </div>
+                                <!-- Submit Button -->
+                                <button type="submit" class="btn btn-primary mt-3" style="width: 100%;">Go to Class</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    {% endfor %}
+                    {% endif %}
+
+                    {% if not teaching_modules %}
+                    <div class=" mb-3">
+                        <div class="text-center" style="height: 70vh; display: flex; justify-content: center; align-items: center;
+                    background-color: #e2e7ea; border-radius: 22px; width: 100%;">
+                       <h1 class="h3 mb-3 text-danger">📖 No Results Found for Your Search 🔎</h1><br>
+                    </div>
+                    {% endif %}
+
+                 
+                  
+                </div>
+                
+                
+            </main>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("sidebarToggle").addEventListener("click", function() {
+            document.getElementById("sidebar").classList.toggle("show");
+        });
+
+        document.getElementById("closeSidebar").addEventListener("click", function() {
+            document.getElementById("sidebar").classList.remove("show");
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

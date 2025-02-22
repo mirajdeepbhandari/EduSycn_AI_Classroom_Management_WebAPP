@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional File Reader and Summarizer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0066cc;
+            --secondary-color: #003366;
+            --accent-color: #00a8ff;
+            --danger-color: #dc3545;
+        }
+        body {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            padding: 20px;
+        }
+        .card {
+            background-color: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .card-header {
+            background-color: var(--secondary-color);
+            color: white;
+            font-weight: bold;
+            padding: 25px;
+            border-bottom: none;
+        }
+        .card-body {
+            padding: 35px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        #fileContents, #summaryContent {
+            min-height: 250px;
+            max-height: 500px;
+            overflow-y: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            border: 1px solid #ced4da;
+            border-radius: 0.5rem;
+            padding: 15px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background-color: #f8f9fa;
+        }
+        .btn {
+            transition: all 0.3s ease;
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-weight: 600;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        .btn-danger {
+            background-color: var(--danger-color);
+            border-color: var(--danger-color);
+        }
+        .btn-danger:hover {
+            background-color: #bd2130;
+            border-color: #bd2130;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+        .file-name {
+            margin-top: 15px;
+            font-style: italic;
+            color: #495057;
+            font-size: 0.9rem;
+        }
+        .file-info {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        #summaryContent {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container position-relative">
+       
+        <div class="card">
+            <form action="{{ url_for('student_dashboard') }}" method="get">
+            <button class="btn btn-secondary back-btn" id="backBtn" type="submit">
+                <i class="fas fa-arrow-left me-2"></i>Back
+            </button>
+            </form>
+            <div class="card-header">
+                <h1 class="text-center">AI Notes Generation</h1>
+            </div>
+        <form method="POST" action="{{ url_for('summaryNote') }}" enctype="multipart/form-data">
+            <div class="card-body">
+                <div class="mb-4 text-center">
+                    <div class="button-group">
+                        <div class="file-input-wrapper">
+                            <button class="btn btn-primary btn-lg">
+                                <i class="fas fa-file-upload me-2"></i>Choose a file
+                            </button>
+                            <input type="file" id="fileInput" class="form-control" name="pdf_file" required>
+                        </div>
+                        <button class="btn btn-danger btn-lg" id="summarizeBtn" type="submit" disabled>
+                            <i class="fas fa-chart-bar me-2"></i>Summarize
+                        </button>
+                    </div>
+                    <div class="file-name mt-2" id="fileName"></div>
+                    <div class="file-info" id="fileInfo"></div>
+                </div>
+                <div class="mb-4">
+                    <label for="fileContents" class="form-label fw-bold">File Contents:</label>
+                    <div id="fileContents" class="bg-light">{% if summary_ %}{{summary_}}{% endif %}
+                    </div>
+                </div>
+                
+                <div class="mb-4" id="summarySection" style="display: none;">
+                    <label for="summaryContent" class="form-label fw-bold">Summary:</label>
+                    <div id="summaryContent" class="bg-light">
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary btn-lg me-2" id="downloadBtn" type="button" onclick="downloadFile()">
+                        <i class="fas fa-download me-2"></i>Download
+                    </button>
+                    <button class="btn btn-secondary btn-lg" id="clearBtn" type="button" disabled>
+                        <i class="fas fa-trash-alt me-2"></i>Clear
+                    </button>
+                </div>
+            </div>
+            </div>
+        </form>
+    </div>
+
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const fileInput = document.getElementById('fileInput');
+        const summarizeBtn = document.getElementById('summarizeBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const fileContents = document.getElementById('fileContents');
+        const summarySection = document.getElementById('summarySection');
+        const summaryContent = document.getElementById('summaryContent');
+        const fileNameDisplay = document.getElementById('fileName');
+        const fileInfoDisplay = document.getElementById('fileInfo');
+        const uploadArea = document.querySelector('.file-input-wrapper');
+
+        // Drag and drop feature
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#00a8ff';
+            uploadArea.style.backgroundColor = '#f8f9fa';
+        });
+
+        uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#ccc';
+            uploadArea.style.backgroundColor = 'transparent';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#ccc';
+            uploadArea.style.backgroundColor = 'transparent';
+
+            const files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].type === 'application/pdf') {
+                handleFileUpload(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0 && e.target.files[0].type === 'application/pdf') {
+                handleFileUpload(e.target.files[0]);
+            }
+        });
+
+        function handleFileUpload(file) {
+            fileNameDisplay.textContent = `Uploaded file: ${file.name}`;
+            summarizeBtn.removeAttribute('disabled');
+            clearBtn.removeAttribute('disabled');
+        }
+
+        clearBtn.addEventListener('click', () => {
+            fileInput.value = '';
+            fileContents.textContent = '';
+            fileNameDisplay.textContent = '';
+            fileInfoDisplay.textContent = '';
+            summarySection.style.display = 'none';
+            summarizeBtn.setAttribute('disabled', 'true');
+            downloadBtn.removeAttribute('disabled');
+            clearBtn.setAttribute('disabled', 'true');
+        });
+
+       
+
+
+       
+    });
+
+    const downloadFile = () => {
+        const fileElement = document.getElementById("fileContents");
+        const fileText = fileElement.textContent;
+        if (!fileText || fileText.trim() === ""){
+            alert("No content to download.");
+            return;
+        }
+        const blob = new Blob([fileText], { type: "text/plain;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "Notes.txt";
+        link.click();
+        URL.revokeObjectURL(url);
+    };
+</script>
+
+</html>

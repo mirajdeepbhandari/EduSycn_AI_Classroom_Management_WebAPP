@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+        }
+
+        .sidebar {
+            background-color: #274270;
+            color: white;
+            height: 100vh;
+            width: 250px;
+            position: fixed;
+            left: -270px;
+            top: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar .nav-link {
+            color: white;
+            padding: 10px 20px;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+
+        .main-content {
+            margin-left: 0;
+            padding: 20px;
+            transition: margin-left 0.3s;
+        }
+
+        @media (min-width: 992px) {
+            .sidebar {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 250px;
+            }
+        }
+
+        .action-card {
+            height: 150px;
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+
+        .card-title {
+            margin-bottom: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .card-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .generate-notes-card {
+            background-color: #0f4f93; 
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .generate-notes-card:hover{
+            background-color: #0e447e; 
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .abs-card{
+            background-color: #860202;
+        }
+
+        .present-card{
+            background-color: #02863d;
+        }
+        .generate-notes-card h5,
+        .generate-notes-card p {
+            margin-bottom: 0;
+        }
+
+        .course-card {
+            border: none;
+            border-radius: 12px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s;
+        }
+
+        .course-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .avatar-group img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: -10px;
+            transition: transform 0.3s;
+        }
+
+        .avatar-group img:hover {
+            transform: scale(1.2);
+            z-index: 1;
+        }
+
+        .search-container {
+            max-width: 400px;
+            width: 100%;
+            margin-left: auto;
+        }
+
+        .navbar {
+            background-color: #274270;
+            padding: 15px;
+            color: white;
+        }
+
+        .navbar h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .navbar .btn {
+            color: #2a2770;
+            background-color: #ffffff;
+            border: none;
+        }
+
+        .navbar .btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .navbar .form-control:focus {
+            box-shadow: none;
+            border-color: #ced4da;
+        }
+
+        .message-info {
+            margin-left: 10px;
+    border-radius: 71%;
+    background-color: crimson;
+    padding: 6px;
+        }
+
+
+        @media (max-width: 576px) {
+            .search-container {
+                max-width: 100%;
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="sidebar">
+            <div class="position-sticky">
+                <div class="d-flex justify-content-between align-items-center p-3">
+                    <h3 class="m-0" style="text-align: center;">EduSync </h3>
+                    <button id="sidebar-close" class="btn btn-link text-white" style="display: none;">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <i class="bi bi-house-door"></i> Home 
+                        </a>
+                    </li>
+                    <form action="{{ url_for('notificationsPage') }}" method="get">
+                        <li class="nav-item">
+                            <button type="submit" class="nav-link btn btn-link text-start w-100" style="display: flex; align-items: center;">
+                                <i class="bi bi-bell"></i> Notifications 
+                                {% if is_Notifyread == "no" %}
+                                <p style="margin-bottom: 30px; margin-left: 10px;" id="notifydot">
+                                    🔴
+                                </p>
+                                {% endif %}
+                            </button>
+                        </li>
+
+                        
+                    </form>
+
+
+                    <form action="{{ url_for('inbox') }}" method="get"> <!-- Adjust action and method as needed -->
+                        <li class="nav-item">
+                            <button type="submit" class="nav-link btn btn-link text-start w-100" style="display: flex; align-items: center;">
+                                <i class="bi bi-chat-dots me-2"></i> 
+                                Chat <p class="message-info" >💬 {{inbox_message}}</p>
+                            </button>
+                            
+                        </li>
+                    </form>
+
+                    
+                    <form action="{{ url_for('summaryNote') }}" method="get">
+                        <li class="nav-item">
+                            <button type="submit" class="nav-link btn btn-link text-start w-100" style="display: flex; align-items: center;">
+                                <i class="bi bi-journal-text"></i> Generate Notes 
+                            </button>
+                        </li>
+
+                        
+                    </form>
+                    
+                    
+
+                    <li class="nav-item" style="display: flex; align-items: center;">
+                        <form action="{{url_for('logout')}}" method="POST">
+                            <button  type="submit" class="nav-link" style="background-color: rgb(103, 50, 235); border: 1px; margin-top: 15px; margin-left: 20px;"> Logout </button>
+                        </form>
+                    </li>
+                    
+                </ul>
+                
+                
+            </div>
+        </nav>
+
+        <!-- Main content -->
+        <main class="main-content flex-grow-1">
+            <div class="navbar d-flex align-items-center justify-content-between">
+                <h1 class="h4 mb-0">
+                    <button id="sidebar-toggle" class="btn me-2 d-lg-none">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    Hi! {{name}}
+                </h1>
+                
+                <div class="search-container">
+                <form action="{{url_for('student_dashboard')}}" method="get">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search Classrooms" name="search_query">
+                        <button class="btn" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+                </div>
+            
+            </div>
+
+            <div class="container-fluid py-4">
+              
+                
+
+                <hr style="border: 1.5px double #000000;">
+
+                <!-- My Courses -->
+                <h2 class="mb-3">My Courses</h2>
+                <div class="row">
+                    {% if subject_data %}
+                    {% for sub in subject_data %}
+                    <div class="col-md-4 mb-3">
+                        <form action="/class" method="get" style="text-decoration: none; color: #000000; background-color: white; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); border: none; border-radius: 12px; padding: 20px; transition: box-shadow 0.3s;">
+                            <input type="hidden" name="subject_id" value="{{sub[1]}}">
+                            <input type="hidden" name="subject" value="{{sub[0]}}">
+                            <input type="hidden" name="class_id" value="{{class_id}}">
+                            <button type="submit" class="course-card" style="all: unset; display: block; width: 100%; cursor: pointer;">
+                                <h5>{{ sub[0] }}</h5>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>{{ sub[2] }} Students</span>
+                                    <div class="avatar-group">
+                                        
+                                        <img src="{{ url_for('static', path='images/prof1.png') }}">
+                                        <img src="{{ url_for('static', path='images/prof2.png') }}">
+                                        <img src="{{ url_for('static', path='images/prof3.png') }}">
+                                        
+                                    </div>
+                                </div>
+                            </button>
+                        </form>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    {% if not subject_data %}
+                    <div class="text-center" style="height: 70vh; display: flex; justify-content: center; align-items: center;
+                    background-color: #e2e7ea; border-radius: 22px;">
+                       <h1 class="h3 mb-3 text-danger">📖 No Courses Found for Your Search 🔎</h1><br>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const sidebarClose = document.getElementById('sidebar-close');
+            const mainContent = document.querySelector('.main-content');
+
+            function toggleSidebar() {
+                sidebar.classList.toggle('active');
+                if (window.innerWidth < 992) {
+                    mainContent.style.marginLeft = sidebar.classList.contains('active') ? '240px' : '0';
+                    sidebarToggle.style.display = sidebar.classList.contains('active') ? 'none' : 'inline-block';
+                    sidebarClose.style.display = sidebar.classList.contains('active') ? 'block' : 'none';
+                }
+            }
+
+            sidebarToggle.addEventListener('click', toggleSidebar);
+            sidebarClose.addEventListener('click', toggleSidebar);
+
+            document.addEventListener('click', function (event) {
+                const isClickInsideSidebar = sidebar.contains(event.target);
+                const isClickOnToggleButton = sidebarToggle.contains(event.target);
+
+                if (!isClickInsideSidebar && !isClickOnToggleButton && sidebar.classList.contains('active') && window.innerWidth < 992) {
+                    toggleSidebar();
+                }
+            });
+
+            window.addEventListener('resize', function () {
+                if (window.innerWidth >= 992) {
+                    sidebar.classList.add('active');
+                    mainContent.style.marginLeft = '250px';
+                    sidebarToggle.style.display = 'none';
+                    sidebarClose.style.display = 'none';
+                } else {
+                    sidebar.classList.remove('active');
+                    mainContent.style.marginLeft = '0';
+                    sidebarToggle.style.display = 'inline-block';
+                    sidebarClose.style.display = 'none';
+                }
+            });
+
+            if (window.innerWidth >= 992) {
+                sidebar.classList.add('active');
+                mainContent.style.marginLeft = '250px';
+                sidebarToggle.style.display = 'none';
+                sidebarClose.style.display = 'none';
+            }
+        });
+    </script>
+
+</body>
+
+</html>

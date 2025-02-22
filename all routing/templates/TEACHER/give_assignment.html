@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment Submission Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .form-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            width: 100%;
+            max-width: 500px;
+        }
+        .form-container h2 {
+            color: #ffffff;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 700;
+        }
+        .form-control {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 10px;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: none;
+        }
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .btn-back {
+            background-color: red;
+            color: black;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-back:hover {
+            background-color: #ff6666;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        label {
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        textarea.form-control {
+            resize: none;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        @media (max-width: 576px) {
+            .form-container {
+                padding: 20px;
+            }
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Assignment Submission</h2>
+        {% if message %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+        {% endif %}
+        <form action="{{url_for('giveAssignment')}}" method="post" enctype="multipart/form-data">
+            <!-- Hidden inputs for subject_id, class_id, and teacher_id -->
+            <input type="hidden" name="subject_id" value="{{ subject_id }}">
+            <input type="hidden" name="class_id" value="{{ class_id }}">
+            <input type="hidden" name="subject" value="{{ subject_name }}">
+            <input type="hidden" name="teacher_id" value="{{ teacher_id }}">
+
+            <!-- Assignment Title -->
+            <div class="mb-3">
+                <label for="assignment_title" class="form-label">Assignment Title</label>
+                <input type="text" class="form-control" id="assignment_title" placeholder="Enter assignment title" name="title" required>
+            </div>
+
+            <!-- Assignment Description -->
+            <div class="mb-3">
+                <label for="assignment_description" class="form-label">Assignment Description</label>
+                <textarea class="form-control" id="assignment_description" rows="4" placeholder="Enter assignment description" name="description" required></textarea>
+            </div>
+
+            <!-- Due Date -->
+            <div class="mb-3">
+                <label for="due_date" class="form-label">Due Date</label>
+                <input type="date" class="form-control" id="due_date" name="due_date" required>
+            </div>
+
+            <!-- File Upload -->
+            <div class="mb-3">
+                <label for="assignment_file" class="form-label">Upload Assignment File</label>
+                <div class="custom-file">
+                    <input type="file" class="form-control" id="assignment_file" name="assignment_file" required>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary flex-grow-1">Submit Assignment</button>
+            </div>
+        </form>
+        <br>
+        <form action="{{ url_for('viewAssignment') }}" method="post">
+            <!-- Hidden inputs for subject_id, class_id, and subject -->
+            <input type="hidden" name="subject_id" value="{{ subject_id }}">
+            <input type="hidden" name="class_id" value="{{ class_id }}">
+            <input type="hidden" name="subject" value="{{ subject_name }}">
+            <input type="hidden" name="teacher_id" value="{{ teacher_id }}">
+
+            <!-- Back Button -->
+            <button type="submit" class="btn btn-back flex-grow-1">Back</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

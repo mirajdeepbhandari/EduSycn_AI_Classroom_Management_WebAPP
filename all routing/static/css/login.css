@@ -1,0 +1,132 @@
+/* Import Google font - Poppins */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.bodyalter {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000046; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to top, #1CB5E0, #000046); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to top, #1CB5E0, #000046); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+.err{
+  background-color: #ffa4a4;
+    padding: 5px;
+    font-size: 17px;
+    border-radius: 5px;
+    text-align: center;
+}
+.wrapper {
+  position: relative;
+  height: 623px;
+  max-width: 390px; /* Reduce the maximum width */
+  width: 100%;
+  border-radius: 12px;
+  padding: 20px 15px 40px; /* Adjusted padding */
+  background: #4070f4;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+.form.login {
+  position: absolute;
+  left: 50%;
+  bottom: -86%;
+  transform: translateX(-50%);
+  width: calc(100% + 150px); /* Reduced the width */
+  padding: 20px 100px; /* Adjusted padding */
+  border-radius: 50%;
+  height: 100%;
+  background: #fff;
+  transition: all 0.6s ease;
+}
+.wrapper.active .form.login {
+  bottom: -20%;
+  border-radius: 35%;
+  box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
+}
+.form header {
+  font-size: 24px; /* Adjusted font size */
+  text-align: center;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+.form.login header {
+  color: #333;
+  opacity: 0.6;
+}
+.wrapper.active .form.login header {
+  opacity: 1;
+}
+.wrapper.active .signup header {
+  opacity: 0.6;
+}
+.wrapper form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Reduced gap */
+  margin-top: 30px; /* Adjusted margin */
+}
+form input {
+  height: 50px; /* Reduced height */
+  outline: none;
+  border: none;
+  padding: 0 15px;
+  font-size: 14px; /* Reduced font size */
+  font-weight: 400;
+  color: #333;
+  border-radius: 8px;
+  background: #fff;
+}
+.form.login input {
+  border: 1px solid #aaa;
+}
+.form.login input:focus {
+  box-shadow: 0 1px 0 #ddd;
+}
+form .checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.checkbox input[type="checkbox"] {
+  height: 16px;
+  width: 16px;
+  accent-color: #fff;
+  cursor: pointer;
+}
+form .checkbox label {
+  cursor: pointer;
+  color: #fff;
+}
+form a {
+  color: #333;
+  text-decoration: none;
+}
+form a:hover {
+  text-decoration: underline;
+}
+form input[type="submit"] {
+  margin-top: 15px;
+  font-size: 16px; /* Adjusted font size */
+  font-weight: 500;
+  transition: 0.7s;
+  cursor: pointer;
+}
+.form.login input[type="submit"] {
+  background: #5781f3;
+  color: #fff;
+  border: none;
+}
+
+.signupbtn:hover {
+  background-color: #000000;
+  color: white;
+}

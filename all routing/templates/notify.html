@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Panel</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0 20px;
+        }
+        .notification-panel {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 1050px; /* Increased width */
+            max-height: 500px; /* Set maximum height for the container */
+            padding: 30px; /* Increased padding */
+            transition: background-color 0.3s;
+            overflow-y: auto; /* Added auto scrolling for overflow content */
+        }
+
+        /* Custom scrollbar styling */
+        .notification-panel::-webkit-scrollbar {
+            width: 10px; /* Width of the scrollbar */
+        }
+
+        .notification-panel::-webkit-scrollbar-track {
+            background: #f1f1f1; /* Background of the scrollbar track */
+            border-radius: 10px;
+        }
+
+        .notification-panel::-webkit-scrollbar-thumb {
+            background-color: #888; /* Color of the scrollbar thumb */
+            border-radius: 10px;
+            border: 3px solid transparent; /* Padding around thumb */
+            background-clip: padding-box; /* Clip the background of the thumb */
+        }
+
+        .notification-panel::-webkit-scrollbar-thumb:hover {
+            background-color: #555; /* Change color on hover */
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .panel-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        .close-btn {
+            cursor: pointer;
+            font-size: 20px;
+            color: #888;
+            background: none;
+            border: none;
+            outline: none;
+            transition: color 0.3s;
+        }
+        .close-btn:hover {
+            color: #e74c3c;
+        }
+        .notification-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: background-color 0.3s;
+        }
+        .notification-item:hover {
+            background-color: #f1f1f1;
+        }
+        .notification-dot {
+            width: 10px;
+            height: 10px;
+            background-color: #8e44ad;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+        .notification-content {
+            flex-grow: 1;
+        }
+        .notification-title {
+            font-size: 15px;
+            color: #333;
+            margin: 0 0 4px 0;
+            font-weight: 500;
+        }
+       
+        .notification-time {
+        font-size: 15px;
+        font-weight: 600;
+        color: #766f6f;
+        }
+        .mark-all {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .mark-all a {
+            color: #2196F3;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            border: 1px solid #2196F3;
+            padding: 10px 18px; /* Increased padding */
+            border-radius: 20px;
+            transition: background-color 0.3s, color 0.3s;
+            cursor: pointer;
+        }
+        .mark-all a:hover {
+            background-color: #2196F3;
+            color: #fff;
+        }
+        @media (max-width: 480px) {
+            .notification-panel {
+                padding: 15px;
+                height: auto; /* Adjust height for small screens */
+            }
+            .notification-title {
+                font-size: 14px;
+            }
+            .notification-time {
+                font-size: 12px;
+            }
+            .mark-all a {
+                font-size: 13px;
+                padding: 6px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="notification-panel" id="notification-panel">
+        
+        <form action="{{ url_for('student_dashboard') }}" method="get">
+        <div class="panel-header">
+            <span class="panel-title">Notifications</span>
+            <button class="close-btn">✕</button>
+        </div>
+        </form>
+        {% if notifications %}
+        {% for notification in notifications %}
+        <div class="notification-item">
+            <div class="notification-dot"></div>
+            <div class="notification-content">
+                <p class="notification-title">{{ notification[0]}}</p>
+                <p class="notification-time">{{ notification.date.strftime('%Y-%m-%d %I:%M %p') }}</p>
+            </div>
+        </div>
+        {% endfor %}
+        {%else%}
+        <p>No notifications found.</p>
+        {% endif %}
+
+       
+       
+    </div>
+
+ 
+</body>
+</html>
