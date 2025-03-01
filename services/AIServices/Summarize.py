@@ -2,13 +2,13 @@ import re
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains.summarize import load_summarize_chain
-from langchain_google_genai import GoogleGenerativeAI
+from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAI
 from langchain.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate, PromptTemplate
 
 class SummarizePDF:
     def __init__(self, pdf_path, api_key):
         self.pdf_path = pdf_path
-        self.llm_model = GoogleGenerativeAI(model="gemini-pro", google_api_key=api_key)
+        self.llm_model = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=api_key)
         self.chunks = []
     
     def doc_words_join(self):

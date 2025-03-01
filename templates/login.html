@@ -27,10 +27,11 @@
       <p style="background-color: greenyellow; "class="err" >
         {{ success }}
     </p>
+
       {% endif %}
         <div class="form signup">
           <header>Signup</header>
-          <form action="/register_validation" method="post">
+          <form action="{{ url_for('register_validation')}}" method="post">
             <input type="text" placeholder="Full Name" name="full_name" required />
             <input type="text" placeholder="Email Address" name="email" required />
             <input type="password" placeholder="Password" name="password" required />
@@ -42,7 +43,7 @@
 
         <div class="form login">
           <header>Login</header>
-          <form action="/login_validation" method="post">
+          <form action="{{ url_for('login_validation')}}" method="post">
             <input type="text" placeholder="Email address" name="email" required />
             <input type="password" placeholder="Password" name="password" required />
             <a href="#">Forgot password?</a>

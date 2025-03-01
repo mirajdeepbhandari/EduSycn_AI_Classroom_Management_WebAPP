@@ -306,7 +306,7 @@
                     </button>
                 </form>
                 
-                <form action="/classroom_students" method="POST" class="m-0 flex-grow-1 text-center">
+                <form action="{{ url_for('showClassMembers') }}" method="POST" class="m-0 flex-grow-1 text-center">
                     <input type="hidden" name="subject_id" value="{{ subject_id }}">
                     <input type="hidden" name="subject" value="{{ subject_name }}">
                     <input type="hidden" name="class_id" value="{{ class_id }}">
@@ -437,11 +437,11 @@
                     </form>
                 </div>
                 {% if post[7] != "nofile" %}
-                    <a href="{{ post[7] }}" download class="file-download-wrapper">
+                    <a href="{{ url_for('static', path=post[7]) }}" download class="file-download-wrapper">
                         <div class="file-download-content">
-                            <img src="static/images/file_logo.png" alt="File Icon" class="file-icon">
+                            <img src="{{ url_for('static', path='images/file_logo.png') }}" alt="File Icon" class="file-icon">
                             <span class="file-name"><b>{{ post[7] | getpostname }}</b></span>
-                            <img src="static/images/download_logoo.png" alt="Download Icon" class="download-icon">
+                            <img src="{{ url_for('static', path='images/download_logoo.png') }}" alt="Download Icon" class="download-icon">
                         </div>
                     </a>
                 {% endif %}
@@ -515,7 +515,7 @@
 
     try {
         // Send POST request with post_id and user_id
-        const response = await fetch("/api/like", {
+        const response = await fetch("/pm/api/like", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -550,7 +550,7 @@
 async function loadLikedStatuses(userId) {
     try {
         // Fetch the liked statuses for the current user
-        const response = await fetch(`/api/liked_statuses?user_id=${userId}`);
+        const response = await fetch(`/pm/api/liked_statuses?user_id=${userId}`);
         
         if (response.ok) {
             const likedPosts = await response.json();

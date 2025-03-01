@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Lost in Space</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;700&display=swap');
+        
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            overflow-x: hidden;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+        
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+            opacity: 0;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        
+        .content-container {
+            position: relative;
+            z-index: 1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .error-code {
+            font-size: 10rem;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            margin-bottom: 0;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 3s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .error-message {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 2s forwards 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        .astronaut {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            right: 10%;
+            top: 30%;
+            animation: float 15s infinite ease-in-out;
+            transform: rotate(10deg);
+            z-index: 2;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(10deg); }
+            50% { transform: translateY(-30px) rotate(-5deg); }
+        }
+        
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.7;
+            z-index: 0;
+        }
+        
+        .planet-1 {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle at 30% 30%, #ff9966, #ff5e62);
+            top: 15%;
+            left: 10%;
+            animation: orbit 30s infinite linear;
+        }
+        
+        .planet-2 {
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle at 30% 30%, #a17fe0, #5d26c1);
+            bottom: 20%;
+            left: 15%;
+            animation: orbit 20s infinite linear reverse;
+        }
+        
+        @keyframes orbit {
+            from { transform: rotate(0deg) translateX(50px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(50px) rotate(-360deg); }
+        }
+        
+        .btn-home {
+            background: linear-gradient(to right, #fc466b, #3f5efb);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(252, 70, 107, 0.4);
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeIn 1s forwards 1.5s;
+        }
+        
+        .btn-home:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(252, 70, 107, 0.6);
+            background: linear-gradient(to right, #fc466b, #3f5efb);
+            color: white;
+        }
+        
+        .ufo {
+            position: absolute;
+            width: 120px;
+            height: 70px;
+            left: -120px;
+            top: 20%;
+            animation: flyby 15s infinite linear;
+            z-index: 2;
+        }
+        
+        @keyframes flyby {
+            from { left: -120px; }
+            to { left: calc(100% + 120px); }
+        }
+        
+        .meteor {
+            position: absolute;
+            width: 300px;
+            height: 1px;
+            background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1));
+            transform: rotate(-45deg);
+            animation: meteor 5s infinite ease-in;
+            opacity: 0;
+            z-index: 1;
+        }
+        
+      
+        
+        .message-container {
+            max-width: 600px;
+        }
+        
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 6rem;
+            }
+            
+            .astronaut {
+                width: 100px;
+                height: 100px;
+                right: 5%;
+            }
+            
+            .planet-1 {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .planet-2 {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Stars background -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- Planets -->
+    <div class="planet planet-1"></div>
+    <div class="planet planet-2"></div>
+    
+    <!-- Meteors -->
+    <div class="meteor"></div>
+    
+    <!-- UFO -->
+    <div class="ufo">
+        <svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="256" cy="176" rx="180" ry="60" fill="#a0a0ff" />
+            <path d="M256 236C159.4 236 76 212.6 76 176C76 139.4 159.4 116 256 116C352.6 116 436 139.4 436 176C436 212.6 352.6 236 256 236Z" stroke="white" stroke-width="8"/>
+            <ellipse cx="256" cy="156" rx="100" ry="40" fill="#7070ff" />
+            <path d="M196 246L176 296M256 246L256 306M316 246L336 296" stroke="rgba(255,255,255,0.5)" stroke-width="4"/>
+            <circle cx="256" cy="156" r="30" fill="#ffff80" />
+        </svg>
+    </div>
+    
+    <!-- Astronaut -->
+    <div class="astronaut">
+        <svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M256 360C323.5 360 378 305.5 378 238C378 170.5 323.5 116 256 116C188.5 116 134 170.5 134 238C134 305.5 188.5 360 256 360Z" fill="white"/>
+            <path d="M256 360C323.5 360 378 305.5 378 238C378 170.5 323.5 116 256 116C188.5 116 134 170.5 134 238C134 305.5 188.5 360 256 360Z" stroke="#333" stroke-width="8"/>
+            <path d="M256 310C296 310 328 278 328 238C328 198 296 166 256 166C216 166 184 198 184 238C184 278 216 310 256 310Z" fill="#333"/>
+            <path d="M214 238C214 238 230 258 256 258C282 258 298 238 298 238" stroke="white" stroke-width="4"/>
+            <path d="M256 166V116M184 238H134M328 238H378" stroke="#333" stroke-width="8"/>
+            <path d="M256 310V360M206 310L186 350M306 310L326 350" stroke="#333" stroke-width="8"/>
+        </svg>
+    </div>
+    
+    <!-- Main content -->
+    <div class="container content-container">
+        <div class="row justify-content-center text-center">
+            <div class="col-md-10">
+                <h1 class="error-code">404</h1>
+                <div class="message-container mx-auto">
+                    <p class="error-message">Oops! The page you are looking for doesn't seem to exist.
+                         It's possible that the URL was mistyped, or the page has been moved or deleted.</p>
+    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Stars generation script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 200;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Random position
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                
+                // Random size
+                const size = Math.random() * 3;
+                
+                // Random duration
+                const duration = 2 + Math.random() * 3 + 's';
+                
+                // Random delay
+                const delay = Math.random() * 5 + 's';
+                
+                star.style.left = `${left}%`;
+                star.style.top = `${top}%`;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.setProperty('--duration', duration);
+                star.style.animationDelay = delay;
+                
+                starsContainer.appendChild(star);
+            }
+            
+            // Create multiple meteors with random timing
+            setInterval(() => {
+                const meteor = document.createElement('div');
+                meteor.classList.add('meteor');
+                
+                // Random position
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                
+                meteor.style.left = `${left}%`;
+                meteor.style.top = `${top}%`;
+                
+                document.body.appendChild(meteor);
+                
+                // Remove meteor after animation
+                setTimeout(() => {
+                    meteor.remove();
+                }, 5000);
+            }, 8000);
+        });
+    </script>
+</body>
+</html>

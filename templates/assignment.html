@@ -128,7 +128,9 @@
                     </div>
                     <h5 class="mb-2 text-primary">Assignment File</h5>
                     <p class="text-muted mb-3 small">Download the assignment file below:</p>
-                    <a href="{{ link }}" class="btn btn-primary btn-sm d-flex align-items-center" download>
+              
+                    <a href="{{ url_for('static', path=link) }}" class="btn btn-primary btn-sm d-flex align-items-center" download>
+
                         <i class="fas fa-download me-2"></i>Download
                     </a>
                 </div>

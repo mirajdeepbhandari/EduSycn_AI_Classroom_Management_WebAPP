@@ -293,9 +293,11 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span>{{ sub[2] }} Students</span>
                                     <div class="avatar-group">
-                                        <img src="static/images/prof1.png" alt="Student 1">
-                                        <img src="static/images/prof2.png" alt="Student 2">
-                                        <img src="static/images/prof3.png" alt="Student 3">
+                                        
+                                        <img src="{{ url_for('static', path='images/prof1.png') }}">
+                                        <img src="{{ url_for('static', path='images/prof2.png') }}">
+                                        <img src="{{ url_for('static', path='images/prof3.png') }}">
+                                        
                                     </div>
                                 </div>
                             </button>

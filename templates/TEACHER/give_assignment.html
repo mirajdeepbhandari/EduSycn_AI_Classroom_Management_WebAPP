@@ -103,7 +103,7 @@
             {{ message }}
         </div>
         {% endif %}
-        <form action="/give_assignment" method="post" enctype="multipart/form-data">
+        <form action="{{url_for('giveAssignment')}}" method="post" enctype="multipart/form-data">
             <!-- Hidden inputs for subject_id, class_id, and teacher_id -->
             <input type="hidden" name="subject_id" value="{{ subject_id }}">
             <input type="hidden" name="class_id" value="{{ class_id }}">

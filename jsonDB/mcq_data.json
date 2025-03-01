@@ -1,5 +1,213 @@
 {
   "class_10": {
     "subjects": {}
+  },
+  "class_8": {
+    "subjects": {
+      "1": {
+        "questions": {
+          "1": {
+            "question": "What is the primary purpose of this document?",
+            "options": {
+              "A": "To explain project management techniques.",
+              "B": "To describe a database schema for managing projects.",
+              "C": "To detail user interface design for project management.",
+              "D": "To outline a software development lifecycle."
+            },
+            "correct_answer": "B"
+          },
+          "2": {
+            "question": "Which of the following tables is NOT mentioned in the document?",
+            "options": {
+              "A": "Users",
+              "B": "Projects",
+              "C": "Budgets",
+              "D": "Tasks"
+            },
+            "correct_answer": "C"
+          },
+          "3": {
+            "question": "What data element is included in the \"Projects\" table?",
+            "options": {
+              "A": "User email addresses",
+              "B": "Subtask status",
+              "C": "Start and end dates",
+              "D": "Resource types"
+            },
+            "correct_answer": "C"
+          },
+          "4": {
+            "question": "What is the purpose of primary and foreign keys in this database schema?",
+            "options": {
+              "A": "To speed up data retrieval.",
+              "B": "To ensure data integrity.",
+              "C": "To encrypt sensitive data.",
+              "D": "To improve database scalability."
+            },
+            "correct_answer": "B"
+          },
+          "5": {
+            "question": "What table would contain information about a task's completion status?",
+            "options": {
+              "A": "Projects",
+              "B": "Users",
+              "C": "Subtasks",
+              "D": "Milestones"
+            },
+            "correct_answer": "C"
+          },
+          "6": {
+            "question": "What type of information is stored in the \"Resources\" table?",
+            "options": {
+              "A": "User roles",
+              "B": "Project descriptions",
+              "C": "Resource types",
+              "D": "Milestone due dates"
+            },
+            "correct_answer": "C"
+          },
+          "7": {
+            "question": "Which table links comments to specific users?",
+            "options": {
+              "A": "Projects",
+              "B": "Tasks",
+              "C": "Comments",
+              "D": "Milestones"
+            },
+            "correct_answer": "C"
+          },
+          "8": {
+            "question": "What table would you query to find all tasks assigned to a specific user?",
+            "options": {
+              "A": "Projects",
+              "B": "Users",
+              "C": "Subtasks",
+              "D": "Tasks"
+            },
+            "correct_answer": "C"
+          },
+          "9": {
+            "question": "What is the relationship between the \"Tasks\" and \"Subtasks\" tables?",
+            "options": {
+              "A": "One-to-one",
+              "B": "One-to-many",
+              "C": "Many-to-many",
+              "D": "No relationship"
+            },
+            "correct_answer": "B"
+          },
+          "10": {
+            "question": "What information is stored in the \"Milestones\" table?",
+            "options": {
+              "A": "Task descriptions",
+              "B": "Due dates",
+              "C": "User roles",
+              "D": "Resource types"
+            },
+            "correct_answer": "B"
+          },
+          "11": {
+            "question": "Which table would you use to find the email address of a user?",
+            "options": {
+              "A": "Projects",
+              "B": "Tasks",
+              "C": "Users",
+              "D": "Comments"
+            },
+            "correct_answer": "C"
+          },
+          "12": {
+            "question": "What is the likely data type for the \"start date\" and \"end date\" fields in the \"Projects\" table?",
+            "options": {
+              "A": "Integer",
+              "B": "Text",
+              "C": "Date",
+              "D": "Boolean"
+            },
+            "correct_answer": "C"
+          },
+          "13": {
+            "question": "The database schema is designed to manage:",
+            "options": {
+              "A": "Only individual tasks.",
+              "B": "Projects, tasks, and users.",
+              "C": "Only project budgets.",
+              "D": "Only user accounts."
+            },
+            "correct_answer": "B"
+          },
+          "14": {
+            "question": "What is the purpose of the \"Comments\" table?",
+            "options": {
+              "A": "To track project budgets.",
+              "B": "To store notes and updates related to tasks.",
+              "C": "To manage user accounts.",
+              "D": "To schedule milestones."
+            },
+            "correct_answer": "B"
+          },
+          "15": {
+            "question": "How are users linked to projects in this schema?",
+            "options": {
+              "A": "Implicitly, through task assignments.",
+              "B": "Through a separate linking table.",
+              "C": "Directly within the \"Projects\" table.",
+              "D": " The description is insufficient to determine the method."
+            },
+            "correct_answer": "D  (While not explicitly stated, a linking table is implied for many-to-many relationships)"
+          },
+          "16": {
+            "question": "What kind of relationship exists between the \"Users\" and \"Subtasks\" tables?",
+            "options": {
+              "A": "One-to-one",
+              "B": "One-to-many",
+              "C": "Many-to-many",
+              "D": "No direct relationship"
+            },
+            "correct_answer": "C"
+          },
+          "17": {
+            "question": "Which table likely contains a foreign key referencing the \"Tasks\" table?",
+            "options": {
+              "A": "Users",
+              "B": "Projects",
+              "C": "Subtasks",
+              "D": "Resources"
+            },
+            "correct_answer": "C"
+          },
+          "18": {
+            "question": "The described schema emphasizes:",
+            "options": {
+              "A": "Data redundancy.",
+              "B": "Data integrity.",
+              "C": "Data inconsistency.",
+              "D": "Data fragmentation."
+            },
+            "correct_answer": "B"
+          },
+          "19": {
+            "question": "What table would you query to find the type of resource used in a project?",
+            "options": {
+              "A": "Users",
+              "B": "Tasks",
+              "C": "Resources",
+              "D": "Projects"
+            },
+            "correct_answer": "C"
+          },
+          "20": {
+            "question": "A user's role is stored in which table?",
+            "options": {
+              "A": "Projects",
+              "B": "Tasks",
+              "C": "Users",
+              "D": "Comments"
+            },
+            "correct_answer": "C"
+          }
+        }
+      }
+    }
   }
 }

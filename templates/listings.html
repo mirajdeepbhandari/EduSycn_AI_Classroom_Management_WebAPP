@@ -441,7 +441,7 @@
         const chatId = parseInt('{{ chatroom_id }}'); 
         const userId2 = String('{{ user2_id }}');
            function connect() {
-            ws = new WebSocket(`ws://${window.location.host}/ws/${chatId}/${userId}`);
+            ws = new WebSocket(`ws://${window.location.host}/skets/ws/${chatId}/${userId}`);
             
             ws.onmessage = function(event) {
                 const data = JSON.parse(event.data);
@@ -518,7 +518,7 @@
         
         async function loadPreviousMessages() {
             try {
-                const response = await fetch(`/api/messages/${chatId}`);
+                const response = await fetch(`/skets/api/messages/${chatId}`);
                 const messages = await response.json();
                 
                 // Clear existing messages first
@@ -560,7 +560,7 @@
    
     
     function fetchActiveUsers() {
-        fetch('/active-users', {
+        fetch('/skets/active-users', {
             method: 'GET', // HTTP method
             headers: {
                 'Content-Type': 'application/json', // Request content type

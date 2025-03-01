@@ -251,7 +251,7 @@
                 {% for user in allusers %}
                     <form action="{{ url_for('Listings') }}" method="get">
                         <button type="submit" class="chat-item w-100 text-start border-0 bg-transparent p-0">
-                            <img src="static/images/prof1.png" alt="Avatar" class="avatar">
+                            <img src="{{url_for('static', path='/images/prof1.png')}}" alt="Avatar" class="avatar">
                             <input type="hidden" name="user_id" value="{{ user[0] }}">
                             <input type="hidden" name="user_name" value="{{ user[1] }}">
                             <div class="chat-info">
@@ -284,7 +284,7 @@
     <script>
         async function updateUnreadCounts() {
             try {
-                const response = await fetch('/get_unread_counts');
+                const response = await fetch('/chat/get_unread_counts');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
