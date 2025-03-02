@@ -18,8 +18,7 @@ async def websocket_endpoint(
     websocket: WebSocket, 
     chat_id: int,  # Changed to int to match your schema
     user_id: int,  # Changed to int to match your schema
-    db: Session = Depends(get_db),
-    is_auth= Depends(auth_required)
+    db: Session = Depends(get_db)
 ):
     await manager.connect(websocket, str(chat_id), str(user_id))
     try:
