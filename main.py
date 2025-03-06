@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from routes import (auth,studentDashboard,classroom,postManagement,
                     listClassMembers,teacherDashboard,assignment,notification,
-                    chat,summary,mcq,socketsChat,superAdmin)
+                    chat,summary,mcq,socketsChat,superAdmin,slidegen)
 
 
 
@@ -52,6 +52,7 @@ app.include_router(summary.router, prefix="/summary_note")
 app.include_router(mcq.router, prefix="/mcq")
 app.include_router(socketsChat.router, prefix="/skets")
 app.include_router(superAdmin.router, prefix="/sa")
+app.include_router(slidegen.router, prefix="/slidegen")
 
 
 @app.get("/404", response_class=HTMLResponse)

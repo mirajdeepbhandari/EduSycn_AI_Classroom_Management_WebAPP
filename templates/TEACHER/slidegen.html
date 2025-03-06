@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Upload with Theme Selector</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --text-color: #1e293b;
+            --light-bg: #f8fafc;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+        }
+        
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            background-color:rgb(204, 195, 220);
+        }
+        
+        .main-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            
+        }
+        
+        .form-container {
+            background-color: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+        
+        .upload-section {
+            padding: 2.5rem;
+            border-right: 1px solid var(--border-color);
+        }
+        
+        .theme-section {
+            padding: 2.5rem;
+            height: 100%;
+        }
+        
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .theme-title {
+            color: #dc2626;
+            font-weight: 700;
+        }
+        
+        .drop-area {
+            border: 2px dashed var(--primary-color);
+            border-radius: var(--radius-md);
+            padding: 3rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s ease;
+        }
+        
+        .drop-area:hover {
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+        
+        .pdf-icon {
+            color: var(--primary-color);
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .drop-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .browse-text {
+            color: #64748b;
+            font-size: 1rem;
+        }
+        
+        .upload-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: var(--radius-md);
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            transition: background-color 0.3s;
+        }
+        
+        .upload-btn:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .file-info {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            background-color: rgba(37, 99, 235, 0.05);
+            border: 1px solid var(--border-color);
+            display: none;
+        }
+        
+        .file-info.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .file-details {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .file-icon-sm {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+        
+        .file-name-display {
+            font-weight: 600;
+            word-break: break-word;
+        }
+        
+        .file-size {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        
+        .theme-scroll {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+            margin-right: -0.5rem;
+        }
+        
+        .theme-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .theme-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .theme-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        
+        .theme-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        .theme-option {
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .theme-option:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .theme-option.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+        
+        .theme-image {
+            width: 100%;
+            height: 120px;
+            border-radius: var(--radius-sm);
+            object-fit: cover;
+            margin-bottom: 0.75rem;
+        }
+        
+        .theme-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            font-size: 1rem;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        /* Custom radio button styling */
+        .theme-radio {
+            display: flex;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+        
+        .theme-radio input[type="radio"] {
+            margin-right: 0.5rem;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+            width: 18px;
+            height: 18px;
+        }
+        
+        .theme-radio label {
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-bottom: 0;
+            color: #64748b;
+        }
+        
+        .back-btn {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 767px) {
+            body {
+                display: block;
+                padding: 1rem;
+            }
+            
+            .upload-section {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .drop-area {
+                padding: 2rem 1rem;
+            }
+            
+            .pdf-icon {
+                font-size: 2.5rem;
+            }
+            
+            .drop-text {
+                font-size: 1.125rem;
+            }
+        }
+        
+        /* For medium devices */
+        @media (min-width: 768px) and (max-width: 991px) {
+            body {
+                padding: 2rem;
+            }
+            
+            .main-container {
+                max-width: 90%;
+            }
+        }
+        
+        /* For large devices */
+        @media (min-width: 992px) {
+            body {
+                padding: 0;
+            }
+            
+            .main-container {
+                max-width: 85%;
+            }
+        }
+        
+        /* For extra large devices */
+        @media (min-width: 1200px) {
+            .main-container {
+                max-width: 1100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <form action="{{url_for('teacher_dashboard')}}" method="get">
+        <button class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back
+        </button>
+        </form>
+        <form id="uploadForm">
+            <div class="form-container">
+                <div class="row g-0">
+                    <div class="col-lg-8">
+                        <div class="upload-section">
+                            <h1 class="section-title">Upload PDF Document</h1>
+                            <div class="drop-area" id="dropArea">
+                                <div class="pdf-icon">
+                                    <i class="fas fa-file-pdf"></i>
+                                </div>
+                                <p class="drop-text">Drag & Drop your PDF here</p>
+                                <p class="browse-text">or click to browse files</p>
+                            </div>
+                            <input type="file" id="fileInput" class="file-input" accept=".pdf">
+                            <button type="button" class="upload-btn" id="uploadBtn">Upload PDF</button>
+                            
+                            <!-- File information section (initially hidden) -->
+                            <div class="file-info" id="fileInfo">
+                                <h5 class="mb-3">Selected File:</h5>
+                                <div class="file-details">
+                                    <div class="file-icon-sm">
+                                        <i class="fas fa-file-pdf"></i>
+                                    </div>
+                                    <div>
+                                        <div class="file-name-display" id="fileName">document.pdf</div>
+                                        <div class="file-size" id="fileSize">0 KB</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="theme-section">
+                            <h2 class="section-title theme-title">Choose Theme</h2>
+                            <div class="theme-scroll">
+                                <div class="theme-option" id="theme1">
+                                    <img src="{{ url_for('static', path='images/theme1.png') }}" alt="Blue Theme" class="theme-image">
+                                    <div class="theme-name">Theme 1</div>
+                                    <div class="theme-radio">
+                                        <input type="radio" id="radio1" name="theme" value="theme1" checked>
+                                        <label for="radio1">Select this theme</label>
+                                    </div>
+                                </div>
+                               
+                                <div class="theme-option" id="theme3">
+                                    <img src="{{ url_for('static', path='images/theme 2.png') }}" alt="Purple Theme" class="theme-image">
+                                    <div class="theme-name">Theme 2</div>
+                                    <div class="theme-radio">
+                                        <input type="radio" id="radio3" name="theme" value="theme3">
+                                        <label for="radio3">Select this theme</label>
+                                    </div>
+                                </div>
+
+                                <div class="theme-option" id="theme4">
+                                    <img src="{{ url_for('static', path='images/theme 3.png') }}" alt="Dark Theme" class="theme-image">
+                                    <div class="theme-name">Theme 3</div>
+                                    <div class="theme-radio">
+                                        <input type="radio" id="radio4" name="theme" value="theme4">
+                                        <label for="radio4">Select this theme</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // File upload functionality
+        const dropArea = document.getElementById('dropArea');
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const uploadForm = document.getElementById('uploadForm');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const themeOptions = document.querySelectorAll('.theme-option');
+        const radioButtons = document.querySelectorAll('input[type="radio"][name="theme"]');
+        
+        // Prevent default drag behaviors
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        // Highlight drop area when item is dragged over it
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, unhighlight, false);
+        });
+        
+        // Handle dropped files
+        dropArea.addEventListener('drop', handleDrop, false);
+        
+        // Handle click to browse files
+        dropArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        fileInput.addEventListener('change', handleFiles, false);
+        
+        uploadBtn.addEventListener('click', uploadFiles, false);
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        function highlight() {
+            dropArea.classList.add('bg-light');
+        }
+        
+        function unhighlight() {
+            dropArea.classList.remove('bg-light');
+        }
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles({ target: { files: files } });
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        function handleFiles(e) {
+            const files = e.target.files;
+            if (files.length > 0) {
+                if (files[0].type === 'application/pdf') {
+                    // Update drop area to show success state
+                    dropArea.innerHTML = `
+                        <div class="pdf-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <p class="drop-text">File Selected</p>
+                        <p class="browse-text">Ready to upload</p>
+                    `;
+                    
+                    // Display file information below
+                    fileName.textContent = files[0].name;
+                    fileSize.textContent = formatFileSize(files[0].size);
+                    fileInfo.classList.add('active');
+                    
+                    // Update file icon color to match theme
+                    document.querySelector('.file-icon-sm').style.color = getComputedStyle(document.documentElement).getPropertyValue('--primary-color');
+                } else {
+                    alert('Please select a PDF file.');
+                }
+            }
+        }
+        
+        function uploadFiles() {
+            if (fileInput.files.length > 0) {
+                // Here you would typically send the file to a server
+                alert('Upload functionality would be implemented here with the selected theme.');
+                // Reset the form after upload
+                resetForm();
+            } else {
+                alert('Please select a file to upload.');
+            }
+        }
+        
+        function resetForm() {
+            fileInput.value = '';
+            dropArea.innerHTML = `
+                <div class="pdf-icon">
+                    <i class="fas fa-file-pdf"></i>
+                </div>
+                <p class="drop-text">Drag & Drop your PDF here</p>
+                <p class="browse-text">or click to browse files</p>
+            `;
+            
+            // Hide file info section
+            fileInfo.classList.remove('active');
+        }
+        
+        // Theme selection functionality
+        let currentTheme = 1;
+        const themeColors = {
+            1: { primary: '#2563eb', secondary: '#1e40af' }, // Blue
+            2: { primary: '#16a34a', secondary: '#15803d' }, // Green
+            3: { primary: '#9333ea', secondary: '#7e22ce' }, // Purple
+            4: { primary: '#334155', secondary: '#1e293b' }, // Dark
+            5: { primary: '#6b7280', secondary: '#4b5563' }, // Gray
+            6: { primary: '#ec4899', secondary: '#db2777' }  // Pink
+        };
+        
+        // Add click event to theme options
+        themeOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const themeId = this.id.replace('theme', '');
+                selectTheme(themeId);
+                
+                // Check the corresponding radio button
+                document.getElementById(`radio${themeId}`).checked = true;
+            });
+        });
+        
+        // Add change event to radio buttons
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', function() {
+                const themeId = this.id.replace('radio', '');
+                selectTheme(themeId);
+            });
+        });
+        
+        function selectTheme(themeId) {
+            // Remove selected class from all themes
+            themeOptions.forEach(theme => {
+                theme.classList.remove('selected');
+            });
+            
+            // Add selected class to chosen theme
+            document.getElementById(`theme${themeId}`).classList.add('selected');
+            
+            // Apply theme color
+            currentTheme = themeId;
+            document.documentElement.style.setProperty('--primary-color', themeColors[themeId].primary);
+            document.documentElement.style.setProperty('--secondary-color', themeColors[themeId].secondary);
+            
+            // Update drop area border color
+            dropArea.style.borderColor = themeColors[themeId].primary;
+            
+            // Update PDF icon colors
+            document.querySelector('.pdf-icon').style.color = themeColors[themeId].primary;
+            
+            // Update file info icon color if visible
+            if (fileInfo.classList.contains('active')) {
+                document.querySelector('.file-icon-sm').style.color = themeColors[themeId].primary;
+            }
+            
+            // Update radio button accent color
+            document.querySelectorAll('.theme-radio input[type="radio"]').forEach(radio => {
+                radio.style.accentColor = themeColors[themeId].primary;
+            });
+        }
+        
+        // Initialize with theme 1 selected
+        selectTheme(1);
+    </script>
+</body>
+</html>

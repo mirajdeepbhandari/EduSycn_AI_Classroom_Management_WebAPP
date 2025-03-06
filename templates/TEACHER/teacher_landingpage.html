@@ -219,13 +219,15 @@
                             </a>
                         </li>
                    
-                       
+                       <form action="{{ url_for('slideGeN') }}" method="get">
                         <li class="nav-item">
-                            <a class="nav-link" href="notify.html">
+                            <button class="nav-link" style="border: none; background-color: transparent;">
                                 <i class="fas fa-file-powerpoint me-2"></i>
                                 Generate PPT Slides
-                            </a>
+                            </button>
                         </li>
+                    </form>
+
                         <form action="{{ url_for('inbox') }}" method="get"> <!-- Adjust action and method as needed -->
                             <li class="nav-item">
                                 <button type="submit" class="nav-link btn btn-link text-start w-100" style="display: flex; align-items: center;">
