@@ -2,3 +2,5 @@
 venv
 .env
 FypVenv
+__pycache__
+EdusyncENV
