@@ -3,11 +3,10 @@ from pptx.util import Pt
 from pptx.enum.text import MSO_AUTO_SIZE, PP_ALIGN
 import os
 
-
-
-
-def generate_ppt(theme_name, output):
+def generate_ppt(theme_name, output,file_name):
         
+        file_name = file_name.replace(".pdf", "")
+
         introsection = output['FinalResult']['Introduction_']
 
         bodysection = output['FinalResult']['Body_']
@@ -159,6 +158,9 @@ def generate_ppt(theme_name, output):
         #Add Conclusion
         add_paginated_text("Conclusion", concsection['FinalSummary']['Summary'], [])
 
-        os.makedirs('services/AIServices/pptStore', exist_ok=True)
+        os.makedirs('static/pptStore', exist_ok=True) 
         # Save the presentation
-        prs.save('services/AIServices/pptStore/Final_Presentation.pptx')
+        prs.save(f'static/pptStore/{file_name}.pptx')
+
+        
+
