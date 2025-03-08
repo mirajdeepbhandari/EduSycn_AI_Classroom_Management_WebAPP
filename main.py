@@ -62,3 +62,5 @@ async def notFound(request: Request):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8200, log_level="debug")
+
+#### slide gen route ma slide gen ko pdf store garne path need to be change

@@ -335,7 +335,7 @@
             <i class="fas fa-arrow-left"></i> Back
         </button>
         </form>
-        <form id="uploadForm">
+        <form id="uploadForm" action="{{url_for('slideGeN')}}" method="post" enctype="multipart/form-data">
             <div class="form-container">
                 <div class="row g-0">
                     <div class="col-lg-8">
@@ -348,8 +348,8 @@
                                 <p class="drop-text">Drag & Drop your PDF here</p>
                                 <p class="browse-text">or click to browse files</p>
                             </div>
-                            <input type="file" id="fileInput" class="file-input" accept=".pdf">
-                            <button type="button" class="upload-btn" id="uploadBtn">Upload PDF</button>
+                            <input type="file" id="fileInput" class="file-input" name="pdf_file" accept=".pdf">
+                            <button type="submit" class="upload-btn"  >Upload PDF</button>
                             
                             <!-- File information section (initially hidden) -->
                             <div class="file-info" id="fileInfo">
@@ -383,7 +383,7 @@
                                     <img src="{{ url_for('static', path='images/theme 2.png') }}" alt="Purple Theme" class="theme-image">
                                     <div class="theme-name">Theme 2</div>
                                     <div class="theme-radio">
-                                        <input type="radio" id="radio3" name="theme" value="theme3">
+                                        <input type="radio" id="radio3" name="theme" value="theme2">
                                         <label for="radio3">Select this theme</label>
                                     </div>
                                 </div>
@@ -392,7 +392,7 @@
                                     <img src="{{ url_for('static', path='images/theme 3.png') }}" alt="Dark Theme" class="theme-image">
                                     <div class="theme-name">Theme 3</div>
                                     <div class="theme-radio">
-                                        <input type="radio" id="radio4" name="theme" value="theme4">
+                                        <input type="radio" id="radio4" name="theme" value="theme3">
                                         <label for="radio4">Select this theme</label>
                                     </div>
                                 </div>
@@ -590,5 +590,6 @@
         // Initialize with theme 1 selected
         selectTheme(1);
     </script>
+
 </body>
 </html>
