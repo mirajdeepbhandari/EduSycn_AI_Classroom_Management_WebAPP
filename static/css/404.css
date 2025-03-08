@@ -1,0 +1,193 @@
+
+       @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;700&display=swap');
+        
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            overflow-x: hidden;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+        
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+            opacity: 0;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        
+        .content-container {
+            position: relative;
+            z-index: 1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .error-code {
+            font-size: 10rem;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            margin-bottom: 0;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 3s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .error-message {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 2s forwards 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        .astronaut {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            right: 10%;
+            top: 30%;
+            animation: float 15s infinite ease-in-out;
+            transform: rotate(10deg);
+            z-index: 2;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(10deg); }
+            50% { transform: translateY(-30px) rotate(-5deg); }
+        }
+        
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.7;
+            z-index: 0;
+        }
+        
+        .planet-1 {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle at 30% 30%, #ff9966, #ff5e62);
+            top: 15%;
+            left: 10%;
+            animation: orbit 30s infinite linear;
+        }
+        
+        .planet-2 {
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle at 30% 30%, #a17fe0, #5d26c1);
+            bottom: 20%;
+            left: 15%;
+            animation: orbit 20s infinite linear reverse;
+        }
+        
+        @keyframes orbit {
+            from { transform: rotate(0deg) translateX(50px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(50px) rotate(-360deg); }
+        }
+        
+        .btn-home {
+            background: linear-gradient(to right, #fc466b, #3f5efb);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(252, 70, 107, 0.4);
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeIn 1s forwards 1.5s;
+        }
+        
+        .btn-home:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(252, 70, 107, 0.6);
+            background: linear-gradient(to right, #fc466b, #3f5efb);
+            color: white;
+        }
+        
+        .ufo {
+            position: absolute;
+            width: 120px;
+            height: 70px;
+            left: -120px;
+            top: 20%;
+            animation: flyby 15s infinite linear;
+            z-index: 2;
+        }
+        
+        @keyframes flyby {
+            from { left: -120px; }
+            to { left: calc(100% + 120px); }
+        }
+        
+        .meteor {
+            position: absolute;
+            width: 300px;
+            height: 1px;
+            background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1));
+            transform: rotate(-45deg);
+            animation: meteor 5s infinite ease-in;
+            opacity: 0;
+            z-index: 1;
+        }
+        
+      
+        
+        .message-container {
+            max-width: 600px;
+        }
+        
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 6rem;
+            }
+            
+            .astronaut {
+                width: 100px;
+                height: 100px;
+                right: 5%;
+            }
+            
+            .planet-1 {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .planet-2 {
+                width: 40px;
+                height: 40px;
+            }
+        }
+  
