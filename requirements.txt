@@ -1,0 +1,13 @@
+uvicorn
+fastapi
+itsdangerous
+sqlalchemy
+passlib
+pymysql
+python-multipart
+jinja2 
+langchain_community
+langchain_google_genai
+langgraph
+python-pptx
+bcrypt
