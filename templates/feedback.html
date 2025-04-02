@@ -272,11 +272,11 @@
                         <i class="bi bi-person-fill input-icon"></i>
                         <select class="form-select" id="teacherSelect" required>
                             <option value="" selected disabled>Choose a teacher...</option>
-                            <option value="1">Dr. Sarah Johnson</option>
-                            <option value="2">Prof. Michael Chen</option>
-                            <option value="3">Dr. Emily Rodriguez</option>
-                            <option value="4">Prof. David Williams</option>
-                            <option value="5">Dr. Lisa Thompson</option>
+                            
+                            {% for teacher in teachers %}
+                            <option value="{{ teacher[0] }}">{{ teacher[0] }} - {{ teacher[1] }}</option>
+                            {% endfor %}
+
                         </select>
                     </div>
                 </div>
@@ -288,22 +288,14 @@
                     </h5>
                     
                     <div class="position-relative">
-                        <i class="bi bi-book input-icon"></i>
                         <div class="form-floating">
-                            <select class="form-select" id="subject" required>
-                                <option value="" selected disabled>Select a subject</option>
-                                <option value="math">Mathematics</option>
-                                <option value="science">Science</option>
-                                <option value="english">English</option>
-                                <option value="history">History</option>
-                                <option value="art">Art</option>
-                                <option value="music">Music</option>
-                                <option value="pe">Physical Education</option>
-                                <option value="other">Other</option>
-                            </select>
-                            <label for="subject">Subject</label>
+                            <input type="text" class="form-control" id="subject" placeholder="Enter subject" required>
+                            <label for="subject">Subject (English, Math, etc.)</label>
                         </div>
                     </div>
+                    
+                   <input type="hidden" id="class" value="{{ classroom }}">
+                    
                     
                     <div class="position-relative">
                          
