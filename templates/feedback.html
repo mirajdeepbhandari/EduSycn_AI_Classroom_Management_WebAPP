@@ -247,6 +247,13 @@
 </head>
 <body>
     <div class="container">
+        
+        <form action="{{ url_for('feedback_teacher')}}" method="post">
+            {% if send %}
+            <div class="alert alert-success" role="alert" style="text-align: center;">
+                Feedback sent successfully !!!!
+              </div>
+            {% endif %}
         <div class="form-container">
             <div class="form-header">
                 
@@ -270,11 +277,11 @@
                     <label for="teacherSelect" class="form-label">Select Teacher</label>
                     <div class="position-relative">
                         <i class="bi bi-person-fill input-icon"></i>
-                        <select class="form-select" id="teacherSelect" required>
+                        <select class="form-select" id="teacherSelect" required name="choosed_teacher">
                             <option value="" selected disabled>Choose a teacher...</option>
                             
                             {% for teacher in teachers %}
-                            <option value="{{ teacher[0] }}">{{ teacher[0] }} - {{ teacher[1] }}</option>
+                             <option value="{{ teacher[0] }}">{{ teacher[0] }} - {{ teacher[1] }}</option>
                             {% endfor %}
 
                         </select>
@@ -289,12 +296,12 @@
                     
                     <div class="position-relative">
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="subject" placeholder="Enter subject" required>
+                            <input type="text" class="form-control" id="subject" placeholder="Enter subject" name="subject" required>
                             <label for="subject">Subject (English, Math, etc.)</label>
                         </div>
                     </div>
                     
-                   <input type="hidden" id="class" value="{{ classroom }}">
+                   <input type="hidden" id="class" value="{{ classroom }}" name="classroom">
                     
                     
                     <div class="position-relative">
@@ -303,7 +310,7 @@
                  
                         <div class="form-floating">
                             <textarea class="form-control" id="message" required placeholder="Your message"
-                             style="min-height: 300px; resize: vertical;"></textarea>
+                             style="min-height: 300px; resize: vertical;" name="mssg"></textarea>
 
                             
                         </div>
@@ -332,6 +339,7 @@
                 <i class="bi bi-shield-lock"></i>Your feedback is confidential and will only be shared with the relevant faculty members.
             </div>
         </div>
+        </form>
     </div>
     
     <!-- Bootstrap JS Bundle with Popper -->

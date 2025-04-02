@@ -180,6 +180,16 @@ class McqMarks(Base):
     percentage = Column(Float(precision=2), nullable=False)
     is_taken = Column(String(10), nullable=False, default='no')
 
+class FeedBack(Base):
+    __tablename__ = 'feedback' 
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    teacher = Column(String(50), nullable=False)
+    subject = Column(String(50), nullable=False)
+    classroom = Column(String(50), nullable=False)
+    message = Column(Text, nullable=False)
+    date = Column(DateTime, nullable=False, server_default=func.current_timestamp())
+    feedback_score = Column(String(50), nullable=False)
 
 
 try:
