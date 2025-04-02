@@ -249,9 +249,12 @@
     <div class="container">
         <div class="form-container">
             <div class="form-header">
+                
+                <a href="{{ url_for('student_dashboard')}}" style="text-decoration: none;">
                 <button class="back-button" id="backButton">
                     <i class="bi bi-arrow-left"></i>
                 </button>
+                </a>
                 <div class="header-content">
                     <h2>Faculty Feedback Portal</h2>
                     <p>Share your thoughts with our teaching staff</p>
@@ -279,23 +282,6 @@
                 </div>
                 
                 <form id="feedbackForm">
-                    <h5 class="form-section-title mt-4">
-                        <i class="bi bi-card-text me-2"></i>Your Information
-                    </h5>
-                    
-                    <div class="position-relative">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="studentName" placeholder="Your Name" required >
-                            <label for="studentName">Student Name</label>
-                        </div>
-                    </div>
-                    
-                    <div class="position-relative">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="studentId" placeholder="Your ID" required >
-                            <label for="studentId">Student ID</label>
-                        </div>
-                    </div>
                     
                     <h5 class="form-section-title mt-4">
                         <i class="bi bi-chat-square-text me-2"></i>Feedback Details
