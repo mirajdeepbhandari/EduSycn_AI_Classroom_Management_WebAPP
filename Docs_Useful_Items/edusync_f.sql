@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 12, 2025 at 06:16 PM
+-- Generation Time: Apr 03, 2025 at 05:47 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -169,13 +169,21 @@ CREATE TABLE `comments` (
   `content` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `comments`
+-- Table structure for table `feedback`
 --
 
-INSERT INTO `comments` (`comment_id`, `post_id`, `user_id`, `content`) VALUES
-(3, 1, 4, 'nevr'),
-(4, 1, 5, 'nice');
+CREATE TABLE `feedback` (
+  `id` int(11) NOT NULL,
+  `teacher` varchar(50) NOT NULL,
+  `subject` varchar(50) NOT NULL,
+  `classroom` varchar(50) NOT NULL,
+  `message` text NOT NULL,
+  `date` datetime NOT NULL DEFAULT current_timestamp(),
+  `feedback_score` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -188,15 +196,6 @@ CREATE TABLE `likes` (
   `post_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `likes`
---
-
-INSERT INTO `likes` (`like_id`, `post_id`, `user_id`) VALUES
-(3, 1, 5),
-(4, 1, 4),
-(5, 1, 9090);
 
 -- --------------------------------------------------------
 
@@ -284,7 +283,6 @@ CREATE TABLE `post` (
 --
 
 INSERT INTO `post` (`post_id`, `user_id`, `subject_id`, `class_id`, `post_content`, `post_date`, `filelink`) VALUES
-(1, 4, 1, 10, 'hello hij', '2025-02-08 12:36:36', 'nofile'),
 (5, 9092, 5, 10, 'hello', '2025-02-12 17:15:58', 'nofile');
 
 -- --------------------------------------------------------
@@ -467,6 +465,12 @@ ALTER TABLE `comments`
   ADD KEY `ix_comments_comment_id` (`comment_id`);
 
 --
+-- Indexes for table `feedback`
+--
+ALTER TABLE `feedback`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `likes`
 --
 ALTER TABLE `likes`
@@ -595,6 +599,12 @@ ALTER TABLE `class_sub`
 --
 ALTER TABLE `comments`
   MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `feedback`
+--
+ALTER TABLE `feedback`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `likes`

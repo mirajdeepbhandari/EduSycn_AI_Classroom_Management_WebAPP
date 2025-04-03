@@ -7,7 +7,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 
 
-from routes import (auth,studentDashboard,classroom,postManagement,
+from routes import (auth, feedback_admin,studentDashboard,classroom,postManagement,
                     listClassMembers,teacherDashboard,assignment,notification,
                     chat,summary,mcq,socketsChat,superAdmin,slidegen,teacherFeedback)
 
@@ -54,6 +54,7 @@ app.include_router(socketsChat.router, prefix="/skets")
 app.include_router(superAdmin.router, prefix="/sa")
 app.include_router(slidegen.router, prefix="/slidegen")
 app.include_router(teacherFeedback.router, prefix="/feedbackform")
+app.include_router(feedback_admin.router, prefix="/feedseek")
 
 
 @app.get("/404", response_class=HTMLResponse)

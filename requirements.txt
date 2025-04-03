@@ -11,3 +11,6 @@ langchain_google_genai
 langgraph
 python-pptx
 bcrypt
+transformers
+torch
+pypdf

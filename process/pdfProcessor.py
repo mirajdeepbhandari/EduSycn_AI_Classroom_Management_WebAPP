@@ -18,7 +18,7 @@ class PDFProcessor:
         Summary:
         """
         map_prompt_template = PromptTemplate(input_variables=['text'], template=chunks_prompt)
-        
+         
         system_prompt = """
         Your task is to carefully analyze the given text chunks and capture all the important details. 
         Ensure that no information is missed and present everything in clear, continuous text.

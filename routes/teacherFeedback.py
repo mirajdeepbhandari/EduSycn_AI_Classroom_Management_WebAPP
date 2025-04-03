@@ -2,13 +2,16 @@ from fastapi import APIRouter, Request, Form, Depends
 from fastapi.templating import Jinja2Templates
 from starlette.responses import RedirectResponse
 from sqlalchemy.orm import Session
-
+from services.AIServices.Sentiment import SentimentAnalyzer
+import os
 from models.database import Classroom, FeedBack, Student, Teacher, User, get_db
 
 
 router = APIRouter()
 
 templates = Jinja2Templates(directory="templates")
+
+MODEL_DIR = "static\sentimentModel\checkpoint-1500"
 
 @router.get("/")
 async def feedback_teacher(request: Request,db: Session = Depends(get_db), send:str = None):
@@ -39,12 +42,23 @@ async def feedback_teacher(
     mssg: str = Form(...)
 ):
     try:
+
+        setiment_model = SentimentAnalyzer(MODEL_DIR)
+
+        sentiment = setiment_model.predict(mssg)
+
+        predicted_label = sentiment['predicted_label']
+        confidence_score = sentiment['confidence_score']
+
+        # Concatenate them into a single string
+        sentiment_result = f"{predicted_label} ({confidence_score}%)"
+
         new_feedback = FeedBack(
             teacher=choosed_teacher,
             subject=subject,
             classroom=classroom,
             message=mssg,
-            feedback_score="nea"
+            feedback_score=sentiment_result
         )
 
         db.add(new_feedback)

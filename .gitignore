@@ -4,3 +4,5 @@ venv
 FypVenv
 __pycache__
 EdusyncENV
+sentimentModel
+static\sentimentModel
