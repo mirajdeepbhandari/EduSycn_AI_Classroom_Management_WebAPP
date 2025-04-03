@@ -56,6 +56,7 @@ async def feedback_teacher(
         new_feedback = FeedBack(
             teacher=choosed_teacher,
             subject=subject,
+            student= request.session['user_name'],
             classroom=classroom,
             message=mssg,
             feedback_score=sentiment_result
