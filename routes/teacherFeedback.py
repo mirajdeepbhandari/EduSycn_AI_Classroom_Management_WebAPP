@@ -5,7 +5,8 @@ from sqlalchemy.orm import Session
 from services.AIServices.Sentiment import SentimentAnalyzer
 import os
 from models.database import Classroom, FeedBack, Student, Teacher, User, get_db
-
+from authentication.authorizations import studentAllowed
+from authentication.authentication import auth_required
 
 router = APIRouter()
 
@@ -14,7 +15,8 @@ templates = Jinja2Templates(directory="templates")
 MODEL_DIR = "static\sentimentModel\checkpoint-1500"
 
 @router.get("/")
-async def feedback_teacher(request: Request,db: Session = Depends(get_db), send:str = None):
+async def feedback_teacher(request: Request,db: Session = Depends(get_db), send:str = None,  is_auth= Depends(auth_required),
+    is_allowed= Depends(studentAllowed)):
 
     result = (
         db.query(Teacher.teacher_id, User.full_name.label("teacher_name"))
@@ -39,7 +41,9 @@ async def feedback_teacher(
     choosed_teacher: str = Form(...), 
     subject: str = Form(...), 
     classroom: str = Form(...),
-    mssg: str = Form(...)
+    mssg: str = Form(...),
+    is_auth= Depends(auth_required),
+    is_allowed= Depends(studentAllowed),
 ):
     try:
 
