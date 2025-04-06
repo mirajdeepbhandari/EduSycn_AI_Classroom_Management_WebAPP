@@ -7,6 +7,7 @@ import os
 from models.database import Classroom, FeedBack, Student, Teacher, User, get_db
 from authentication.authorizations import studentAllowed
 from authentication.authentication import auth_required
+from sqlalchemy import select, func
 
 router = APIRouter()
 
@@ -56,6 +57,15 @@ async def feedback_teacher(
 
         # Concatenate them into a single string
         sentiment_result = f"{predicted_label} ({confidence_score}%)"
+
+        
+        feedback_query = db.query(FeedBack).filter(
+        FeedBack.student == 'miraj deepbhandari',
+        func.date(FeedBack.date) == func.curdate()
+    ).all()
+        # if results:
+        #     request.session["error"] = "You have already submitted feedback today!"
+        #     return RedirectResponse(url="/", status_code=303)
 
         new_feedback = FeedBack(
             teacher=choosed_teacher,

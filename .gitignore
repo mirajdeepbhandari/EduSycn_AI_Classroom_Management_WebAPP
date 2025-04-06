@@ -5,3 +5,4 @@ FypVenv
 __pycache__
 EdusyncENV
 sentimentModel
+test_edusync.py
