@@ -11,12 +11,12 @@ class SummarizePDF:
         self.llm_model = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=api_key)
         self.chunks = []
     
-    def doc_words_join(self):
+    async def doc_words_join(self):
         loader = PyPDFLoader(self.pdf_path)
         pages = loader.load_and_split()
         whole_doc_text = ''
-        for i in range(len(pages)):
-            whole_doc_text += pages[i].page_content
+        for page in pages:
+            whole_doc_text += page.page_content
         return whole_doc_text
 
     def split_text(self, text):
@@ -26,13 +26,13 @@ class SummarizePDF:
     def generate_summary_and_topics(self):
         chunks_prompt = """
         Please summarize the below Document. The summary must be very clear with proper phrases and easy words:
-        Document:`{text}'
+        Document:`{text}`
         Summary:
         """
         
         map_prompt_template = PromptTemplate(input_variables=['text'], template=chunks_prompt)
         
-        system =  """Identify the key topics from the provided text and structure them as follows:
+        system = """Identify the key topics from the provided text and structure them as follows:
 
                     - **Introduction:** A brief overview of the topic.  
                     - **Description:** A concise explanation covering essential details.  
@@ -56,13 +56,19 @@ class SummarizePDF:
             combine_prompt=final_combine_prompt,
             verbose=False
         )
-        
-        output = summary_chain.invoke(self.chunks)
-        self.output_text = output['output_text']
-        return self.output_text
+
+        return summary_chain
+
+    async def run_summary_chain(self, chain):
+        return await chain.ainvoke(self.chunks)
     
-    def run(self):
-        allwords = self.doc_words_join()
-        self.split_text(allwords)
-        return self.generate_summary_and_topics()
+    async def run(self):
+        try:
+            content = await self.doc_words_join()
+            self.split_text(content)
+            chain = self.generate_summary_and_topics()
+            result = await self.run_summary_chain(chain)
+            return result['output_text']
+        except Exception as e:
+            return f"Error: {e}"
 

@@ -87,6 +87,53 @@ async def GenerateMcqPage(
     )
 
 
+# @router.post("/generatemcq", response_class=HTMLResponse)
+# async def GenerateMcqPage(
+#     pdf_file: UploadFile = File(...),
+#     subject_id: str = Form(...),
+#     subject: str = Form(...),
+#     class_id: str = Form(...),
+#     is_auth= Depends(auth_required),
+#     is_allowed= Depends(teacherAllowed),
+# ):
+#     # Create the directory if it doesn't exist
+#     directory_path = f"static/PDFProcessing/{class_id}/{subject_id}/{subject}"
+#     os.makedirs(directory_path, exist_ok=True)
+
+#     # Ensure a clean filename (prevent issues with slashes or invalid characters)
+#     safe_filename = pdf_file.filename.replace("\\", "_").replace("/", "_")
+
+#     # Define file path correctly
+#     file_location = os.path.join(directory_path, safe_filename)
+
+#     # Save the uploaded file
+#     with open(file_location, "wb") as file:
+#         file.write(await pdf_file.read())
+
+#     # Process the PDF and generate MCQs
+#     api_key = os.getenv("GOOGLE_API_KEY")
+
+#     mcq_generator = PDFMCQGenerator(file_location, api_key)
+#     textout = mcq_generator.run()
+
+#     # Delete the uploaded PDF file
+#     directory = os.path.dirname(file_location )
+#     print(directory)
+#     if os.path.exists(directory):
+#         # If the directory exists, remove all files in the directory
+#         for file in os.listdir(directory):
+#             file_path = os.path.join(directory, file)
+#             if os.path.isfile(file_path):
+#                 os.remove(file_path)
+
+    
+#     # Redirect to GET route with necessary data
+#     query_params = f"?subject_id={subject_id}&subject={subject}&class_id={class_id}&mcq_output={textout}"
+#     return RedirectResponse(url=f"/mcq/generatemcq{query_params}", status_code=303)
+
+
+
+
 @router.post("/generatemcq", response_class=HTMLResponse)
 async def GenerateMcqPage(
     pdf_file: UploadFile = File(...),
@@ -100,34 +147,28 @@ async def GenerateMcqPage(
     directory_path = f"static/PDFProcessing/{class_id}/{subject_id}/{subject}"
     os.makedirs(directory_path, exist_ok=True)
 
-    # Ensure a clean filename (prevent issues with slashes or invalid characters)
+    # Ensure a clean filename
     safe_filename = pdf_file.filename.replace("\\", "_").replace("/", "_")
-
-    # Define file path correctly
     file_location = os.path.join(directory_path, safe_filename)
 
-    # Save the uploaded file
+    # Save uploaded PDF file
     with open(file_location, "wb") as file:
         file.write(await pdf_file.read())
 
-    # Process the PDF and generate MCQs
+    # Generate MCQs from PDF
     api_key = os.getenv("GOOGLE_API_KEY")
-
     mcq_generator = PDFMCQGenerator(file_location, api_key)
-    textout = mcq_generator.run()
+    textout = await mcq_generator.run()  # <-- ✅ AWAIT the async call
 
-    # Delete the uploaded PDF file
-    directory = os.path.dirname(file_location )
-    print(directory)
+    # Clean up uploaded file
+    directory = os.path.dirname(file_location)
     if os.path.exists(directory):
-        # If the directory exists, remove all files in the directory
         for file in os.listdir(directory):
             file_path = os.path.join(directory, file)
             if os.path.isfile(file_path):
                 os.remove(file_path)
 
-    
-    # Redirect to GET route with necessary data
+    # Redirect with query params
     query_params = f"?subject_id={subject_id}&subject={subject}&class_id={class_id}&mcq_output={textout}"
     return RedirectResponse(url=f"/mcq/generatemcq{query_params}", status_code=303)
 

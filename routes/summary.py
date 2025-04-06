@@ -45,7 +45,7 @@ async def summaryNote(request: Request,
     summarizer = SummarizePDF(file_location, api_key)
 
     # Run the summarization and topic extraction process
-    result = summarizer.run()
+    result = await summarizer.run()
     
     result=result.replace("**", "")
 
