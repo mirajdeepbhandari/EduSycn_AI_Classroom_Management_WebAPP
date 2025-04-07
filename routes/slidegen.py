@@ -4,7 +4,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from authentication.authentication import auth_required
 from authentication.authorizations import teacherAllowed
 from fastapi.templating import Jinja2Templates
-from process.pdfProcessor import PDFProcessor
+from process.pdfProcessor import AsyncPDFProcessor
 from dotenv import load_dotenv
 from graphs.graph import build_Agentic_Graph
 from services.AIServices.SlideGenerator import generate_ppt
@@ -57,11 +57,11 @@ async def slideGeN(request: Request,
     
     api_key = os.getenv("GOOGLE_API_KEY")
     
-    processor = PDFProcessor(api_key)
+    processor = AsyncPDFProcessor(api_key)
 
-    contents = processor.summarize(file_location)
+    contents = await processor.summarize(file_location)
 
-    graph_output = build_Agentic_Graph(contents)
+    graph_output = await build_Agentic_Graph(contents)
     
     generate_ppt(theme_name=theme, output=graph_output, file_name=new_file_name)
 
