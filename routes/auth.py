@@ -59,6 +59,11 @@ async def register_validation(
             request.session["error"] = "Email already exists."
             return RedirectResponse(url="/", status_code=303)
         
+        existing_user = db.query(User).filter(User.number == number).first()
+        if existing_user:
+            request.session["error"] = "phone number already exists."
+            return RedirectResponse(url="/", status_code=303)
+        
         # Hash the password
         hashed_password = bcrypt.hash(password)
         

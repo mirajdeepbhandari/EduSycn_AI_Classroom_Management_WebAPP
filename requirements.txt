@@ -14,3 +14,4 @@ bcrypt
 transformers
 torch
 pypdf
+websockets

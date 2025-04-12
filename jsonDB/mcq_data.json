@@ -1,6 +1,411 @@
 {
   "class_10": {
-    "subjects": {}
+    "subjects": {
+      "1": {
+        "questions": {
+          "1": {
+            "question": "What is the primary geographical feature that makes Nepal particularly vulnerable to climate change?",
+            "options": {
+              "A": "Its extensive lowland plains",
+              "B": "Its proximity to the Indian Ocean",
+              "C": "Its mountainous Himalayan terrain",
+              "D": "None of the above"
+            },
+            "correct_answer": "C"
+          },
+          "2": {
+            "question": "What percentage of Nepal's population relies on subsistence agriculture?",
+            "options": {
+              "A": "Approximately 50%",
+              "B": " A majority, but the exact percentage isn't specified.",
+              "C": " A minority, with most people living in urban areas.",
+              "D": " Less than 25%"
+            },
+            "correct_answer": "B"
+          },
+          "3": {
+            "question": "Which of the following is NOT a key vulnerable sector in Nepal facing climate change impacts?",
+            "options": {
+              "A": "Water resources",
+              "B": "Public health",
+              "C": "Industrial production",
+              "D": "Terrestrial ecosystems"
+            },
+            "correct_answer": "C"
+          },
+          "4": {
+            "question": "What is a major concern regarding glacial melt in Nepal?",
+            "options": {
+              "A": "Reduced hydropower production",
+              "B": "Increased glacial lake outburst floods (GLOFs)",
+              "C": "Loss of biodiversity in high-altitude regions",
+              "D": "All of the above"
+            },
+            "correct_answer": "D"
+          },
+          "5": {
+            "question": "What is the projected temperature increase in Nepal by the 2090s?",
+            "options": {
+              "A": "0.5-1.0\u00b0C",
+              "B": "1.3-5.8\u00b0C",
+              "C": "6.0-8.0\u00b0C",
+              "D": " No significant change is projected."
+            },
+            "correct_answer": "B"
+          },
+          "6": {
+            "question": "Which major crops are projected to experience significant yield decreases due to climate change in Nepal?",
+            "options": {
+              "A": "Rice, potatoes, and beans",
+              "B": "Wheat, maize, and sorghum",
+              "C": "Tea, coffee, and sugarcane",
+              "D": "Apples, oranges, and mangoes"
+            },
+            "correct_answer": "B"
+          },
+          "7": {
+            "question": "What waterborne disease is mentioned as being widespread in Nepal due to poor water quality?",
+            "options": {
+              "A": "Typhoid",
+              "B": "Cholera",
+              "C": "Malaria",
+              "D": "Dengue fever"
+            },
+            "correct_answer": "B"
+          },
+          "8": {
+            "question": "What is a major threat to hydropower production in Nepal due to climate change?",
+            "options": {
+              "A": "Increased rainfall",
+              "B": "Glacial melt changes",
+              "C": "Reduced demand for electricity",
+              "D": " Increased cloud cover"
+            },
+            "correct_answer": "B"
+          },
+          "9": {
+            "question": "Which of the following is NOT an organization mentioned as working to reduce disaster risks in Nepal?",
+            "options": {
+              "A": "ADB",
+              "B": " WHO",
+              "C": "UNDP",
+              "D": "World Bank"
+            },
+            "correct_answer": "B"
+          },
+          "10": {
+            "question": "What is a significant gap identified in data collection regarding disaster impacts in Nepal?",
+            "options": {
+              "A": "Lack of information on the impact on different social groups.",
+              "B": "Insufficient data on the number of landslides.",
+              "C": " Lack of information on economic losses.",
+              "D": "Insufficient data on rainfall patterns."
+            },
+            "correct_answer": "A"
+          },
+          "11": {
+            "question": "What is the main focus of the government's current plans in Nepal, according to the text?",
+            "options": {
+              "A": "Climate change mitigation",
+              "B": "Disaster risk reduction",
+              "C": "Poverty reduction",
+              "D": "Infrastructure development"
+            },
+            "correct_answer": "C"
+          },
+          "12": {
+            "question": "What geographical region within Nepal is particularly vulnerable due to unsustainable development practices?",
+            "options": {
+              "A": "Terai plains",
+              "B": "Siwalik hills",
+              "C": "Himalayan region",
+              "D": "Middle Mountains"
+            },
+            "correct_answer": "C"
+          },
+          "13": {
+            "question": "What is a key recommendation to improve disaster risk management in Nepal, as highlighted in the World Bank report?",
+            "options": {
+              "A": "Implementing a one-size-fits-all approach",
+              "B": "Developing tailored strategies considering diverse geography and populations",
+              "C": "Focusing solely on economic development",
+              "D": "Ignoring local needs and prioritizing national plans"
+            },
+            "correct_answer": "B"
+          },
+          "14": {
+            "question": "What is a major data gap identified in the World Bank report?",
+            "options": {
+              "A": "Sufficient climate prediction and early warning systems",
+              "B": "Adequate hazard and vulnerability mapping",
+              "C": "Detailed information on disaster impacts across different groups",
+              "D": "Both B and C"
+            },
+            "correct_answer": "D"
+          },
+          "15": {
+            "question": "What does the text suggest is needed to better understand and address climate-related risks in Nepal?",
+            "options": {
+              "A": "Reduced data collection",
+              "B": "Improved data collection and mapping",
+              "C": "Ignoring existing data",
+              "D": "Focusing solely on government reports"
+            },
+            "correct_answer": "B"
+          },
+          "16": {
+            "question": "The Terai plains are characterized by which climate?",
+            "options": {
+              "A": "Freezing",
+              "B": "Hot and humid",
+              "C": "Temperate",
+              "D": "Arid"
+            },
+            "correct_answer": "B"
+          },
+          "17": {
+            "question": "What is the primary impact of reduced monsoon rains on Nepal's agriculture?",
+            "options": {
+              "A": "Increased rice yields",
+              "B": "Lower rice yields",
+              "C": "No significant effect",
+              "D": "Increased wheat production"
+            },
+            "correct_answer": "B"
+          },
+          "18": {
+            "question": "Besides GLOFs, what other climate-related disasters frequently cause significant damage and loss of life in Nepal?",
+            "options": {
+              "A": "Earthquakes",
+              "B": "Volcanic eruptions",
+              "C": "Floods and landslides",
+              "D": "Tsunamis"
+            },
+            "correct_answer": "C"
+          },
+          "19": {
+            "question": "What is a key adaptation strategy suggested to address agricultural challenges in Nepal?",
+            "options": {
+              "A": "Reducing agricultural land",
+              "B": "Developing climate-resilient crops",
+              "C": "Ignoring pest and disease control",
+              "D": "Decreasing agricultural extension services"
+            },
+            "correct_answer": "B"
+          },
+          "20": {
+            "question": "What is one of the major public health issues exacerbated by climate change in Nepal?",
+            "options": {
+              "A": "Improved sanitation",
+              "B": "Diarrheal diseases",
+              "C": "Reduced malnutrition",
+              "D": "Decreased vector-borne illnesses"
+            },
+            "correct_answer": "B"
+          },
+          "1": {
+            "question": "What is the primary geographical feature that makes Nepal particularly vulnerable to climate change?",
+            "options": {
+              "A": "Its extensive lowland plains",
+              "B": "Its proximity to the Indian Ocean",
+              "C": "Its mountainous Himalayan terrain",
+              "D": "Its dense forest cover"
+            },
+            "correct_answer": "C"
+          },
+          "2": {
+            "question": "What percentage of Nepal's population relies on subsistence agriculture?",
+            "options": {
+              "A": "Approximately 50%",
+              "B": " A majority, but the exact percentage isn't specified.",
+              "C": " A minority, with most people living in urban areas.",
+              "D": " Less than 25%"
+            },
+            "correct_answer": "B"
+          },
+          "3": {
+            "question": "Which of the following is NOT a key vulnerable sector in Nepal facing climate change impacts?",
+            "options": {
+              "A": "Water resources",
+              "B": "Public health",
+              "C": "Industrial production",
+              "D": "Terrestrial ecosystems"
+            },
+            "correct_answer": "C"
+          },
+          "4": {
+            "question": "What is a major concern regarding glacial melt in Nepal?",
+            "options": {
+              "A": "Reduced hydropower production",
+              "B": "Increased glacial lake outburst floods (GLOFs)",
+              "C": "Loss of biodiversity in high-altitude regions",
+              "D": "All of the above"
+            },
+            "correct_answer": "D"
+          },
+          "5": {
+            "question": "What is the projected temperature increase in Nepal by the 2090s?",
+            "options": {
+              "A": "0.5-1.0\u00b0C",
+              "B": "1.3-5.8\u00b0C",
+              "C": "6.0-8.0\u00b0C",
+              "D": " No significant change is projected."
+            },
+            "correct_answer": "B"
+          },
+          "6": {
+            "question": "Which major crops are projected to experience significant yield decreases due to climate change in Nepal?",
+            "options": {
+              "A": "Rice, potatoes, and beans",
+              "B": "Wheat, maize, and sorghum",
+              "C": "Tea, coffee, and sugarcane",
+              "D": "Apples, oranges, and mangoes"
+            },
+            "correct_answer": "B"
+          },
+          "7": {
+            "question": "What waterborne disease is mentioned as being widespread in Nepal due to poor water quality?",
+            "options": {
+              "A": "Typhoid",
+              "B": "Cholera",
+              "C": "Malaria",
+              "D": "Dengue fever"
+            },
+            "correct_answer": "B"
+          },
+          "8": {
+            "question": "What is a major threat to hydropower production in Nepal due to climate change?",
+            "options": {
+              "A": "Increased rainfall",
+              "B": "Glacial melt changes",
+              "C": "Reduced demand for electricity",
+              "D": " Increased cloud cover"
+            },
+            "correct_answer": "B"
+          },
+          "9": {
+            "question": "Which of the following is NOT an organization mentioned as working to reduce disaster risks in Nepal?",
+            "options": {
+              "A": "ADB",
+              "B": " WHO",
+              "C": "UNDP",
+              "D": "World Bank"
+            },
+            "correct_answer": "B"
+          },
+          "10": {
+            "question": "What is a significant gap identified in data collection regarding disaster impacts in Nepal?",
+            "options": {
+              "A": "Lack of information on the impact on different social groups.",
+              "B": "Insufficient data on the number of landslides.",
+              "C": " Lack of information on economic losses.",
+              "D": "Insufficient data on rainfall patterns."
+            },
+            "correct_answer": "A"
+          },
+          "11": {
+            "question": "What is the main focus of the government's current plans in Nepal, according to the text?",
+            "options": {
+              "A": "Climate change mitigation",
+              "B": "Disaster risk reduction",
+              "C": "Poverty reduction",
+              "D": "Infrastructure development"
+            },
+            "correct_answer": "C"
+          },
+          "12": {
+            "question": "What geographical region within Nepal is particularly vulnerable due to unsustainable development practices?",
+            "options": {
+              "A": "Terai plains",
+              "B": "Siwalik hills",
+              "C": "Himalayan region",
+              "D": "Middle Mountains"
+            },
+            "correct_answer": "C"
+          },
+          "13": {
+            "question": "What is a key recommendation to improve disaster risk management in Nepal, as highlighted in the World Bank report?",
+            "options": {
+              "A": "Implementing a one-size-fits-all approach",
+              "B": "Developing tailored strategies considering diverse geography and populations",
+              "C": "Focusing solely on economic development",
+              "D": "Ignoring local needs and prioritizing national plans"
+            },
+            "correct_answer": "B"
+          },
+          "14": {
+            "question": "What is a major data gap identified in the World Bank report?",
+            "options": {
+              "A": "Sufficient climate prediction and early warning systems",
+              "B": "Adequate hazard and vulnerability mapping",
+              "C": "Detailed information on disaster impacts across different groups",
+              "D": "Both B and C"
+            },
+            "correct_answer": "D"
+          },
+          "15": {
+            "question": "What does the text suggest is needed to better understand and address climate-related risks in Nepal?",
+            "options": {
+              "A": "Reduced data collection",
+              "B": "Improved data collection and mapping",
+              "C": "Ignoring existing data",
+              "D": "Focusing solely on government reports"
+            },
+            "correct_answer": "B"
+          },
+          "16": {
+            "question": "The Terai plains are characterized by which climate?",
+            "options": {
+              "A": "Freezing",
+              "B": "Hot and humid",
+              "C": "Temperate",
+              "D": "Arid"
+            },
+            "correct_answer": "B"
+          },
+          "17": {
+            "question": "What is the primary impact of reduced monsoon rains on Nepal's agriculture?",
+            "options": {
+              "A": "Increased rice yields",
+              "B": "Lower rice yields",
+              "C": "No significant effect",
+              "D": "Increased wheat production"
+            },
+            "correct_answer": "B"
+          },
+          "18": {
+            "question": "Besides GLOFs, what other climate-related disasters frequently cause significant damage and loss of life in Nepal?",
+            "options": {
+              "A": "Earthquakes",
+              "B": "Volcanic eruptions",
+              "C": "Floods and landslides",
+              "D": "Tsunamis"
+            },
+            "correct_answer": "C"
+          },
+          "19": {
+            "question": "What is a key adaptation strategy suggested to address agricultural challenges in Nepal?",
+            "options": {
+              "A": "Reducing agricultural land",
+              "B": "Developing climate-resilient crops",
+              "C": "Ignoring pest and disease control",
+              "D": "Decreasing agricultural extension services"
+            },
+            "correct_answer": "B"
+          },
+          "20": {
+            "question": "What is one of the major public health issues exacerbated by climate change in Nepal?",
+            "options": {
+              "A": "Improved sanitation",
+              "B": "Diarrheal diseases",
+              "C": "Reduced malnutrition",
+              "D": "Decreased vector-borne illnesses"
+            },
+            "correct_answer": "B"
+          }
+        }
+      }
+    }
   },
   "class_8": {
     "subjects": {
