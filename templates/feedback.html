@@ -464,5 +464,47 @@
             });
         });
     </script>
+
+    <script>
+        // Get the subject input element
+        const subjectInput = document.getElementById('subject');
+
+        // Add input event listener to validate in real-time
+        subjectInput.addEventListener('input', function() {
+            validateSubjectField(this);
+        });
+
+        function validateSubjectField(input) {
+            // Regular expression to allow only letters and spaces
+            const regex = /^[A-Za-z\s]*$/;
+            const errorMessage = "Only letters and spaces are allowed";
+            
+            // Check if the input contains any forbidden characters
+            if (!regex.test(input.value)) {
+                // Remove the invalid characters
+                input.value = input.value.replace(/[^A-Za-z\s]/g, '');
+                
+                // Show error message
+                input.classList.add('is-invalid');
+                
+                // Create or update error message
+                let errorDiv = input.nextElementSibling;
+                if (!errorDiv || !errorDiv.classList.contains('invalid-feedback')) {
+                    errorDiv = document.createElement('div');
+                    errorDiv.className = 'invalid-feedback';
+                    input.parentNode.appendChild(errorDiv);
+                }
+                errorDiv.textContent = errorMessage;
+            } else if (input.value.trim() !== '') {
+                // Input is valid and not empty, mark as valid
+                input.classList.remove('is-invalid');
+                input.classList.add('is-valid');
+            } else {
+                // Input is empty but not invalid format
+                input.classList.remove('is-invalid');
+                input.classList.remove('is-valid');
+            }
+        }
+    </script>
 </body>
 </html>
