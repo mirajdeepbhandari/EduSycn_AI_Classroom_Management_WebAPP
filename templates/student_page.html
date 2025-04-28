@@ -212,6 +212,19 @@
 
                         
                     </form>
+                    
+                    <form action="{{ url_for('notificationsPage') }}" method="get">
+                        <li class="nav-item">
+                            <button type="submit" class="nav-link btn btn-link text-start w-100" style="display: flex; align-items: center;">
+                                <i class="bi bi-bell"></i> Notifications 
+                                {% if is_Notifyread == "no" %}
+                                <p style="margin-bottom: 30px; margin-left: 10px;" id="notifydot">
+                                    🔴
+                                </p>
+                                {% endif %}
+                            </button>
+                        </li>
+                    </form>
 
 
                     <form action="{{ url_for('feedback_teacher') }}" method="get">
