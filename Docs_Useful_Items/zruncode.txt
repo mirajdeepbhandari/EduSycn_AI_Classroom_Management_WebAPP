@@ -1,4 +1,3 @@
-uvicorn main:app --reload
-
-Mirajj@@@123abc
+run script = uvicorn main:app --reload
+admin password = Mirajj@@@123abc
 
